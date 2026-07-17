@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Proposta Comercial | Atlas Gerenciamento de Riscos</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --preto:#111111;
+  --grafite:#333333;
+  --laranja:#FF5618;
+  --amarelo:#FFC500;
+  --linha:#c9c9c9;
+  --cinza:#f2f2f2;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#d9d9d9;color:var(--grafite);font:14px/1.5 Montserrat,Arial,sans-serif}
+
+.sheet{position:relative;width:min(1100px,100%);margin:20px auto;background:#fff;box-shadow:0 3px 20px rgba(0,0,0,.25);padding:0 0 24px;overflow:hidden}
+
+.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60%;max-width:480px;opacity:.06;pointer-events:none;z-index:0}
+.sheet-content{position:relative;z-index:1;padding:0 34px}
+
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 34px;border-bottom:8px solid var(--laranja)}
+.logo{height:54px}
+.tag{text-align:right}
+.tag h1{margin:0;font-size:19px;letter-spacing:.5px;color:var(--preto);text-transform:uppercase}
+.tag .emissao{margin-top:6px;font-size:12px;color:#555;display:flex;gap:6px;align-items:center;justify-content:flex-end}
+.tag .emissao input{border:1px solid #ccc;border-radius:3px;padding:4px 6px;font:inherit;font-size:12px}
+
+h2.section{background:var(--laranja);color:#fff;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 14px;margin:28px 0 12px;border-radius:2px}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 18px;margin-bottom:6px}
+.field{display:flex;flex-direction:column}
+.field.wide{grid-column:1/-1}
+.field label{font-size:10.5px;font-weight:800;text-transform:uppercase;color:#555;margin-bottom:4px;letter-spacing:.3px}
+.field input{border:0;border-bottom:2px solid var(--preto);padding:8px 4px;font:inherit;font-size:14px;background:transparent;color:var(--preto)}
+.field input:focus{outline:none;border-color:var(--laranja)}
+
+.intro{background:var(--cinza);border-left:6px solid var(--preto);padding:14px 16px;font-size:13.5px;color:#333}
+
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.product{border:1px solid var(--linha);padding:12px 13px;background:#fff}
+.product b{display:block;color:var(--preto);font-size:15px;text-transform:uppercase;margin-bottom:5px}
+.product p{margin:0;font-size:12px;color:#444}
+
+.categoria{margin-bottom:26px}
+.categoria-titulo{background:var(--grafite);color:#fff;font-size:13.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 13px;display:flex;justify-content:space-between;align-items:center}
+.categoria-titulo small{font-weight:500;font-size:10.5px;color:#ddd;text-transform:none;letter-spacing:0}
+
+.seletor{display:flex;gap:10px;align-items:center;padding:12px 13px;background:#fafafa;border:1px solid var(--linha);border-top:0;flex-wrap:wrap}
+.seletor select{border:1px solid #bbb;border-radius:3px;padding:9px 10px;font:inherit;font-size:13px;background:#fff;color:var(--preto)}
+.seletor select:focus{outline:none;border-color:var(--laranja)}
+.sel-plano{flex:1;min-width:190px}
+.sel-item{flex:1.4;min-width:230px}
+.sel-item:disabled{background:#eee;color:#999}
+.btn-add{border:0;background:var(--laranja);color:#fff;padding:9px 16px;font-weight:800;font-size:12px;text-transform:uppercase;border-radius:3px;cursor:pointer;white-space:nowrap}
+.btn-add:hover{background:#e14a10}
+.btn-add:disabled{background:#ccc;cursor:not-allowed}
+
+.tablewrap{width:100%;overflow-x:auto;border:1px solid var(--linha);border-top:0}
+table{width:100%;border-collapse:collapse;min-width:820px;font-size:12.5px}
+thead th{background:var(--preto);color:#fff;text-align:left;padding:9px;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+tbody td{padding:8px 9px;border-bottom:1px solid var(--linha);vertical-align:middle}
+tbody tr:nth-of-type(even){background:#fafafa}
+tbody tr:hover{background:#fff3ec}
+.vazio-msg{padding:16px;text-align:center;color:#888;font-size:12.5px;font-style:italic;background:#fdfdfd;border:1px dashed var(--linha);border-top:0}
+
+.col-plano{width:150px}
+.col-item{width:190px}
+.col-valor{width:120px}
+.col-qtd{width:90px}
+.col-total{width:130px}
+.col-del{width:40px;text-align:center}
+
+input.qtd-input{width:100%;border:1px solid #bbb;padding:6px;font:inherit;font-size:12.5px;text-align:center;border-radius:2px}
+input.qtd-input:focus{outline:none;border-color:var(--laranja)}
+.valor-unit,.valor-total{text-align:right;white-space:nowrap;font-weight:700}
+.valor-unit{color:#333}
+.valor-total{color:var(--preto);font-weight:800}
+.detalhe{color:#555;font-size:12px}
+.badge-plano{display:inline-block;background:var(--amarelo);color:#111;font-size:10px;font-weight:800;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-bottom:3px}
+.btn-del{border:0;background:#a83b3b;color:#fff;width:26px;height:26px;border-radius:3px;cursor:pointer;font-size:14px;line-height:1}
+.btn-del:hover{background:#8a2f2f}
+
+.custom-input{width:100%;border:1px solid #bbb;padding:6px;font:inherit;font-size:12px;border-radius:2px}
+
+.totalbox{margin:22px 0 6px;margin-left:auto;width:min(360px,100%);background:var(--preto);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;font-size:19px;font-weight:800;border-left:10px solid var(--laranja)}
+.note{font-size:11px;color:#555;margin-top:8px}
+
+.terms p{font-size:12px;color:#333;margin:7px 0}
+
+.signature{margin-top:30px;border-top:3px solid var(--preto);padding-top:16px}
+.sigline{margin-top:44px;border-top:1px solid #333;width:60%;padding-top:6px;font-size:12px;color:#333}
+.dados-assinatura{margin-top:16px;font-size:12px;line-height:2;color:#333}
+.dados-assinatura span.fill{display:inline-block;min-width:170px;border-bottom:1px solid #777;margin:0 14px 0 4px}
+
+.footer{font-size:10.5px;color:#666;border-top:2px solid var(--laranja);padding-top:10px;margin-top:26px;display:flex;justify-content:space-between}
+
+.no-print{position:fixed;right:22px;bottom:22px;display:flex;gap:10px;z-index:5}
+.btn{border:0;color:#fff;padding:9px 16px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.3px;border-radius:2px;cursor:pointer}
+.btn.secundario{background:#666}
+.btn.laranja{background:var(--laranja)}
+
+@media (max-width:760px){
+  .grid,.products{grid-template-columns:1fr}
+  .top{flex-direction:column;align-items:flex-start}
+  .tag{text-align:left}
+  .tag .emissao{justify-content:flex-start}
+  .no-print{position:static;justify-content:center;margin:16px}
+  .sheet{margin:0}
+  .seletor{flex-direction:column;align-items:stretch}
+  .seletor select{min-width:0}
+}
+
+@media print{
+  body{background:#fff}
+  .sheet{box-shadow:none;margin:0;width:100%}
+  .no-print,.seletor,.btn-del{display:none}
+  .watermark{opacity:.05}
+}
+</style>
+</head>
+<body>
+<main class="sheet">
+  <img class="watermark" src="https://www.atlasgr.com.br/wp-content/uploads/2021/03/atlas.svg" alt="">
+  <div class="sheet-content">
+
+    <header class="top">
+      <img class="logo" src="https://www.atlasgr.com.br/wp-content/uploads/2021/03/atlas.svg" alt="Atlas Gerenciamento de Riscos">
+      <div class="tag">
+        <h1>Proposta Comercial</h1>
+        <div class="emissao">Emissão: <input id="data" type="date"></div>
+      </div>
+    </header>
+
+    <section>
+      <h2 class="section">Dados do cliente</h2>
+      <div class="grid">
+        <div class="field wide"><label>Nome da empresa</label><input id="empresa" placeholder="Digite o nome da empresa"></div>
+        <div class="field"><label>CNPJ</label><input id="cnpj" maxlength="18" placeholder="00.000.000/0000-00"></div>
+        <div class="field"><label>Contato / cargo</label><input placeholder="Nome e cargo"></div>
+        <div class="field"><label>Cidade / UF</label><input placeholder="Cidade - UF"></div>
+        <div class="field"><label>E-mail / telefone</label><input placeholder="E-mail e telefone"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section">Sobre a Atlas</h2>
+      <div class="intro">Desde 2004, a Atlas gerencia riscos nos processos logísticos com tecnologia, equipe especializada e atendimento 24 horas por dia, 7 dias por semana. Nosso propósito é conectar pessoas e tecnologia, proporcionando segurança e inovação.</div>
+    </section>
+
+    <section>
+      <h2 class="section">Nossos produtos</h2>
+      <div class="products">
+        <article class="product"><b>Gerenciamento de Risco</b><p>Medidas preventivas para reduzir roubos e perdas financeiras no transporte, com recursos tecnológicos e suporte 24/7.</p></article>
+        <article class="product"><b>Software Logístico</b><p>New Connect, Atlas Analytics B.I. e Gestão à Vista: alertas, relatórios, mapas e acompanhamento em tempo real.</p></article>
+        <article class="product"><b>Perfil Securitário</b><p>Cadastro e consulta digital, com IA e análise de bases oficiais para profissionais, processos e veículos.</p></article>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section">Plano escolhido e valores</h2>
+      <p style="font-size:12.5px;color:#555;margin:0 0 14px">Em cada categoria, primeiro escolha o <b>plano</b> na primeira lista; a segunda lista mostrará os itens desse plano. Selecione o item para adicioná-lo automaticamente com detalhamento e valor. Preencha apenas a quantidade.</p>
+
+      <div id="categorias"></div>
+
+      <div class="totalbox"><span>VALOR FINAL</span><span id="total">R$ 0,00</span></div>
+      <p class="note">Serviço de Escolta tem valor variável conforme km rodado; utilize "Item personalizado" em Serviços Adicionais para incluí-lo manualmente.</p>
+    </section>
+
+    <section>
+      <h2 class="section">Segurança e privacidade</h2>
+      <div class="terms">
+        <p><b>Proteção de dados:</b> dados de usuários, motoristas e veículos são protegidos por criptografia e políticas de acesso restrito por usuário.</p>
+        <p><b>Backup:</b> backups automáticos diários, com redundância em nuvem, asseguram a continuidade das operações.</p>
+        <p><b>Prevenção de violações:</b> medidas avançadas em datacenters especializados e monitoramento constante preservam a integridade dos dados.</p>
+      </div>
+
+      <h2 class="section">Confidencialidade</h2>
+      <div class="terms">
+        <p>As informações deste documento, sobre produtos e serviços, são propriedade da ATLAS. A duplicação é permitida apenas para uso interno do cliente; não poderão ser usadas como fonte para terceiros. Informações sobre a ATLAS não deverão ser divulgadas sem autorização escrita de ambas as partes.</p>
+      </div>
+
+      <h2 class="section">Considerações gerais</h2>
+      <div class="terms">
+        <p>Os valores não contemplam despesas de comunicação dos rastreadores nem taxas eventualmente cobradas pelos fornecedores. O contrato estará sujeito a reajuste conforme a variação dos últimos 12 meses do dissídio salarial da categoria, com base no sindicato de Ribeirão Preto, SP.</p>
+        <p>Implantação e treinamentos solicitados são cobrados à parte; para distâncias superiores a 500 km, o deslocamento poderá ser aéreo. A prestação é supletiva e complementar, não constitui guarda de veículos nem dispensa outras medidas de segurança.</p>
+        <p>Os serviços não impedem sinistros, danos, furtos ou roubos. Dados de localização dependem de rastreadores de terceiros e podem sofrer interrupções, interferências e zonas de sombra, que podem afetar a prestação dos serviços. Há obrigação de seguir o PGR.</p>
+      </div>
+    </section>
+
+    <section class="signature">
+      <h2 class="section">Assinatura</h2>
+      <p style="font-size:12.5px;color:#333">Declaro que li e concordo plenamente com a cobrança da ATLAS para minha empresa, referente ao conteúdo desta proposta. Esta proposta estará vinculada ao contrato de prestação de serviços a ser firmado entre as partes, aos termos e condições específicas do serviço contratado e ao termo de licença de uso de software. <b>Validade da proposta: 30 dias.</b></p>
+      <div class="sigline">Assinatura e identificação do cliente</div>
+      <div class="dados-assinatura">
+        <strong>Nome:</strong><span class="fill"></span><strong>Cargo:</strong><span class="fill"></span><br>
+        <strong>CNPJ:</strong><span class="fill"></span><strong>Cidade/UF:</strong><span class="fill"></span><br>
+        <strong>E-mail:</strong><span class="fill"></span><strong>Fone:</strong><span class="fill"></span><br>
+        <strong>Data:</strong> Ribeirão Preto, <span id="data-extenso"></span>.
+      </div>
+    </section>
+
+    <footer class="footer"><span>ATLAS Gerenciamento de Riscos</span><span>CNPJ 18.580.156/0001-54</span></footer>
+  </div>
+</main>
+
+<div class="no-print">
+  <button class="btn secundario" onclick="salvarProposta()">Baixar HTML</button>
+  <button class="btn laranja" onclick="window.print()">Imprimir / Salvar PDF</button>
+</div>
+
+<script>
+const brl = n => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n||0);
+
+const faixas = {
+  objeto:        [[100,23.50],[250,21.39],[400,19.46],[500,15.90],[1000,14.87],[1500,13.90],[Infinity,13.00]],
+  integrada:     [[100,34.50],[250,31.40],[400,28.57],[500,28.00],[1000,27.50],[1500,27.20],[Infinity,27.00]],
+  erro:          [[100,6.50],[250,5.92],[400,5.38],[500,4.41],[1000,4.02],[1500,3.66],[Infinity,3.33]],
+  faceObjeto:    [[100,30.50],[250,28.40],[400,26.44],[500,24.61],[1000,22.91],[1500,21.33],[Infinity,19.86]],
+  faceIntegrada: [[100,41.50],[250,38.80],[400,36.28],[500,33.92],[1000,32.57],[1500,31.99],[Infinity,31.10]],
+  cnh:           [[100,9.90],[250,9.26],[400,8.65],[500,8.09],[1000,7.57],[1500,7.07],[Infinity,6.61]],
+  background:    [[100,9.20],[250,8.60],[400,8.04],[500,7.52],[1000,7.03],[1500,6.57],[Infinity,6.15]],
+  vitimologia:   [[100,69.90],[250,63.90],[400,60.90],[500,57.90],[1000,54.90],[1500,51.90],[Infinity,49.90]]
+};
+
+function precoFaixa(tipo,q){
+  const tabela = faixas[tipo];
+  for (const [limite,preco] of tabela){ if (q <= limite) return preco; }
+  return tabela[tabela.length-1][1];
+}
+
+const categorias = [
+  { id:'gr', titulo:'Gerenciamento de Riscos', planos:{
+      'Standard': [
+        {item:'Por veículo/mês', detalhe:'Monitoramento com abertura de SM e macros padrão Atlas.', preco:90.00, qtd:1},
+        {item:'Por viagem', detalhe:'Valor por viagem.', preco:35.00, qtd:1},
+      ],
+      'Pro': [
+        {item:'Por veículo/mês', detalhe:'Monitoramento contínuo da frota e macros personalizadas.', preco:120.00, qtd:1},
+        {item:'Por viagem', detalhe:'Valor por viagem.', preco:35.00, qtd:1},
+      ],
+      'Premium': [
+        {item:'Por veículo/mês', detalhe:'Treinamentos adicionais, ECVC e Atlas Analytics personalizado.', preco:150.00, qtd:1},
+        {item:'Por viagem', detalhe:'Valor por viagem.', preco:35.00, qtd:1},
+      ],
+      'Monitoramento 24x7': [
+        {item:'Por veículo/mês', detalhe:'Monitoramento de veículos e gestão de riscos, 24h por dia, 7 dias por semana; pacote mínimo conforme contratação.', preco:120.00, qtd:1},
+        {item:'Por viagem', detalhe:'Valor por viagem.', preco:40.00, qtd:1},
+      ],
+      'Operação de Terceiros': [
+        {item:'Checklist', detalhe:'Teste dos sensores e atuadores do rastreador principal; por demanda.', preco:5.90, qtd:1},
+        {item:'Envio de rotograma', detalhe:'Envio de rotograma ao motorista; por veículo.', preco:3.90, qtd:1},
+      ],
+  }},
+  { id:'combos', titulo:'Combos e Controle de Jornada', planos:{
+      'Combo GR + Logística': [
+        {item:'GR + Torre de Controle Logística', detalhe:'Combo especial para contratação conjunta do GR + Logística; por veículo/mês.', preco:135.90, qtd:1},
+      ],
+      'Controle de Jornada': [
+        {item:'Controle de Jornada (A52)', detalhe:'Controle de jornada dos motoristas; por CPF.', preco:34.90, qtd:1},
+      ],
+      'Implantação': [
+        {item:'Implantação inicial', detalhe:'Valor para implementação.', preco:1200.00, qtd:1},
+      ],
+  }},
+  { id:'apoio', titulo:'Ponto de Apoio — Terceiros', planos:{
+      'Analista de Risco': [
+        {item:'Interior diurno', detalhe:'Ponto de apoio terceiros.', preco:6500.00, qtd:1},
+        {item:'Interior noturno', detalhe:'Ponto de apoio terceiros.', preco:7000.00, qtd:1},
+        {item:'Capital diurno', detalhe:'Ponto de apoio terceiros.', preco:7500.00, qtd:1},
+        {item:'Capital noturno', detalhe:'Ponto de apoio terceiros.', preco:8000.00, qtd:1},
+      ],
+      'Analista de Logística': [
+        {item:'Interior', detalhe:'Ponto de apoio terceiros.', preco:8000.00, qtd:1},
+        {item:'Capital', detalhe:'Ponto de apoio terceiros.', preco:8500.00, qtd:1},
+      ],
+      'Supervisor': [
+        {item:'Interior', detalhe:'Ponto de apoio terceiros.', preco:10000.00, qtd:1},
+        {item:'Capital', detalhe:'Ponto de apoio terceiros.', preco:10500.00, qtd:1},
+      ],
+  }},
+  { id:'adicionais', titulo:'Serviços Adicionais', planos:{
+      'Adicional Autotrac': [
+        {item:'Integração mensal/veículo', detalhe:'Requer subconta de acesso para a Atlas.', preco:14.45, qtd:1},
+      ],
+      'Pronta-Resposta': [
+        {item:'Acionamento (até 3h)', detalhe:'Valor unitário para período máximo de 3 horas.', preco:1300.00, qtd:1},
+        {item:'Hora excedente', detalhe:'Por hora após o período máximo de 3 horas.', preco:180.00, qtd:1},
+      ],
+      'Desenvolvimento': [
+        {item:'Desenvolvimento adicional (por hora)', detalhe:'Custo por hora trabalhada.', preco:250.00, qtd:1},
+      ],
+  }},
+  { id:'profile', titulo:'Atlas Profile (valor por faixa de consultas)', planos:{
+      'Pesquisa': [
+        {item:'Pesquisa por Objeto', detalhe:'CNH, individual. Valor ajustado por faixa de consultas/mês.', range:'objeto', qtd:100},
+        {item:'Pesquisa Integrada (até 3 placas)', detalhe:'Valor ajustado por faixa de consultas/mês.', range:'integrada', qtd:100},
+        {item:'Consulta e erro de parâmetro', detalhe:'Valor ajustado por faixa de consultas/mês.', range:'erro', qtd:100},
+      ],
+      'Face ID': [
+        {item:'Face ID Objeto', detalhe:'Valor ajustado por faixa de consultas/mês.', range:'faceObjeto', qtd:100},
+        {item:'Face ID Integrada', detalhe:'Valor ajustado por faixa de consultas/mês.', range:'faceIntegrada', qtd:100},
+      ],
+      'Consultas Financeiras e RH': [
+        {item:'CNH Financeira', detalhe:'Valor ajustado por faixa de consultas/mês.', range:'cnh', qtd:100},
+        {item:'Background Check RH', detalhe:'Valor ajustado por faixa de consultas/mês.', range:'background', qtd:100},
+        {item:'Vitimologia', detalhe:'Valor ajustado por faixa de consultas/mês.', range:'vitimologia', qtd:100},
+      ],
+  }},
+];
+
+function montarCategorias(){
+  const container = document.getElementById('categorias');
+  container.innerHTML = '';
+  categorias.forEach(cat=>{
+    const nomesPlanos = Object.keys(cat.planos);
+    const bloco = document.createElement('div');
+    bloco.className = 'categoria';
+    bloco.innerHTML = `
+      <div class="categoria-titulo">${cat.titulo} <small>escolha o plano e depois o item</small></div>
+      <div class="seletor">
+        <select class="sel-plano" id="plano-${cat.id}">
+          <option value="">1. Selecionar plano...</option>
+          ${nomesPlanos.map(p=>`<option value="${p}">${p}</option>`).join('')}
+          <option value="__custom__">+ Item personalizado</option>
+        </select>
+        <select class="sel-item" id="item-${cat.id}" disabled>
+          <option value="">2. Selecionar item...</option>
+        </select>
+        <button type="button" class="btn-add" id="btn-${cat.id}" disabled>Adicionar</button>
+      </div>
+      <div class="tablewrap" id="wrap-${cat.id}" style="display:none">
+        <table>
+          <colgroup><col class="col-plano"><col class="col-item"><col><col class="col-valor"><col class="col-qtd"><col class="col-total"><col class="col-del"></colgroup>
+          <thead><tr><th>Plano</th><th>Item</th><th>Detalhamento</th><th>Valor unitário</th><th>Quantidade</th><th>Valor total</th><th></th></tr></thead>
+          <tbody id="corpo-${cat.id}"></tbody>
+        </table>
+      </div>
+      <div class="vazio-msg" id="vazio-${cat.id}">Nenhum item adicionado nesta categoria ainda.</div>
+    `;
+    container.appendChild(bloco);
+
+    const selPlano = bloco.querySelector(`#plano-${cat.id}`);
+    const selItem = bloco.querySelector(`#item-${cat.id}`);
+    const botao = bloco.querySelector(`#btn-${cat.id}`);
+
+    selPlano.addEventListener('change', ()=>{
+      const plano = selPlano.value;
+      selItem.innerHTML = '<option value="">2. Selecionar item...</option>';
+      if(plano === '' ){
+        selItem.disabled = true; botao.disabled = true; return;
+      }
+      if(plano === '__custom__'){
+        selItem.disabled = true; botao.disabled = false; return;
+      }
+      cat.planos[plano].forEach((it,i)=>{
+        selItem.innerHTML += `<option value="${i}">${it.item}</option>`;
+      });
+      selItem.disabled = false; botao.disabled = true;
+    });
+
+    selItem.addEventListener('change', ()=>{
+      botao.disabled = selItem.value === '';
+    });
+
+    botao.addEventListener('click', ()=>{
+      const plano = selPlano.value;
+      if(plano === '__custom__'){
+        adicionarLinhaPersonalizada(cat.id);
+      } else if(plano !== '' && selItem.value !== ''){
+        const indiceItem = Number(selItem.value);
+        const item = cat.planos[plano][indiceItem];
+        adicionarLinhaCatalogo(cat.id, plano, item, indiceItem, selItem.querySelector(`option[value="${indiceItem}"]`), selPlano);
+      }
+    });
+  });
+}
+
+function atualizarVisibilidade(catId){
+  const corpo = document.getElementById(`corpo-${catId}`);
+  const wrap = document.getElementById(`wrap-${catId}`);
+  const vazio = document.getElementById(`vazio-${catId}`);
+  const temLinhas = corpo.children.length > 0;
+  wrap.style.display = temLinhas ? '' : 'none';
+  vazio.style.display = temLinhas ? 'none' : '';
+}
+
+function resetSeletor(catId){
+  const selPlano = document.getElementById(`plano-${catId}`);
+  const selItem = document.getElementById(`item-${catId}`);
+  const botao = document.getElementById(`btn-${catId}`);
+  selPlano.value = '';
+  selItem.innerHTML = '<option value="">2. Selecionar item...</option>';
+  selItem.disabled = true;
+  botao.disabled = true;
+}
+
+function adicionarLinhaCatalogo(catId, plano, item, indiceItem, opcaoEl, selPlanoEl){
+  const corpo = document.getElementById(`corpo-${catId}`);
+  const tr = document.createElement('tr');
+  if(item.range) tr.dataset.range = item.range;
+  else tr.dataset.preco = item.preco;
+  const precoInicial = item.range ? precoFaixa(item.range, item.qtd) : item.preco;
+  tr.innerHTML = `
+    <td><span class="badge-plano">${plano}</span></td>
+    <td><b>${item.item}</b></td>
+    <td class="detalhe">${item.detalhe}</td>
+    <td class="valor-unit">${brl(precoInicial)}</td>
+    <td><input type="number" class="qtd-input" min="0" step="1" value="${item.qtd}"></td>
+    <td class="valor-total">R$ 0,00</td>
+    <td class="col-del"><button type="button" class="btn-del" title="Remover">×</button></td>`;
+  tr.querySelector('.btn-del').addEventListener('click', ()=>{
+    tr.remove();
+    if(opcaoEl) opcaoEl.disabled = false;
+    atualizarVisibilidade(catId);
+    calcular();
+  });
+  corpo.appendChild(tr);
+  if(opcaoEl) opcaoEl.disabled = true;
+  resetSeletor(catId);
+  atualizarVisibilidade(catId);
+  calcular();
+}
+
+function adicionarLinhaPersonalizada(catId){
+  const corpo = document.getElementById(`corpo-${catId}`);
+  const tr = document.createElement('tr');
+  tr.dataset.custom = 'true';
+  tr.innerHTML = `
+    <td><input class="custom-input" placeholder="Plano"></td>
+    <td><input class="custom-input" placeholder="Item"></td>
+    <td><input class="custom-input" placeholder="Detalhamento"></td>
+    <td><input class="custom-input custom-preco" type="number" min="0" step="0.01" value="0" style="text-align:right"></td>
+    <td><input type="number" class="qtd-input" min="0" step="1" value="1"></td>
+    <td class="valor-total">R$ 0,00</td>
+    <td class="col-del"><button type="button" class="btn-del" title="Remover">×</button></td>`;
+  tr.querySelector('.btn-del').addEventListener('click', ()=>{
+    tr.remove();
+    atualizarVisibilidade(catId);
+    calcular();
+  });
+  corpo.appendChild(tr);
+  resetSeletor(catId);
+  atualizarVisibilidade(catId);
+  calcular();
+}
+
+function calcular(){
+  let total = 0;
+  categorias.forEach(cat=>{
+    const corpo = document.getElementById(`corpo-${cat.id}`);
+    if(!corpo) return;
+    Array.from(corpo.children).forEach(tr=>{
+      const qtdInput = tr.querySelector('.qtd-input');
+      const valorTotalCell = tr.querySelector('.valor-total');
+      if(!qtdInput || !valorTotalCell) return;
+      const q = Number(qtdInput.value) || 0;
+      let preco;
+      if(tr.dataset.range){
+        preco = precoFaixa(tr.dataset.range, q);
+        tr.querySelector('.valor-unit').textContent = brl(preco);
+      } else if(tr.dataset.preco !== undefined){
+        preco = Number(tr.dataset.preco) || 0;
+      } else {
+        const campoPreco = tr.querySelector('.custom-preco');
+        preco = campoPreco ? (Number(campoPreco.value) || 0) : 0;
+      }
+      const sub = preco * q;
+      valorTotalCell.textContent = brl(sub);
+      total += sub;
+    });
+  });
+  document.getElementById('total').textContent = brl(total);
+}
+
+document.addEventListener('input', e=>{ if(e.target.matches('.qtd-input, .custom-preco')) calcular(); });
+
+function mascaraCNPJ(e){
+  let v = e.target.value.replace(/\D/g,'').slice(0,14);
+  v = v.replace(/(\d{2})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1/$2').replace(/(\d{4})(\d{1,2})$/,'$1-$2');
+  e.target.value = v;
+}
+document.getElementById('cnpj').addEventListener('input', mascaraCNPJ);
+
+const hoje = new Date();
+document.getElementById('data').value = hoje.toISOString().slice(0,10);
+const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+document.getElementById('data-extenso').textContent = `${hoje.getDate()} de ${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`;
+
+function salvarProposta(){
+  calcular();
+  const clone = document.documentElement.cloneNode(true);
+  const originaisInputs = document.querySelectorAll('input, select');
+  clone.querySelectorAll('input, select').forEach((el,i)=>{
+    const original = originaisInputs[i];
+    if(!original) return;
+    if(original.tagName === 'SELECT'){
+      Array.from(el.options).forEach(o=>{ o.selected = (o.value === original.value); });
+    } else if(original.type === 'checkbox'){
+      if(original.checked) el.setAttribute('checked','checked');
+      else el.removeAttribute('checked');
+    } else {
+      el.setAttribute('value', original.value);
+    }
+  });
+  const nomeEmpresa = (document.getElementById('empresa').value || 'proposta-atlas').trim().replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'') || 'proposta-atlas';
+  const blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], {type:'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = nomeEmpresa + '.html';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+
+montarCategorias();
+</script>
+</body>
+</html>
