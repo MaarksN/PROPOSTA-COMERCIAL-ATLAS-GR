@@ -17,42 +17,45 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:#d9d9d9;color:var(--grafite);font:14px/1.5 Montserrat,Arial,sans-serif}
+body{background:#d9d9d9;color:var(--grafite);font:15.5px/1.65 Montserrat,Arial,sans-serif}
 
 .sheet{position:relative;width:min(1100px,100%);margin:20px auto;background:#fff;box-shadow:0 3px 20px rgba(0,0,0,.25);padding:0 0 24px;overflow:hidden}
 
-.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60%;max-width:480px;opacity:.06;pointer-events:none;z-index:0}
+.watermark{position:absolute;left:50%;width:56%;max-width:440px;opacity:.09;pointer-events:none;z-index:0}
+.watermark.wm-1{top:16%;transform:translate(-50%,-50%) rotate(-8deg)}
+.watermark.wm-2{top:48%;transform:translate(-50%,-50%) rotate(-8deg)}
+.watermark.wm-3{top:80%;transform:translate(-50%,-50%) rotate(-8deg)}
 .sheet-content{position:relative;z-index:1;padding:0 34px}
 
 .top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 34px;border-bottom:8px solid var(--laranja)}
 .logo{height:54px}
 .tag{text-align:right}
-.tag h1{margin:0;font-size:19px;letter-spacing:.5px;color:var(--preto);text-transform:uppercase}
-.tag .emissao{margin-top:6px;font-size:12px;color:#555;display:flex;gap:6px;align-items:center;justify-content:flex-end}
-.tag .emissao input{border:1px solid #ccc;border-radius:3px;padding:4px 6px;font:inherit;font-size:12px}
+.tag h1{margin:0;font-size:20px;letter-spacing:.5px;color:var(--preto);text-transform:uppercase}
+.tag .emissao{margin-top:6px;font-size:13px;color:#555;display:flex;gap:6px;align-items:center;justify-content:flex-end}
+.tag .emissao input{border:1px solid #ccc;border-radius:3px;padding:4px 6px;font:inherit;font-size:13px}
 
-h2.section{background:var(--laranja);color:#fff;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 14px;margin:28px 0 12px;border-radius:2px}
+h2.section{background:var(--laranja);color:#fff;font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 14px;margin:28px 0 12px;border-radius:2px}
 
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 18px;margin-bottom:6px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 18px;margin-bottom:6px}
 .field{display:flex;flex-direction:column}
 .field.wide{grid-column:1/-1}
-.field label{font-size:10.5px;font-weight:800;text-transform:uppercase;color:#555;margin-bottom:4px;letter-spacing:.3px}
-.field input{border:0;border-bottom:2px solid var(--preto);padding:8px 4px;font:inherit;font-size:14px;background:transparent;color:var(--preto)}
+.field label{font-size:11.5px;font-weight:800;text-transform:uppercase;color:#555;margin-bottom:4px;letter-spacing:.3px}
+.field input{border:0;border-bottom:2px solid var(--preto);padding:9px 4px;font:inherit;font-size:15px;background:transparent;color:var(--preto)}
 .field input:focus{outline:none;border-color:var(--laranja)}
 
-.intro{background:var(--cinza);border-left:6px solid var(--preto);padding:14px 16px;font-size:13.5px;color:#333}
+.intro{background:var(--cinza);border-left:6px solid var(--preto);padding:14px 16px;font-size:14.5px;color:#333;text-align:justify}
 
 .products{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .product{border:1px solid var(--linha);padding:12px 13px;background:#fff}
-.product b{display:block;color:var(--preto);font-size:15px;text-transform:uppercase;margin-bottom:5px}
-.product p{margin:0;font-size:12px;color:#444}
+.product b{display:block;color:var(--preto);font-size:16px;text-transform:uppercase;margin-bottom:5px}
+.product p{margin:0;font-size:13px;color:#444;text-align:justify}
 
 .categoria{margin-bottom:26px}
-.categoria-titulo{background:var(--grafite);color:#fff;font-size:13.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 13px;display:flex;justify-content:space-between;align-items:center}
-.categoria-titulo small{font-weight:500;font-size:10.5px;color:#ddd;text-transform:none;letter-spacing:0}
+.categoria-titulo{background:var(--grafite);color:#fff;font-size:14.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 13px;display:flex;justify-content:space-between;align-items:center}
+.categoria-titulo small{font-weight:500;font-size:11px;color:#ddd;text-transform:none;letter-spacing:0}
 
 .seletor{display:flex;gap:10px;align-items:center;padding:12px 13px;background:#fafafa;border:1px solid var(--linha);border-top:0;flex-wrap:wrap}
-.seletor select{border:1px solid #bbb;border-radius:3px;padding:9px 10px;font:inherit;font-size:13px;background:#fff;color:var(--preto)}
+.seletor select{border:1px solid #bbb;border-radius:3px;padding:9px 10px;font:inherit;font-size:14px;background:#fff;color:var(--preto)}
 .seletor select:focus{outline:none;border-color:var(--laranja)}
 .sel-plano{flex:1;min-width:190px}
 .sel-item{flex:1.4;min-width:230px}
@@ -62,12 +65,12 @@ h2.section{background:var(--laranja);color:#fff;font-size:15px;font-weight:800;t
 .btn-add:disabled{background:#ccc;cursor:not-allowed}
 
 .tablewrap{width:100%;overflow-x:auto;border:1px solid var(--linha);border-top:0}
-table{width:100%;border-collapse:collapse;min-width:820px;font-size:12.5px}
-thead th{background:var(--preto);color:#fff;text-align:left;padding:9px;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
-tbody td{padding:8px 9px;border-bottom:1px solid var(--linha);vertical-align:middle}
+table{width:100%;border-collapse:collapse;min-width:820px;font-size:13.5px}
+thead th{background:var(--preto);color:#fff;text-align:left;padding:9px;font-size:11px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+tbody td{padding:9px;border-bottom:1px solid var(--linha);vertical-align:middle}
 tbody tr:nth-of-type(even){background:#fafafa}
 tbody tr:hover{background:#fff3ec}
-.vazio-msg{padding:16px;text-align:center;color:#888;font-size:12.5px;font-style:italic;background:#fdfdfd;border:1px dashed var(--linha);border-top:0}
+.vazio-msg{padding:16px;text-align:center;color:#888;font-size:13px;font-style:italic;background:#fdfdfd;border:1px dashed var(--linha);border-top:0}
 
 .col-plano{width:150px}
 .col-item{width:190px}
@@ -76,29 +79,38 @@ tbody tr:hover{background:#fff3ec}
 .col-total{width:130px}
 .col-del{width:40px;text-align:center}
 
-input.qtd-input{width:100%;border:1px solid #bbb;padding:6px;font:inherit;font-size:12.5px;text-align:center;border-radius:2px}
+input.qtd-input{width:100%;border:1px solid #bbb;padding:7px;font:inherit;font-size:13.5px;text-align:center;border-radius:2px}
 input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 .valor-unit,.valor-total{text-align:right;white-space:nowrap;font-weight:700}
 .valor-unit{color:#333}
 .valor-total{color:var(--preto);font-weight:800}
-.detalhe{color:#555;font-size:12px}
-.badge-plano{display:inline-block;background:var(--amarelo);color:#111;font-size:10px;font-weight:800;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-bottom:3px}
+.detalhe{color:#555;font-size:13px}
+.badge-plano{display:inline-block;background:var(--amarelo);color:#111;font-size:10.5px;font-weight:800;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-bottom:3px}
 .btn-del{border:0;background:#a83b3b;color:#fff;width:26px;height:26px;border-radius:3px;cursor:pointer;font-size:14px;line-height:1}
 .btn-del:hover{background:#8a2f2f}
 
-.custom-input{width:100%;border:1px solid #bbb;padding:6px;font:inherit;font-size:12px;border-radius:2px}
+.custom-input{width:100%;border:1px solid #bbb;padding:7px;font:inherit;font-size:13px;border-radius:2px}
 
-.totalbox{margin:22px 0 6px;margin-left:auto;width:min(360px,100%);background:var(--preto);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;font-size:19px;font-weight:800;border-left:10px solid var(--laranja)}
-.note{font-size:11px;color:#555;margin-top:8px}
+.totalbox{margin:22px 0 6px;margin-left:auto;width:min(360px,100%);background:var(--preto);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:800;border-left:10px solid var(--laranja)}
+.note{font-size:12px;color:#555;margin-top:8px}
 
-.terms p{font-size:12px;color:#333;margin:7px 0}
+.terms p{font-size:13px;color:#333;margin:7px 0;text-align:justify}
 
 .signature{margin-top:30px;border-top:3px solid var(--preto);padding-top:16px}
-.sigline{margin-top:44px;border-top:1px solid #333;width:60%;padding-top:6px;font-size:12px;color:#333}
-.dados-assinatura{margin-top:16px;font-size:12px;line-height:2;color:#333}
-.dados-assinatura span.fill{display:inline-block;min-width:170px;border-bottom:1px solid #777;margin:0 14px 0 4px}
+.signature>p{text-align:justify}
+.sigline{margin-top:48px;border-top:1px solid #333;width:60%;padding-top:6px;font-size:13px;color:#333}
 
-.footer{font-size:10.5px;color:#666;border-top:2px solid var(--laranja);padding-top:10px;margin-top:26px;display:flex;justify-content:space-between}
+.dados-assinatura{margin-top:22px;font-size:13.5px;color:#333}
+.assinatura-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px 40px}
+.assinatura-grid .campo{display:flex;align-items:flex-end;gap:8px}
+.assinatura-grid .campo.wide{grid-column:1/-1}
+.assinatura-grid .campo strong{white-space:nowrap;padding-bottom:6px}
+.assinatura-grid .campo .fill{flex:1;height:30px;border-bottom:2px solid #777}
+.assinatura-grid .campo .fill.data{flex:0 0 auto;min-width:260px}
+
+.footer{margin:34px -34px 0;padding:18px 34px;background:var(--preto);color:#eee;border-top:4px solid var(--laranja);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px 24px;font-size:12px;letter-spacing:.2px}
+.footer .marca{font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.4px}
+.footer span{white-space:nowrap}
 
 .no-print{position:fixed;right:22px;bottom:22px;display:flex;gap:10px;z-index:5}
 .btn{border:0;color:#fff;padding:9px 16px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.3px;border-radius:2px;cursor:pointer}
@@ -106,7 +118,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 .btn.laranja{background:var(--laranja)}
 
 @media (max-width:760px){
-  .grid,.products{grid-template-columns:1fr}
+  .grid,.products,.assinatura-grid{grid-template-columns:1fr}
   .top{flex-direction:column;align-items:flex-start}
   .tag{text-align:left}
   .tag .emissao{justify-content:flex-start}
@@ -114,19 +126,23 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
   .sheet{margin:0}
   .seletor{flex-direction:column;align-items:stretch}
   .seletor select{min-width:0}
+  .footer{justify-content:flex-start;text-align:left}
 }
 
 @media print{
   body{background:#fff}
   .sheet{box-shadow:none;margin:0;width:100%}
   .no-print,.seletor,.btn-del{display:none}
-  .watermark{opacity:.05}
+  .watermark{opacity:.08}
+  .footer{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
 <body>
 <main class="sheet">
-  <img class="watermark" src="https://www.atlasgr.com.br/wp-content/uploads/2021/03/atlas.svg" alt="">
+  <img class="watermark wm-1" src="https://www.atlasgr.com.br/wp-content/uploads/2021/03/atlas.svg" alt="">
+  <img class="watermark wm-2" src="https://www.atlasgr.com.br/wp-content/uploads/2021/03/atlas.svg" alt="">
+  <img class="watermark wm-3" src="https://www.atlasgr.com.br/wp-content/uploads/2021/03/atlas.svg" alt="">
   <div class="sheet-content">
 
     <header class="top">
@@ -198,14 +214,23 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
       <p style="font-size:12.5px;color:#333">Declaro que li e concordo plenamente com a cobrança da ATLAS para minha empresa, referente ao conteúdo desta proposta. Esta proposta estará vinculada ao contrato de prestação de serviços a ser firmado entre as partes, aos termos e condições específicas do serviço contratado e ao termo de licença de uso de software. <b>Validade da proposta: 30 dias.</b></p>
       <div class="sigline">Assinatura e identificação do cliente</div>
       <div class="dados-assinatura">
-        <strong>Nome:</strong><span class="fill"></span><strong>Cargo:</strong><span class="fill"></span><br>
-        <strong>CNPJ:</strong><span class="fill"></span><strong>Cidade/UF:</strong><span class="fill"></span><br>
-        <strong>E-mail:</strong><span class="fill"></span><strong>Fone:</strong><span class="fill"></span><br>
-        <strong>Data:</strong> Ribeirão Preto, <span id="data-extenso"></span>.
+        <div class="assinatura-grid">
+          <div class="campo"><strong>Nome:</strong><span class="fill"></span></div>
+          <div class="campo"><strong>Cargo:</strong><span class="fill"></span></div>
+          <div class="campo"><strong>CNPJ:</strong><span class="fill"></span></div>
+          <div class="campo"><strong>Cidade/UF:</strong><span class="fill"></span></div>
+          <div class="campo"><strong>E-mail:</strong><span class="fill"></span></div>
+          <div class="campo"><strong>Fone:</strong><span class="fill"></span></div>
+          <div class="campo wide"><strong>Data:</strong><span class="fill data">Ribeirão Preto, <span id="data-extenso"></span>.</span></div>
+        </div>
       </div>
     </section>
 
-    <footer class="footer"><span>ATLAS Gerenciamento de Riscos</span><span>CNPJ 18.580.156/0001-54</span></footer>
+    <footer class="footer">
+      <span class="marca">Atlas Gerenciamento de Riscos</span>
+      <span>CNPJ 18.580.156/0001-54</span>
+      <span>www.atlasgr.com.br</span>
+    </footer>
   </div>
 </main>
 
