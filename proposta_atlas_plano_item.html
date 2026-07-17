@@ -11,7 +11,6 @@
   --preto:#111111;
   --grafite:#333333;
   --laranja:#FF5618;
-  --amarelo:#FFC500;
   --linha:#c9c9c9;
   --cinza:#f2f2f2;
 }
@@ -121,7 +120,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 .valor-unit{color:#333}
 .valor-total{color:var(--preto);font-weight:800}
 .detalhe{color:#555;font-size:13px}
-.badge-plano{display:inline-block;background:var(--amarelo);color:#111;font-size:10.5px;font-weight:800;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-bottom:3px}
+.badge-plano{display:inline-block;background:var(--laranja);color:#fff;font-size:10.5px;font-weight:800;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-bottom:3px}
 .btn-del{border:0;background:#a83b3b;color:#fff;width:26px;height:26px;border-radius:3px;cursor:pointer;font-size:14px;line-height:1}
 .btn-del:hover{background:#8a2f2f}
 
@@ -130,25 +129,23 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 .totalbox{margin:22px 0 6px;margin-left:auto;width:min(360px,100%);background:var(--preto);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:800;border-left:10px solid var(--laranja)}
 .note{font-size:12px;color:#555;margin-top:8px}
 
-.fatmin{margin:14px 0 6px;width:100%;background:#fff;border:2px solid var(--preto);padding:14px 16px}
-.fatmin b{display:block;font-size:13.5px;color:var(--preto);text-transform:uppercase;letter-spacing:.3px;text-align:center}
-.fatmin .fatmin-valor{font-size:19px;font-weight:800;color:var(--laranja);margin:10px 0}
+.fatmin{margin:14px 0 6px;width:100%;background:#fff;border:2px solid var(--preto);padding:0 0 16px}
+.fatmin .fatmin-titulo{background:var(--laranja);color:#fff;font-size:14.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 13px;text-align:center;margin-bottom:14px}
+.fatmin-corpo{padding:0 16px}
+.fatmin-corpo p{margin:0 0 8px;font-size:13px;color:#333;text-align:justify;position:relative;padding-left:16px}
+.fatmin-corpo p::before{content:"•";position:absolute;left:0;top:0;color:var(--laranja);font-weight:800}
+.fatmin .fatmin-valor{font-size:19px;font-weight:800;color:var(--laranja);margin:14px 0 10px}
 .fatmin label{display:block;font-size:10.5px;font-weight:800;text-transform:uppercase;color:#555;margin-bottom:4px;letter-spacing:.3px}
 .fatmin input{width:100%;border:1px solid #bbb;border-radius:2px;padding:8px;font:inherit;font-size:13px}
 .fatmin input:focus{outline:none;border-color:var(--laranja)}
-
-.adendo{background:var(--cinza);border-left:6px solid var(--laranja);padding:14px 16px;margin-top:14px}
-.adendo b{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.3px;color:var(--preto);margin-bottom:6px;text-align:center}
-.adendo p{margin:6px 0 0;font-size:13px;color:#333;text-align:justify;position:relative;padding-left:16px}
-.adendo p::before{content:"•";position:absolute;left:0;top:0;color:var(--laranja);font-weight:800}
 
 .terms p{font-size:13px;color:#333;margin:7px 0;text-align:justify;position:relative;padding-left:16px}
 .terms p::before{content:"•";position:absolute;left:0;top:0;color:var(--laranja);font-weight:800}
 
 .signature{margin-top:30px;border-top:3px solid var(--preto);padding-top:16px}
 .signature>p{text-align:justify}
-.sigline{margin-top:52px;border-top:2px solid var(--preto);width:100%;padding-top:6px;font-size:13px;color:#333}
-.sig-cnpj{font-size:13.5px;color:var(--preto);font-weight:700;margin-top:4px}
+.sigline{margin-top:52px;border-top:2px solid var(--preto);width:100%;padding-top:6px;font-size:13px;color:#333;text-align:center}
+.sig-cnpj{font-size:13.5px;color:var(--preto);font-weight:700;margin-top:4px;text-align:center}
 
 .dados-assinatura{margin-top:20px}
 .dados-assinatura .grid{margin-bottom:0}
@@ -234,8 +231,6 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
         <p>Abaixo detalhamos nosso portfólio modular para compor a sua proposta.</p>
       </div>
 
-      <p style="font-size:12.5px;color:#555;margin:0 0 14px">Em cada produto, a tabela abaixo da explicação mostra todos os planos e itens com seus valores. Informe a <b>quantidade</b> desejada na linha do item e clique em <b>Adicionar</b> para incluí-lo na proposta. Use o botão <b>"+ Item personalizado"</b> para incluir um item fora do catálogo, com nome, detalhamento e valor próprios.</p>
-
       <article class="produto">
         <div class="produto-cabecalho"><span class="icone"><svg viewBox="0 0 252 172"><use href="#atlas-icon"/></svg></span><h3>Atlas Profile</h3></div>
         <dl class="produto-corpo">
@@ -267,7 +262,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
         <div class="produto-preco" id="cat-connect"></div>
         <div class="combo-opcao">
           <input type="checkbox" id="combo-gr-connect">
-          <label for="combo-gr-connect"><b>Combo GR + Torre de Controle Logística — R$ 135,90/veículo/mês</b>Contratando o Atlas GR junto com o Atlas Connect, marque esta opção para aplicar o preço especial do combo em vez dos valores individuais.</label>
+          <label for="combo-gr-connect"><b>Combo GR + Torre de Controle Logística — R$ 135,90/veículo/mês</b>Preço especial para a contratação conjunta do Atlas GR com o Atlas Connect, em substituição aos valores individuais.</label>
         </div>
       </article>
 
@@ -301,20 +296,18 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
       <div class="checklist-vazio" id="checklist-vazio">Nenhum item selecionado ainda.</div>
 
       <div class="totalbox"><span>VALOR FINAL</span><span id="total">R$ 0,00</span></div>
-      <p class="note">Serviço de Escolta tem valor variável conforme km rodado; utilize "Item personalizado" em Serviços Adicionais para incluí-lo manualmente.</p>
+      <p class="note">Serviço de Escolta tem valor variável conforme km rodado.</p>
 
       <div class="fatmin">
-        <b>Faturamento mínimo mensal</b>
-        <div class="fatmin-valor" id="fatmin-valor">R$ 0,00</div>
-        <label for="fatmin-input">Personalizar valor (opcional)</label>
-        <input type="number" id="fatmin-input" min="0" step="0.01" placeholder="Deixe em branco para aplicar 40% automaticamente">
-      </div>
-
-      <div class="adendo">
-        <b>Adendo — Faturamento mínimo</b>
-        <p>Esse valor garante a manutenção e a disponibilidade da ferramenta contratada, sendo devido mesmo nos meses em que o cliente não utilizar nenhum item contratado.</p>
-        <p>Caso o consumo do período seja inferior ao valor mínimo de faturamento, será cobrado o valor mínimo.</p>
-        <p>Caso o consumo do período seja igual ou superior ao valor mínimo de faturamento, será cobrado o valor efetivamente consumido.</p>
+        <div class="fatmin-titulo">Faturamento mínimo mensal</div>
+        <div class="fatmin-corpo">
+          <p>Esse valor garante a manutenção e a disponibilidade da ferramenta contratada, sendo devido mesmo nos meses em que o cliente não utilizar nenhum item contratado.</p>
+          <p>Caso o consumo do período seja inferior ao valor mínimo de faturamento, será cobrado o valor mínimo.</p>
+          <p>Caso o consumo do período seja igual ou superior ao valor mínimo de faturamento, será cobrado o valor efetivamente consumido.</p>
+          <div class="fatmin-valor" id="fatmin-valor">R$ 0,00</div>
+          <label for="fatmin-input">Personalizar valor (opcional)</label>
+          <input type="number" id="fatmin-input" min="0" step="0.01" placeholder="Deixe em branco para aplicar 40% automaticamente">
+        </div>
       </div>
     </section>
 
