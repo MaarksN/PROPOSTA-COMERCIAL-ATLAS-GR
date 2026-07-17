@@ -51,7 +51,8 @@ h2.section{background:var(--laranja);color:#fff;font-size:16px;font-weight:800;t
 
 .produtos-intro{background:var(--cinza);border-left:6px solid var(--laranja);padding:14px 16px;margin-bottom:18px}
 .produtos-intro h3{margin:0 0 8px;font-size:16px;color:var(--preto);letter-spacing:.2px;text-align:center}
-.produtos-intro p{margin:6px 0 0;font-size:13.5px;color:#333;text-align:justify}
+.produtos-intro p{margin:6px 0 0;font-size:13.5px;color:#333;text-align:justify;position:relative;padding-left:16px}
+.produtos-intro p::before{content:"•";position:absolute;left:0;top:0;color:var(--laranja);font-weight:800}
 
 .produto{border:1px solid var(--linha);margin-bottom:16px;background:#fff}
 .produto-cabecalho{background:var(--grafite);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 14px}
@@ -60,10 +61,30 @@ h2.section{background:var(--laranja);color:#fff;font-size:16px;font-weight:800;t
 .produto-cabecalho h3{margin:0;font-size:15px;text-transform:uppercase;letter-spacing:.3px}
 .produto-corpo{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 .produto-corpo .bloco dt{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--laranja);letter-spacing:.3px;margin-bottom:3px;text-align:left}
-.produto-corpo .bloco dd{margin:0;font-size:13.5px;color:#333;text-align:justify}
+.produto-corpo .bloco dd{margin:0;font-size:13.5px;color:#333;text-align:justify;position:relative;padding-left:16px}
+.produto-corpo .bloco dd::before{content:"•";position:absolute;left:0;top:0;color:var(--laranja);font-weight:800}
 
 .produto-preco{border-top:1px solid var(--linha)}
 .produto-preco .categoria{margin-bottom:0}
+
+.combo-opcao{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:var(--cinza);border-top:1px solid var(--linha)}
+.combo-opcao input[type=checkbox]{width:18px;height:18px;margin-top:2px;accent-color:var(--laranja);flex-shrink:0}
+.combo-opcao label{font-size:12.5px;color:#333;line-height:1.5}
+.combo-opcao label b{display:block;color:var(--preto);font-size:13px}
+
+.catalogo-add{width:100%;border:0;background:var(--laranja);color:#fff;padding:7px 6px;font-weight:800;font-size:11px;text-transform:uppercase;border-radius:3px;cursor:pointer;white-space:nowrap}
+.catalogo-add:hover{background:#e14a10}
+.btn-custom{border:1px dashed #999;background:#fafafa;color:#555;padding:8px 13px;font-weight:700;font-size:11.5px;text-transform:uppercase;border-radius:3px;cursor:pointer;margin:10px 13px}
+.btn-custom:hover{background:#f0f0f0}
+
+.checklist{border:1px solid var(--linha)}
+.checklist-item{display:flex;align-items:center;gap:10px;padding:9px 13px;border-bottom:1px solid var(--linha);font-size:13px}
+.checklist-item:nth-of-type(even){background:#fafafa}
+.checklist-item .check{color:#fff;background:var(--laranja);width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.checklist-item .checklist-label{flex:1;color:#333}
+.checklist-item .checklist-label b{color:var(--preto)}
+.checklist-item .checklist-valor{font-weight:800;color:var(--preto);white-space:nowrap}
+.checklist-vazio{padding:16px;text-align:center;color:#888;font-size:13px;font-style:italic;background:#fdfdfd}
 
 .categoria{margin-bottom:26px}
 .categoria-titulo{background:var(--laranja);color:#fff;font-size:14.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 13px;display:flex;align-items:center;justify-content:center;text-align:center}
@@ -92,6 +113,7 @@ tbody tr:hover{background:#fff3ec}
 .col-qtd{width:90px}
 .col-total{width:130px}
 .col-del{width:40px;text-align:center}
+.col-add{width:110px;text-align:center}
 
 input.qtd-input{width:100%;border:1px solid #bbb;padding:7px;font:inherit;font-size:13.5px;text-align:center;border-radius:2px}
 input.qtd-input:focus{outline:none;border-color:var(--laranja)}
@@ -117,9 +139,11 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 
 .adendo{background:var(--cinza);border-left:6px solid var(--laranja);padding:14px 16px;margin-top:14px}
 .adendo b{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.3px;color:var(--preto);margin-bottom:6px;text-align:center}
-.adendo p{margin:6px 0 0;font-size:13px;color:#333;text-align:justify}
+.adendo p{margin:6px 0 0;font-size:13px;color:#333;text-align:justify;position:relative;padding-left:16px}
+.adendo p::before{content:"•";position:absolute;left:0;top:0;color:var(--laranja);font-weight:800}
 
-.terms p{font-size:13px;color:#333;margin:7px 0;text-align:justify}
+.terms p{font-size:13px;color:#333;margin:7px 0;text-align:justify;position:relative;padding-left:16px}
+.terms p::before{content:"•";position:absolute;left:0;top:0;color:var(--laranja);font-weight:800}
 
 .signature{margin-top:30px;border-top:3px solid var(--preto);padding-top:16px}
 .signature>p{text-align:justify}
@@ -153,7 +177,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 @media print{
   body{background:#fff}
   .sheet{box-shadow:none;margin:0;width:100%}
-  .no-print,.seletor,.btn-del{display:none}
+  .no-print,.seletor,.btn-del,.catalogo-add,.btn-custom{display:none}
   .watermark{opacity:.08}
   .footer{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
@@ -210,7 +234,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
         <p>Abaixo detalhamos nosso portfólio modular para compor a sua proposta.</p>
       </div>
 
-      <p style="font-size:12.5px;color:#555;margin:0 0 14px">Em cada produto, primeiro escolha o <b>plano</b> na primeira lista; a segunda lista mostrará os itens desse plano. Selecione o item para adicioná-lo automaticamente com detalhamento e valor. Preencha apenas a quantidade. Em qualquer produto, use a opção <b>"+ Item personalizado"</b> para incluir um item fora do catálogo, com nome, detalhamento e valor próprios.</p>
+      <p style="font-size:12.5px;color:#555;margin:0 0 14px">Em cada produto, a tabela abaixo da explicação mostra todos os planos e itens com seus valores. Informe a <b>quantidade</b> desejada na linha do item e clique em <b>Adicionar</b> para incluí-lo na proposta. Use o botão <b>"+ Item personalizado"</b> para incluir um item fora do catálogo, com nome, detalhamento e valor próprios.</p>
 
       <article class="produto">
         <div class="produto-cabecalho"><span class="icone"><svg viewBox="0 0 252 172"><use href="#atlas-icon"/></svg></span><h3>Atlas Profile</h3></div>
@@ -220,6 +244,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
           <div class="bloco"><dt>Como faz</dt><dd>Utiliza uma Inteligência Artificial (IA) integrada que resume os processos judiciais e pendências do profissional em um dossiê simples em poucos minutos, em total conformidade com a LGPD. Oferece API para integração total com o TMS ou ERP da sua empresa.</dd></div>
         </dl>
         <div class="produto-preco" id="cat-profile"></div>
+        <p class="note" style="margin:0;padding:10px 16px">Faturamento mínimo obrigatório em propostas de baixo volume (menos de 100 consultas/mês): R$ 59,90.</p>
       </article>
 
       <article class="produto">
@@ -240,6 +265,10 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
           <div class="bloco"><dt>Como faz</dt><dd>O sistema concentra a "Gestão à Vista" (onde cada caminhão está de forma georreferenciada), a "Gestão de Alvos" (monitoramento de perímetros para controlar tempos de paradas) e a "Gestão de Alertas" (que automatiza ações com base em regras que você cria). Além disso, envia e recebe informações do motorista direto por aplicativo, eliminando dependência do WhatsApp.</dd></div>
         </dl>
         <div class="produto-preco" id="cat-connect"></div>
+        <div class="combo-opcao">
+          <input type="checkbox" id="combo-gr-connect">
+          <label for="combo-gr-connect"><b>Combo GR + Torre de Controle Logística — R$ 135,90/veículo/mês</b>Contratando o Atlas GR junto com o Atlas Connect, marque esta opção para aplicar o preço especial do combo em vez dos valores individuais.</label>
+        </div>
       </article>
 
       <article class="produto">
@@ -266,6 +295,10 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
     <section>
       <h2 class="section">Combos, apoio e serviços adicionais</h2>
       <div id="cat-extra"></div>
+
+      <h2 class="section">Checklist de contratação</h2>
+      <div class="checklist" id="checklist" style="display:none"></div>
+      <div class="checklist-vazio" id="checklist-vazio">Nenhum item selecionado ainda.</div>
 
       <div class="totalbox"><span>VALOR FINAL</span><span id="total">R$ 0,00</span></div>
       <p class="note">Serviço de Escolta tem valor variável conforme km rodado; utilize "Item personalizado" em Serviços Adicionais para incluí-lo manualmente.</p>
@@ -378,8 +411,11 @@ const categorias = [
         {item:'Checklist', detalhe:'Teste dos sensores e atuadores do rastreador principal; por demanda.', preco:5.90, qtd:1},
         {item:'Envio de rotograma', detalhe:'Envio de rotograma ao motorista; por veículo.', preco:3.90, qtd:1},
       ],
+      'Integração New Connect': [
+        {item:'Licença Plataforma Atlas New Connect', detalhe:'Integrador de tecnologia do sistema para estruturação interna; por veículo/mês.', preco:29.90, qtd:1},
+      ],
   }},
-  { id:'combos', container:'cat-extra', titulo:'Combos e Controle de Jornada', planos:{
+  { id:'combos', container:'cat-extra', titulo:'Combos e Controle de Jornada', planosOcultos:['Combo GR + Logística'], planos:{
       'Combo GR + Logística': [
         {item:'GR + Torre de Controle Logística', detalhe:'Combo especial para contratação conjunta do GR + Logística; por veículo/mês.', preco:135.90, qtd:1},
       ],
@@ -434,8 +470,23 @@ const categorias = [
         {item:'Vitimologia', detalhe:'Valor ajustado por faixa de consultas/mês.', range:'vitimologia', qtd:100},
       ],
   }},
-  { id:'connect', container:'cat-connect', titulo:'Planos e valores', planos:{}},
-  { id:'analytics', container:'cat-analytics', titulo:'Planos e valores', planos:{}},
+  { id:'connect', container:'cat-connect', titulo:'Planos e valores', planos:{
+      'Licença Atlas New Connect': [
+        {item:'Por veículo/mês', detalhe:'Software completo com módulos de Gestão à Vista, Gestão de Alvos, Transit Time e ETA.', preco:34.90, qtd:1},
+        {item:'Por viagem', detalhe:'Valor por viagem.', preco:8.90, qtd:1},
+      ],
+      'Planejador de Carga': [
+        {item:'Por veículo/mês', detalhe:'Módulo de planejamento de carga com controle de espaço e roteirização.', preco:29.90, qtd:1},
+        {item:'Por viagem', detalhe:'Valor por viagem.', preco:4.50, qtd:1},
+      ],
+  }},
+  { id:'analytics', container:'cat-analytics', titulo:'Planos e valores', planos:{
+      "Atlas Analytics (BI's)": [
+        {item:'Por usuário/mês', detalhe:'Power BI completo (Transit Time, Alertas, Gestão de Alvos).', preco:14.90, qtd:1},
+        {item:'Por veículo/mês', detalhe:'Power BI completo (Transit Time, Alertas, Gestão de Alvos).', preco:4.90, qtd:1},
+        {item:'Por viagem', detalhe:'Power BI completo (Transit Time, Alertas, Gestão de Alvos).', preco:0.90, qtd:1},
+      ],
+  }},
   { id:'safety', container:'cat-safety', titulo:'Planos e valores', planos:{}},
 ];
 
@@ -448,22 +499,37 @@ function montarCategorias(){
   categorias.forEach(cat=>{
     const container = document.getElementById(cat.container);
     if(!container) return;
-    const nomesPlanos = Object.keys(cat.planos);
+    const ocultos = cat.planosOcultos || [];
+    const linhasCatalogo = [];
+    Object.keys(cat.planos).forEach(plano=>{
+      if(ocultos.includes(plano)) return;
+      cat.planos[plano].forEach((it,i)=>{
+        const precoInicial = it.range ? precoFaixa(it.range, it.qtd) : it.preco;
+        linhasCatalogo.push(`
+          <tr>
+            <td><span class="badge-plano">${plano}</span></td>
+            <td><b>${it.item}</b></td>
+            <td class="detalhe">${it.detalhe}</td>
+            <td class="valor-unit">${brl(precoInicial)}</td>
+            <td><input type="number" class="qtd-catalogo" min="0" step="1" value="${it.qtd}"></td>
+            <td><button type="button" class="catalogo-add" data-plano="${plano}" data-idx="${i}">Adicionar</button></td>
+          </tr>`);
+      });
+    });
+
     const bloco = document.createElement('div');
     bloco.className = 'categoria';
     bloco.innerHTML = `
       <div class="categoria-titulo">${cat.titulo}</div>
-      <div class="seletor">
-        <select class="sel-plano" id="plano-${cat.id}">
-          <option value="">1. Selecionar plano...</option>
-          ${nomesPlanos.map(p=>`<option value="${p}">${p}</option>`).join('')}
-          <option value="__custom__">+ Item personalizado</option>
-        </select>
-        <select class="sel-item" id="item-${cat.id}" disabled>
-          <option value="">2. Selecionar item...</option>
-        </select>
-        <button type="button" class="btn-add" id="btn-${cat.id}" disabled>Adicionar</button>
-      </div>
+      ${linhasCatalogo.length ? `
+      <div class="tablewrap">
+        <table>
+          <colgroup><col class="col-plano"><col class="col-item"><col><col class="col-valor"><col class="col-qtd"><col class="col-add"></colgroup>
+          <thead><tr><th>Plano</th><th>Item</th><th>Detalhamento</th><th>Valor unitário</th><th>Quantidade</th><th></th></tr></thead>
+          <tbody>${linhasCatalogo.join('')}</tbody>
+        </table>
+      </div>` : ''}
+      <button type="button" class="btn-custom" id="custom-${cat.id}">+ Item personalizado</button>
       <div class="tablewrap" id="wrap-${cat.id}" style="display:none">
         <table>
           <colgroup><col class="col-plano"><col class="col-item"><col><col class="col-valor"><col class="col-qtd"><col class="col-total"><col class="col-del"></colgroup>
@@ -475,38 +541,20 @@ function montarCategorias(){
     `;
     container.appendChild(bloco);
 
-    const selPlano = bloco.querySelector(`#plano-${cat.id}`);
-    const selItem = bloco.querySelector(`#item-${cat.id}`);
-    const botao = bloco.querySelector(`#btn-${cat.id}`);
-
-    selPlano.addEventListener('change', ()=>{
-      const plano = selPlano.value;
-      selItem.innerHTML = '<option value="">2. Selecionar item...</option>';
-      if(plano === '' ){
-        selItem.disabled = true; botao.disabled = true; return;
-      }
-      if(plano === '__custom__'){
-        selItem.disabled = true; botao.disabled = false; return;
-      }
-      cat.planos[plano].forEach((it,i)=>{
-        selItem.innerHTML += `<option value="${i}">${it.item}</option>`;
+    bloco.querySelectorAll('.catalogo-add').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const plano = btn.dataset.plano;
+        const idx = Number(btn.dataset.idx);
+        const item = cat.planos[plano][idx];
+        const qtdInput = btn.closest('tr').querySelector('.qtd-catalogo');
+        const qtd = Number(qtdInput.value) || 0;
+        if(qtd <= 0) return;
+        adicionarLinhaCatalogo(cat.id, plano, {...item, qtd});
       });
-      selItem.disabled = false; botao.disabled = true;
     });
 
-    selItem.addEventListener('change', ()=>{
-      botao.disabled = selItem.value === '';
-    });
-
-    botao.addEventListener('click', ()=>{
-      const plano = selPlano.value;
-      if(plano === '__custom__'){
-        adicionarLinhaPersonalizada(cat.id);
-      } else if(plano !== '' && selItem.value !== ''){
-        const indiceItem = Number(selItem.value);
-        const item = cat.planos[plano][indiceItem];
-        adicionarLinhaCatalogo(cat.id, plano, item, indiceItem, selItem.querySelector(`option[value="${indiceItem}"]`), selPlano);
-      }
+    bloco.querySelector(`#custom-${cat.id}`).addEventListener('click', ()=>{
+      adicionarLinhaPersonalizada(cat.id);
     });
   });
 }
@@ -520,17 +568,7 @@ function atualizarVisibilidade(catId){
   vazio.style.display = temLinhas ? 'none' : '';
 }
 
-function resetSeletor(catId){
-  const selPlano = document.getElementById(`plano-${catId}`);
-  const selItem = document.getElementById(`item-${catId}`);
-  const botao = document.getElementById(`btn-${catId}`);
-  selPlano.value = '';
-  selItem.innerHTML = '<option value="">2. Selecionar item...</option>';
-  selItem.disabled = true;
-  botao.disabled = true;
-}
-
-function adicionarLinhaCatalogo(catId, plano, item, indiceItem, opcaoEl, selPlanoEl){
+function adicionarLinhaCatalogo(catId, plano, item){
   const corpo = document.getElementById(`corpo-${catId}`);
   const tr = document.createElement('tr');
   if(item.range) tr.dataset.range = item.range;
@@ -546,13 +584,10 @@ function adicionarLinhaCatalogo(catId, plano, item, indiceItem, opcaoEl, selPlan
     <td class="col-del"><button type="button" class="btn-del" title="Remover">×</button></td>`;
   tr.querySelector('.btn-del').addEventListener('click', ()=>{
     tr.remove();
-    if(opcaoEl) opcaoEl.disabled = false;
     atualizarVisibilidade(catId);
     calcular();
   });
   corpo.appendChild(tr);
-  if(opcaoEl) opcaoEl.disabled = true;
-  resetSeletor(catId);
   atualizarVisibilidade(catId);
   calcular();
 }
@@ -575,7 +610,6 @@ function adicionarLinhaPersonalizada(catId){
     calcular();
   });
   corpo.appendChild(tr);
-  resetSeletor(catId);
   atualizarVisibilidade(catId);
   calcular();
 }
@@ -611,6 +645,42 @@ function calcular(){
   const custom = Number(fatminInput.value);
   const fatMin = custom > 0 ? custom : total * 0.4;
   document.getElementById('fatmin-valor').textContent = brl(fatMin);
+
+  montarChecklist();
+}
+
+function obterRotuloLinha(tr){
+  if(tr.dataset.custom){
+    const inputs = tr.querySelectorAll('.custom-input');
+    return { plano: inputs[0].value || 'Personalizado', item: inputs[1].value || 'Item personalizado' };
+  }
+  return {
+    plano: tr.querySelector('.badge-plano')?.textContent || '',
+    item: tr.querySelector('td:nth-child(2)')?.textContent.trim() || ''
+  };
+}
+
+function montarChecklist(){
+  const container = document.getElementById('checklist');
+  const vazio = document.getElementById('checklist-vazio');
+  container.innerHTML = '';
+  let total = 0;
+  categorias.forEach(cat=>{
+    const corpo = document.getElementById(`corpo-${cat.id}`);
+    if(!corpo) return;
+    Array.from(corpo.children).forEach(tr=>{
+      const valorTotalCell = tr.querySelector('.valor-total');
+      if(!valorTotalCell) return;
+      const {plano, item} = obterRotuloLinha(tr);
+      const linha = document.createElement('div');
+      linha.className = 'checklist-item';
+      linha.innerHTML = `<span class="check">✓</span><span class="checklist-label"><b>${plano}</b> — ${item}</span><span class="checklist-valor">${valorTotalCell.textContent}</span>`;
+      container.appendChild(linha);
+      total++;
+    });
+  });
+  container.style.display = total ? '' : 'none';
+  vazio.style.display = total ? 'none' : '';
 }
 
 document.addEventListener('input', e=>{ if(e.target.matches('.qtd-input, .custom-preco, #fatmin-input')) calcular(); });
@@ -623,6 +693,19 @@ function mascaraCNPJ(e){
 document.getElementById('cnpj').addEventListener('input', mascaraCNPJ);
 document.getElementById('cnpj').addEventListener('input', e=>{
   document.getElementById('assinatura-cnpj').textContent = e.target.value || '—';
+});
+
+document.getElementById('combo-gr-connect').addEventListener('change', e=>{
+  const NOME_PLANO = 'Combo GR + Logística';
+  if(e.target.checked){
+    const combosCat = categorias.find(c=>c.id==='combos');
+    const item = combosCat.planos[NOME_PLANO][0];
+    adicionarLinhaCatalogo('combos', NOME_PLANO, item);
+  } else {
+    const corpo = document.getElementById('corpo-combos');
+    const tr = Array.from(corpo.children).find(tr=>tr.querySelector('.badge-plano')?.textContent === NOME_PLANO);
+    if(tr){ tr.remove(); atualizarVisibilidade('combos'); calcular(); }
+  }
 });
 
 document.getElementById('logo-cliente').addEventListener('change', e=>{
