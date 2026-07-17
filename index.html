@@ -187,64 +187,62 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 @media print{
   @page {
     size: A4;
-    margin: 10mm 15mm;
+    margin: 8mm;
   }
-  body{background:#fff; font-size: 10.5px !important; line-height: 1.3 !important;}
-  .sheet{box-shadow:none;margin:0;width:100%;padding:0}
-  .sheet-content{padding:0}
-  .no-print,.seletor,.btn-del,.catalogo-add,.btn-custom,.faixa-add{display:none !important}
-  .watermark{opacity:.08}
-  .footer{-webkit-print-color-adjust:exact;print-color-adjust:exact; margin: 15px 0 0; padding: 10px; font-size: 9px; border-top-width: 3px;}
-  
-  .top { padding: 10px 0; border-bottom-width: 4px; gap: 10px; }
-  .logo { height: 35px; }
-  .logo-cliente { height: 35px; }
-  .tag h1 { font-size: 14px; }
-  .tag .emissao { font-size: 10px; }
-  .tag .emissao input { padding: 2px; font-size: 10px; border: none; background: transparent; }
-  h2.section { font-size: 11px; padding: 4px 8px; margin: 12px 0 6px; }
-  .grid { gap: 6px 10px; margin-bottom: 6px; }
-  .field label { font-size: 8px; margin-bottom: 2px; }
-  .field input { padding: 3px 2px; font-size: 10.5px; }
-  .intro, .produtos-intro { padding: 6px 8px; font-size: 10.5px; margin-bottom: 8px; border-left-width: 4px; }
-  .produtos-intro h3 { font-size: 11px; margin-bottom: 4px; }
-  .produtos-intro p { font-size: 10.5px; margin-top: 3px; }
-  .produto { margin-bottom: 8px; }
-  .produto-cabecalho { padding: 6px 8px; gap: 8px; }
-  .produto-cabecalho .icone { width: 22px; height: 22px; padding: 4px; }
-  .produto-cabecalho h3 { font-size: 11px; }
-  .produto-corpo { padding: 6px 8px; gap: 6px; }
-  .produto-corpo .bloco dt { font-size: 8.5px; margin-bottom: 2px; }
-  .produto-corpo .bloco dd { font-size: 10.5px; }
-  .combo-opcao { padding: 6px 8px; }
-  .combo-opcao label { font-size: 10.5px; }
-  .combo-opcao label b { font-size: 10.5px; }
-  .faixa-item { margin: 0 0 8px; }
-  .faixa-cabecalho { padding: 6px 8px; }
-  .faixa-cabecalho b { font-size: 10.5px; }
-  .faixa-detalhe { font-size: 9px; }
-  .checklist-item { padding: 5px 8px; font-size: 10.5px; }
-  .checklist-vazio { padding: 8px; font-size: 10.5px; }
-  .categoria { margin-bottom: 12px; }
-  .categoria-titulo { font-size: 11px; padding: 5px 8px; }
-  table { font-size: 10.5px; min-width: 100%; }
-  thead th { padding: 5px; font-size: 8.5px; }
-  tbody td { padding: 5px; }
-  .totalbox { margin: 10px 0 4px auto; padding: 8px 12px; font-size: 14px; width: 250px; border-left-width: 6px; }
-  .note { font-size: 9px; padding: 0 !important; }
-  .fatmin { margin: 8px 0 4px; padding: 0 0 8px; border-width: 1px; }
-  .fatmin .fatmin-titulo { font-size: 11px; padding: 5px 8px; margin-bottom: 6px; }
-  .fatmin-corpo { padding: 0 10px; }
-  .fatmin-corpo p { font-size: 9.5px; margin: 0 0 4px; }
-  .fatmin .fatmin-valor { font-size: 12px; margin: 6px 0 4px; }
-  .fatmin label { font-size: 8.5px; margin-bottom: 2px; }
-  .fatmin input { padding: 4px; font-size: 10.5px; border: none; background: transparent; }
-  .terms p { font-size: 9.5px; margin: 3px 0; }
-  .signature { margin-top: 15px; padding-top: 10px; border-top-width: 2px; }
-  .signature>p { font-size: 9.5px !important; }
-  .sigline { margin-top: 30px; padding-top: 4px; font-size: 10.5px; }
-  .sig-cnpj { font-size: 10.5px; margin-top: 2px; }
-  .dados-assinatura { margin-top: 12px; }
+  body {
+    background: #fff;
+    zoom: 0.6;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  * {
+    overflow: visible !important;
+  }
+  .sheet {
+    box-shadow: none;
+    margin: 0;
+    width: 100%;
+    padding: 0;
+    overflow: visible !important;
+  }
+  .sheet-content {
+    padding: 0;
+  }
+  .no-print, .seletor, .btn-del, .catalogo-add, .btn-custom, .faixa-add {
+    display: none !important;
+  }
+  .watermark {
+    opacity: .08;
+  }
+  table {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  .tablewrap {
+    overflow: visible !important;
+  }
+  h2.section {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+  .produto {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 10px;
+  }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .field {
+    flex: 1 1 45%;
+  }
+  .field.wide {
+    flex: 1 1 100%;
+  }
+  .footer {
+    margin-top: 20px;
+  }
 }
 </style>
 </head>
