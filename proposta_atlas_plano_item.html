@@ -55,15 +55,15 @@ h2.section{background:var(--laranja);color:#fff;font-size:16px;font-weight:800;t
 
 .produto{border:1px solid var(--linha);margin-bottom:16px;background:#fff}
 .produto-cabecalho{background:var(--grafite);color:#fff;display:flex;align-items:center;gap:10px;padding:10px 14px}
-.produto-cabecalho .num{background:var(--laranja);color:#fff;font-weight:800;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12.5px;flex-shrink:0}
+.produto-cabecalho .icone{background:#fff;border-radius:4px;width:28px;height:28px;padding:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.produto-cabecalho .icone svg{width:100%;height:100%;fill:var(--laranja)}
 .produto-cabecalho h3{margin:0;font-size:15px;text-transform:uppercase;letter-spacing:.3px}
 .produto-corpo{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 .produto-corpo .bloco dt{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--laranja);letter-spacing:.3px;margin-bottom:3px}
 .produto-corpo .bloco dd{margin:0;font-size:13.5px;color:#333;text-align:justify}
 
 .categoria{margin-bottom:26px}
-.categoria-titulo{background:var(--grafite);color:#fff;font-size:14.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 13px;display:flex;justify-content:space-between;align-items:center}
-.categoria-titulo small{font-weight:500;font-size:11px;color:#ddd;text-transform:none;letter-spacing:0}
+.categoria-titulo{background:var(--laranja);color:#fff;font-size:14.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 13px;display:flex;align-items:center}
 
 .seletor{display:flex;gap:10px;align-items:center;padding:12px 13px;background:#fafafa;border:1px solid var(--linha);border-top:0;flex-wrap:wrap}
 .seletor select{border:1px solid #bbb;border-radius:3px;padding:9px 10px;font:inherit;font-size:14px;background:#fff;color:var(--preto)}
@@ -107,11 +107,14 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 
 .fatmin{margin:14px 0 6px;margin-left:auto;width:min(360px,100%);background:#fff;border:2px solid var(--preto);padding:14px 16px}
 .fatmin b{display:block;font-size:13.5px;color:var(--preto);text-transform:uppercase;letter-spacing:.3px}
-.fatmin .fatmin-regra{display:block;font-size:11.5px;color:#666;margin-top:2px}
 .fatmin .fatmin-valor{font-size:19px;font-weight:800;color:var(--laranja);margin:10px 0}
 .fatmin label{display:block;font-size:10.5px;font-weight:800;text-transform:uppercase;color:#555;margin-bottom:4px;letter-spacing:.3px}
 .fatmin input{width:100%;border:1px solid #bbb;border-radius:2px;padding:8px;font:inherit;font-size:13px}
 .fatmin input:focus{outline:none;border-color:var(--laranja)}
+
+.adendo{background:var(--cinza);border-left:6px solid var(--laranja);padding:14px 16px;margin-top:14px}
+.adendo b{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.3px;color:var(--preto);margin-bottom:6px}
+.adendo p{margin:6px 0 0;font-size:13px;color:#333;text-align:justify}
 
 .terms p{font-size:13px;color:#333;margin:7px 0;text-align:justify}
 
@@ -154,6 +157,12 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="atlas-icon" viewBox="0 0 252 172">
+    <polygon points="153.4 87.56 167.65 62.87 167.68 62.85 178.13 44.72 178.11 44.68 178.15 44.68 203.95 0 182.97 0 152.31 0 110.4 0 99.17 0 73.37 44.68 73.35 44.72 62.87 62.87 48.62 87.56 48.41 87.94 0 171.76 83.81 171.76 104.78 171.76 125.74 135.49 125.76 135.44 153.19 87.94 153.4 87.56"/>
+    <polygon points="203.07 87.94 175.75 87.94 153.9 125.79 153.9 125.83 137.02 155.01 146.7 171.76 209.57 171.76 251.48 171.76 203.07 87.94"/>
+  </symbol>
+</svg>
 <main class="sheet">
   <img class="watermark wm-1" src="https://www.atlasgr.com.br/wp-content/uploads/2021/03/atlas.svg" alt="">
   <img class="watermark wm-2" src="https://www.atlasgr.com.br/wp-content/uploads/2021/03/atlas.svg" alt="">
@@ -195,56 +204,51 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
       <div class="produtos-intro">
         <h3>Ecossistema de Soluções Atlas: Orquestrando Segurança e Performance no Transporte</h3>
         <p>A Atlas é uma empresa de tecnologia focada em orquestrar a segurança e a performance no transporte, conectando pessoas, riscos e operações em uma única plataforma. Nossas ferramentas atuam para enxergar perdas invisíveis, reduzir custos operacionais, mitigar passivos e garantir que a sua empresa escale com previsibilidade e controle real.</p>
-        <p>Abaixo detalhamos nosso portfólio modular para compor a sua proposta:</p>
+        <p>Abaixo detalhamos nosso portfólio modular para compor a sua proposta.</p>
       </div>
 
       <article class="produto">
-        <div class="produto-cabecalho"><span class="num">1</span><h3>Atlas Profile</h3></div>
+        <div class="produto-cabecalho"><span class="icone"><svg viewBox="0 0 252 172"><use href="#atlas-icon"/></svg></span><h3>Atlas Profile</h3></div>
         <dl class="produto-corpo">
           <div class="bloco"><dt>O que é</dt><dd>É o nosso serviço de Background Check e análise de perfil profissional 100% digital, operando 24 horas por dia. Atua como a porta de entrada para contratações ágeis e seguras.</dd></div>
           <div class="bloco"><dt>O que faz</dt><dd>Realiza uma varredura rigorosa de documentos essenciais (como a CNH) e histórico comportamental, consultando pendências judiciais para identificar riscos antes da contratação. Conta também com validação via Biometria Facial (Face ID) e prova de vida, evitando as mais sofisticadas fraudes de identidade.</dd></div>
           <div class="bloco"><dt>Como faz</dt><dd>Utiliza uma Inteligência Artificial (IA) integrada que resume os processos judiciais e pendências do profissional em um dossiê simples em poucos minutos, em total conformidade com a LGPD. Oferece API para integração total com o TMS ou ERP da sua empresa.</dd></div>
-          <div class="bloco"><dt>A quem atende</dt><dd>Departamentos de RH e Operações em transportadoras, embarcadores e empresas de facilities ou terceirização que precisam padronizar, dar segurança e velocidade ao fluxo de recrutamento.</dd></div>
         </dl>
       </article>
 
       <article class="produto">
-        <div class="produto-cabecalho"><span class="num">2</span><h3>Atlas GR (Gerenciamento de Risco)</h3></div>
+        <div class="produto-cabecalho"><span class="icone"><svg viewBox="0 0 252 172"><use href="#atlas-icon"/></svg></span><h3>Atlas GR (Gerenciamento de Risco)</h3></div>
         <dl class="produto-corpo">
           <div class="bloco"><dt>O que é</dt><dd>Solução contínua e dedicada ao gerenciamento de risco, atuando desde o monitoramento até a pronta resposta, 100% alinhada e parametrizada conforme a apólice da sua seguradora.</dd></div>
           <div class="bloco"><dt>O que faz</dt><dd>Blinda a operação logística contra roubos e sinistros e garante o cumprimento rígido das regras securitárias. Elimina o risco de negativas de seguro e protege o patrimônio e a reputação da sua empresa.</dd></div>
           <div class="bloco"><dt>Como faz</dt><dd>Integra-se com as principais tecnologias de rastreamento do mercado e aplica regras sistêmicas para tratar desvios. Possui o diferencial da CIA (Célula de Inteligência Atlas), uma equipe especializada em investigação, relacionamento com a polícia para rápida recuperação de cargas e acionamento de escoltas de forma ágil.</dd></div>
-          <div class="bloco"><dt>A quem atende</dt><dd>Diretores, gerentes de risco e gestores de operação em transportadoras e embarcadores que enfrentam alta pressão por perdas financeiras, roubos e forte exigência das companhias de seguro.</dd></div>
         </dl>
       </article>
 
       <article class="produto">
-        <div class="produto-cabecalho"><span class="num">3</span><h3>Atlas Connect (Torre de Controle Logística)</h3></div>
+        <div class="produto-cabecalho"><span class="icone"><svg viewBox="0 0 252 172"><use href="#atlas-icon"/></svg></span><h3>Atlas Connect (Torre de Controle Logística)</h3></div>
         <dl class="produto-corpo">
           <div class="bloco"><dt>O que é</dt><dd>Nosso software avançado de logística e Torre de Controle, desenhado para garantir a máxima performance operacional e reduzir o "tempo morto" nas viagens.</dd></div>
           <div class="bloco"><dt>O que faz</dt><dd>Acaba com a fragmentação dos dados. A ferramenta possibilita visualizar a cadeia logística inteira em tempo real, organizar o planejamento de rotas, gerar previsibilidade de entregas (ETA — tempo estimado de chegada) e controlar estadias para evitar multas e ineficiências nos pátios de carga/descarga.</dd></div>
           <div class="bloco"><dt>Como faz</dt><dd>O sistema concentra a "Gestão à Vista" (onde cada caminhão está de forma georreferenciada), a "Gestão de Alvos" (monitoramento de perímetros para controlar tempos de paradas) e a "Gestão de Alertas" (que automatiza ações com base em regras que você cria). Além disso, envia e recebe informações do motorista direto por aplicativo, eliminando dependência do WhatsApp.</dd></div>
-          <div class="bloco"><dt>A quem atende</dt><dd>Operadores Logísticos (3PL/4PL), Gestores de Operações e Gerentes de Logística de empresas e transportadoras que lidam com alto volume de terceiros, dependem do cumprimento rigoroso de SLAs e precisam acabar com a falta de visibilidade nos trânsitos.</dd></div>
         </dl>
       </article>
 
       <article class="produto">
-        <div class="produto-cabecalho"><span class="num">4</span><h3>Atlas Analytics</h3></div>
+        <div class="produto-cabecalho"><span class="icone"><svg viewBox="0 0 252 172"><use href="#atlas-icon"/></svg></span><h3>Atlas Analytics</h3></div>
         <dl class="produto-corpo">
           <div class="bloco"><dt>O que é</dt><dd>Nossa poderosa ferramenta de Business Intelligence (BI) alimentada por um vasto Data Lake operacional exclusivo.</dd></div>
           <div class="bloco"><dt>O que faz</dt><dd>Transforma o caos de planilhas soltas e dados fragmentados em indicadores confiáveis e visuais para tomadas de decisões ágeis, permitindo mensurar perdas de tempo, gargalos em rotas específicas, taxa de recuperação de sinistros e desempenho das operações.</dd></div>
           <div class="bloco"><dt>Como faz</dt><dd>Consolida e cruza as informações captadas na viagem, montando painéis executivos (Dashboards). Você tem acesso rápido a KPIs precisos, Mapas de Calor de criminalidade do Brasil (apoiando planejamento de rotas) e diagnóstico de cadência.</dd></div>
-          <div class="bloco"><dt>A quem atende</dt><dd>Alta Gestão, Diretores, Donos da empresa e Heads operacionais que precisam de respostas analíticas e baseadas em evidências financeiras e de performance, acabando com as avaliações no "achismo".</dd></div>
         </dl>
       </article>
 
       <article class="produto">
-        <div class="produto-cabecalho"><span class="num">5</span><h3>Módulo Safety (Fadiga e Segurança do Motorista)</h3></div>
+        <div class="produto-cabecalho"><span class="icone"><svg viewBox="0 0 252 172"><use href="#atlas-icon"/></svg></span><h3>Módulo Safety (Fadiga e Segurança do Motorista)</h3></div>
         <dl class="produto-corpo">
           <div class="bloco"><dt>O que é</dt><dd>Um módulo tecnológico totalmente focado na prevenção e segurança voltada ao motorista, preservando a carga e as vias.</dd></div>
           <div class="bloco"><dt>O que faz</dt><dd>Identifica proativamente falhas e tendências humanas que levam a acidentes de alto custo e passivos corporativos.</dd></div>
           <div class="bloco"><dt>Como faz</dt><dd>Usando a telemetria, captura falhas graves em tempo real (como uso contínuo de celular ao volante, bocejos e sinais de sono, acelerações e frenagens bruscas). Ele alimenta uma "Matriz de Risco", construindo um ranking claro de motoristas ofensores, permitindo direcionar reciclagens e treinamentos preventivos em vez de tratar apenas os acidentes.</dd></div>
-          <div class="bloco"><dt>A quem atende</dt><dd>Diretores de Prevenção, Segurança Patrimonial/Corporativa e Gestores de Frotas que buscam proteger seu maior ativo (a vida do motorista), minimizar prejuízos patrimoniais milionários em tombamentos e aumentar as práticas ESG e de conformidade (Compliance).</dd></div>
         </dl>
       </article>
     </section>
@@ -260,10 +264,16 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 
       <div class="fatmin">
         <b>Faturamento mínimo mensal</b>
-        <small class="fatmin-regra">Regra padrão do contrato: 40% do valor final do produto</small>
         <div class="fatmin-valor" id="fatmin-valor">R$ 0,00</div>
         <label for="fatmin-input">Personalizar valor (opcional)</label>
         <input type="number" id="fatmin-input" min="0" step="0.01" placeholder="Deixe em branco para aplicar 40% automaticamente">
+      </div>
+
+      <div class="adendo">
+        <b>Adendo — Faturamento mínimo</b>
+        <p>Esse valor garante a manutenção e a disponibilidade da ferramenta contratada, sendo devido mesmo nos meses em que o cliente não utilizar nenhum item contratado.</p>
+        <p>Caso o consumo do período seja inferior ao valor mínimo de faturamento, será cobrado o valor mínimo.</p>
+        <p>Caso o consumo do período seja igual ou superior ao valor mínimo de faturamento, será cobrado o valor efetivamente consumido.</p>
       </div>
     </section>
 
@@ -429,7 +439,7 @@ function montarCategorias(){
     const bloco = document.createElement('div');
     bloco.className = 'categoria';
     bloco.innerHTML = `
-      <div class="categoria-titulo">${cat.titulo} <small>escolha o plano e depois o item</small></div>
+      <div class="categoria-titulo">${cat.titulo}</div>
       <div class="seletor">
         <select class="sel-plano" id="plano-${cat.id}">
           <option value="">1. Selecionar plano...</option>
