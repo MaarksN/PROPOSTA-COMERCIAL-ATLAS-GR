@@ -76,6 +76,19 @@ h2.section{background:var(--laranja);color:#fff;font-size:16px;font-weight:800;t
 .btn-custom{border:1px dashed #999;background:#fafafa;color:#555;padding:8px 13px;font-weight:700;font-size:11.5px;text-transform:uppercase;border-radius:3px;cursor:pointer;margin:10px 13px}
 .btn-custom:hover{background:#f0f0f0}
 
+input.qtd-catalogo{width:100%;border:1px solid #bbb;padding:7px;font:inherit;font-size:13.5px;text-align:center;border-radius:2px}
+input.qtd-catalogo:focus{outline:none;border-color:var(--laranja)}
+
+.faixa-item{border:1px solid var(--linha);margin:0 13px 14px}
+.faixa-cabecalho{background:#fafafa;padding:10px 13px;border-bottom:1px solid var(--linha);display:flex;flex-wrap:wrap;align-items:center;gap:9px}
+.faixa-cabecalho b{font-size:13.5px;color:var(--preto)}
+.faixa-detalhe{font-size:12px;color:#666;flex-basis:100%}
+table.faixa-tabela{min-width:0}
+table.faixa-tabela th:first-child,table.faixa-tabela td:first-child{width:70%}
+.faixa-add{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:12px 13px}
+.faixa-add .field{width:220px}
+.faixa-add .catalogo-add{width:auto;padding:9px 22px}
+
 .checklist{border:1px solid var(--linha)}
 .checklist-item{display:flex;align-items:center;gap:10px;padding:9px 13px;border-bottom:1px solid var(--linha);font-size:13px}
 .checklist-item:nth-of-type(even){background:#fafafa}
@@ -494,19 +507,45 @@ function montarCategorias(){
     if(!container) return;
     const ocultos = cat.planosOcultos || [];
     const linhasCatalogo = [];
+    const blocosFaixa = [];
     Object.keys(cat.planos).forEach(plano=>{
       if(ocultos.includes(plano)) return;
       cat.planos[plano].forEach((it,i)=>{
-        const precoInicial = it.range ? precoFaixa(it.range, it.qtd) : it.preco;
-        linhasCatalogo.push(`
-          <tr>
-            <td><span class="badge-plano">${plano}</span></td>
-            <td><b>${it.item}</b></td>
-            <td class="detalhe">${it.detalhe}</td>
-            <td class="valor-unit">${brl(precoInicial)}</td>
-            <td><input type="number" class="qtd-catalogo" min="0" step="1" value="${it.qtd}"></td>
-            <td><button type="button" class="catalogo-add" data-plano="${plano}" data-idx="${i}">Adicionar</button></td>
-          </tr>`);
+        if(it.range){
+          const tabela = faixas[it.range];
+          const linhasFaixa = tabela.map(([limite,preco],idx)=>{
+            const rotulo = limite === Infinity ? `Acima de ${tabela[idx-1][0]}` : `Até ${limite}`;
+            return `<tr><td>${rotulo}</td><td class="valor-unit">${brl(preco)}</td></tr>`;
+          }).join('');
+          blocosFaixa.push(`
+            <div class="faixa-item">
+              <div class="faixa-cabecalho">
+                <span class="badge-plano">${plano}</span>
+                <b>${it.item}</b>
+                <span class="faixa-detalhe">${it.detalhe}</span>
+              </div>
+              <div class="tablewrap">
+                <table class="faixa-tabela">
+                  <thead><tr><th>Faixa (consultas/mês)</th><th>Valor unitário</th></tr></thead>
+                  <tbody>${linhasFaixa}</tbody>
+                </table>
+              </div>
+              <div class="faixa-add">
+                <div class="field"><label>Quantidade de consultas/mês</label><input type="number" class="qtd-catalogo" min="0" step="1" value="${it.qtd}"></div>
+                <button type="button" class="catalogo-add" data-plano="${plano}" data-idx="${i}">Adicionar</button>
+              </div>
+            </div>`);
+        } else {
+          linhasCatalogo.push(`
+            <tr>
+              <td><span class="badge-plano">${plano}</span></td>
+              <td><b>${it.item}</b></td>
+              <td class="detalhe">${it.detalhe}</td>
+              <td class="valor-unit">${brl(it.preco)}</td>
+              <td><input type="number" class="qtd-catalogo" min="0" step="1" value="${it.qtd}"></td>
+              <td><button type="button" class="catalogo-add" data-plano="${plano}" data-idx="${i}">Adicionar</button></td>
+            </tr>`);
+        }
       });
     });
 
@@ -522,6 +561,7 @@ function montarCategorias(){
           <tbody>${linhasCatalogo.join('')}</tbody>
         </table>
       </div>` : ''}
+      ${blocosFaixa.join('')}
       <button type="button" class="btn-custom" id="custom-${cat.id}">+ Item personalizado</button>
       <div class="tablewrap" id="wrap-${cat.id}" style="display:none">
         <table>
@@ -539,7 +579,8 @@ function montarCategorias(){
         const plano = btn.dataset.plano;
         const idx = Number(btn.dataset.idx);
         const item = cat.planos[plano][idx];
-        const qtdInput = btn.closest('tr').querySelector('.qtd-catalogo');
+        const escopo = btn.closest('tr') || btn.closest('.faixa-item');
+        const qtdInput = escopo.querySelector('.qtd-catalogo');
         const qtd = Number(qtdInput.value) || 0;
         if(qtd <= 0) return;
         adicionarLinhaCatalogo(cat.id, plano, {...item, qtd});
