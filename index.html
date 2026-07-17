@@ -59,8 +59,11 @@ h2.section{background:var(--laranja);color:#fff;font-size:16px;font-weight:800;t
 .produto-cabecalho .icone svg{width:100%;height:100%;fill:var(--laranja)}
 .produto-cabecalho h3{margin:0;font-size:15px;text-transform:uppercase;letter-spacing:.3px}
 .produto-corpo{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
-.produto-corpo .bloco dt{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--laranja);letter-spacing:.3px;margin-bottom:3px;text-align:center}
+.produto-corpo .bloco dt{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--laranja);letter-spacing:.3px;margin-bottom:3px;text-align:left}
 .produto-corpo .bloco dd{margin:0;font-size:13.5px;color:#333;text-align:justify}
+
+.produto-preco{border-top:1px solid var(--linha)}
+.produto-preco .categoria{margin-bottom:0}
 
 .categoria{margin-bottom:26px}
 .categoria-titulo{background:var(--laranja);color:#fff;font-size:14.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:9px 13px;display:flex;align-items:center;justify-content:center;text-align:center}
@@ -105,7 +108,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
 .totalbox{margin:22px 0 6px;margin-left:auto;width:min(360px,100%);background:var(--preto);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:800;border-left:10px solid var(--laranja)}
 .note{font-size:12px;color:#555;margin-top:8px}
 
-.fatmin{margin:14px 0 6px;margin-left:auto;width:min(360px,100%);background:#fff;border:2px solid var(--preto);padding:14px 16px}
+.fatmin{margin:14px 0 6px;width:100%;background:#fff;border:2px solid var(--preto);padding:14px 16px}
 .fatmin b{display:block;font-size:13.5px;color:var(--preto);text-transform:uppercase;letter-spacing:.3px;text-align:center}
 .fatmin .fatmin-valor{font-size:19px;font-weight:800;color:var(--laranja);margin:10px 0}
 .fatmin label{display:block;font-size:10.5px;font-weight:800;text-transform:uppercase;color:#555;margin-bottom:4px;letter-spacing:.3px}
@@ -207,6 +210,8 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
         <p>Abaixo detalhamos nosso portfólio modular para compor a sua proposta.</p>
       </div>
 
+      <p style="font-size:12.5px;color:#555;margin:0 0 14px">Em cada produto, primeiro escolha o <b>plano</b> na primeira lista; a segunda lista mostrará os itens desse plano. Selecione o item para adicioná-lo automaticamente com detalhamento e valor. Preencha apenas a quantidade. Em qualquer produto, use a opção <b>"+ Item personalizado"</b> para incluir um item fora do catálogo, com nome, detalhamento e valor próprios.</p>
+
       <article class="produto">
         <div class="produto-cabecalho"><span class="icone"><svg viewBox="0 0 252 172"><use href="#atlas-icon"/></svg></span><h3>Atlas Profile</h3></div>
         <dl class="produto-corpo">
@@ -214,6 +219,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
           <div class="bloco"><dt>O que faz</dt><dd>Realiza uma varredura rigorosa de documentos essenciais (como a CNH) e histórico comportamental, consultando pendências judiciais para identificar riscos antes da contratação. Conta também com validação via Biometria Facial (Face ID) e prova de vida, evitando as mais sofisticadas fraudes de identidade.</dd></div>
           <div class="bloco"><dt>Como faz</dt><dd>Utiliza uma Inteligência Artificial (IA) integrada que resume os processos judiciais e pendências do profissional em um dossiê simples em poucos minutos, em total conformidade com a LGPD. Oferece API para integração total com o TMS ou ERP da sua empresa.</dd></div>
         </dl>
+        <div class="produto-preco" id="cat-profile"></div>
       </article>
 
       <article class="produto">
@@ -223,6 +229,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
           <div class="bloco"><dt>O que faz</dt><dd>Blinda a operação logística contra roubos e sinistros e garante o cumprimento rígido das regras securitárias. Elimina o risco de negativas de seguro e protege o patrimônio e a reputação da sua empresa.</dd></div>
           <div class="bloco"><dt>Como faz</dt><dd>Integra-se com as principais tecnologias de rastreamento do mercado e aplica regras sistêmicas para tratar desvios. Possui o diferencial da CIA (Célula de Inteligência Atlas), uma equipe especializada em investigação, relacionamento com a polícia para rápida recuperação de cargas e acionamento de escoltas de forma ágil.</dd></div>
         </dl>
+        <div class="produto-preco" id="cat-gr"></div>
       </article>
 
       <article class="produto">
@@ -232,6 +239,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
           <div class="bloco"><dt>O que faz</dt><dd>Acaba com a fragmentação dos dados. A ferramenta possibilita visualizar a cadeia logística inteira em tempo real, organizar o planejamento de rotas, gerar previsibilidade de entregas (ETA — tempo estimado de chegada) e controlar estadias para evitar multas e ineficiências nos pátios de carga/descarga.</dd></div>
           <div class="bloco"><dt>Como faz</dt><dd>O sistema concentra a "Gestão à Vista" (onde cada caminhão está de forma georreferenciada), a "Gestão de Alvos" (monitoramento de perímetros para controlar tempos de paradas) e a "Gestão de Alertas" (que automatiza ações com base em regras que você cria). Além disso, envia e recebe informações do motorista direto por aplicativo, eliminando dependência do WhatsApp.</dd></div>
         </dl>
+        <div class="produto-preco" id="cat-connect"></div>
       </article>
 
       <article class="produto">
@@ -241,6 +249,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
           <div class="bloco"><dt>O que faz</dt><dd>Transforma o caos de planilhas soltas e dados fragmentados em indicadores confiáveis e visuais para tomadas de decisões ágeis, permitindo mensurar perdas de tempo, gargalos em rotas específicas, taxa de recuperação de sinistros e desempenho das operações.</dd></div>
           <div class="bloco"><dt>Como faz</dt><dd>Consolida e cruza as informações captadas na viagem, montando painéis executivos (Dashboards). Você tem acesso rápido a KPIs precisos, Mapas de Calor de criminalidade do Brasil (apoiando planejamento de rotas) e diagnóstico de cadência.</dd></div>
         </dl>
+        <div class="produto-preco" id="cat-analytics"></div>
       </article>
 
       <article class="produto">
@@ -250,14 +259,13 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
           <div class="bloco"><dt>O que faz</dt><dd>Identifica proativamente falhas e tendências humanas que levam a acidentes de alto custo e passivos corporativos.</dd></div>
           <div class="bloco"><dt>Como faz</dt><dd>Usando a telemetria, captura falhas graves em tempo real (como uso contínuo de celular ao volante, bocejos e sinais de sono, acelerações e frenagens bruscas). Ele alimenta uma "Matriz de Risco", construindo um ranking claro de motoristas ofensores, permitindo direcionar reciclagens e treinamentos preventivos em vez de tratar apenas os acidentes.</dd></div>
         </dl>
+        <div class="produto-preco" id="cat-safety"></div>
       </article>
     </section>
 
     <section>
-      <h2 class="section">Plano escolhido e valores</h2>
-      <p style="font-size:12.5px;color:#555;margin:0 0 14px">Em cada categoria, primeiro escolha o <b>plano</b> na primeira lista; a segunda lista mostrará os itens desse plano. Selecione o item para adicioná-lo automaticamente com detalhamento e valor. Preencha apenas a quantidade. Em qualquer categoria, use a opção <b>"+ Item personalizado"</b> para incluir um item fora do catálogo, com nome, detalhamento e valor próprios.</p>
-
-      <div id="categorias"></div>
+      <h2 class="section">Combos, apoio e serviços adicionais</h2>
+      <div id="cat-extra"></div>
 
       <div class="totalbox"><span>VALOR FINAL</span><span id="total">R$ 0,00</span></div>
       <p class="note">Serviço de Escolta tem valor variável conforme km rodado; utilize "Item personalizado" em Serviços Adicionais para incluí-lo manualmente.</p>
@@ -349,7 +357,7 @@ function precoFaixa(tipo,q){
 }
 
 const categorias = [
-  { id:'gr', titulo:'Gerenciamento de Riscos', planos:{
+  { id:'gr', container:'cat-gr', titulo:'Planos e valores', planos:{
       'Standard': [
         {item:'Por veículo/mês', detalhe:'Monitoramento com abertura de SM e macros padrão Atlas.', preco:90.00, qtd:1},
         {item:'Por viagem', detalhe:'Valor por viagem.', preco:35.00, qtd:1},
@@ -371,7 +379,7 @@ const categorias = [
         {item:'Envio de rotograma', detalhe:'Envio de rotograma ao motorista; por veículo.', preco:3.90, qtd:1},
       ],
   }},
-  { id:'combos', titulo:'Combos e Controle de Jornada', planos:{
+  { id:'combos', container:'cat-extra', titulo:'Combos e Controle de Jornada', planos:{
       'Combo GR + Logística': [
         {item:'GR + Torre de Controle Logística', detalhe:'Combo especial para contratação conjunta do GR + Logística; por veículo/mês.', preco:135.90, qtd:1},
       ],
@@ -382,7 +390,7 @@ const categorias = [
         {item:'Implantação inicial', detalhe:'Valor para implementação.', preco:1200.00, qtd:1},
       ],
   }},
-  { id:'apoio', titulo:'Ponto de Apoio — Terceiros', planos:{
+  { id:'apoio', container:'cat-extra', titulo:'Ponto de Apoio — Terceiros', planos:{
       'Analista de Risco': [
         {item:'Interior diurno', detalhe:'Ponto de apoio terceiros.', preco:6500.00, qtd:1},
         {item:'Interior noturno', detalhe:'Ponto de apoio terceiros.', preco:7000.00, qtd:1},
@@ -398,7 +406,7 @@ const categorias = [
         {item:'Capital', detalhe:'Ponto de apoio terceiros.', preco:10500.00, qtd:1},
       ],
   }},
-  { id:'adicionais', titulo:'Serviços Adicionais', planos:{
+  { id:'adicionais', container:'cat-extra', titulo:'Serviços Adicionais', planos:{
       'Adicional Autotrac': [
         {item:'Integração mensal/veículo', detalhe:'Requer subconta de acesso para a Atlas.', preco:14.45, qtd:1},
       ],
@@ -410,7 +418,7 @@ const categorias = [
         {item:'Desenvolvimento adicional (por hora)', detalhe:'Custo por hora trabalhada.', preco:250.00, qtd:1},
       ],
   }},
-  { id:'profile', titulo:'Atlas Profile (valor por faixa de consultas)', planos:{
+  { id:'profile', container:'cat-profile', titulo:'Planos e valores (por faixa de consultas/mês)', planos:{
       'Pesquisa': [
         {item:'Pesquisa por Objeto', detalhe:'CNH, individual. Valor ajustado por faixa de consultas/mês.', range:'objeto', qtd:100},
         {item:'Pesquisa Integrada (até 3 placas)', detalhe:'Valor ajustado por faixa de consultas/mês.', range:'integrada', qtd:100},
@@ -426,15 +434,20 @@ const categorias = [
         {item:'Vitimologia', detalhe:'Valor ajustado por faixa de consultas/mês.', range:'vitimologia', qtd:100},
       ],
   }},
-  { id:'connect', titulo:'Atlas Connect (Torre de Controle Logística)', planos:{}},
-  { id:'analytics', titulo:'Atlas Analytics (BI)', planos:{}},
-  { id:'safety', titulo:'Módulo Safety (Fadiga e Segurança do Motorista)', planos:{}},
+  { id:'connect', container:'cat-connect', titulo:'Planos e valores', planos:{}},
+  { id:'analytics', container:'cat-analytics', titulo:'Planos e valores', planos:{}},
+  { id:'safety', container:'cat-safety', titulo:'Planos e valores', planos:{}},
 ];
 
 function montarCategorias(){
-  const container = document.getElementById('categorias');
-  container.innerHTML = '';
+  const containersUsados = new Set(categorias.map(cat=>cat.container));
+  containersUsados.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = '';
+  });
   categorias.forEach(cat=>{
+    const container = document.getElementById(cat.container);
+    if(!container) return;
     const nomesPlanos = Object.keys(cat.planos);
     const bloco = document.createElement('div');
     bloco.className = 'categoria';
