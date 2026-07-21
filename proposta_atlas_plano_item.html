@@ -198,6 +198,9 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
   .no-print, .seletor, .btn-del, .catalogo-add, .btn-custom, .faixa-add {
     display: none !important;
   }
+  .produto, #titulo-combos, #cat-extra, .campo-logo {
+    display: none !important;
+  }
   .watermark {
     opacity: .08;
   }
@@ -266,7 +269,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
         <div class="field"><label>Contato / cargo</label><input placeholder="Nome e cargo"></div>
         <div class="field"><label>Cidade / UF</label><input placeholder="Cidade - UF"></div>
         <div class="field"><label>E-mail / telefone</label><input placeholder="E-mail e telefone"></div>
-        <div class="field wide"><label>Logo do cliente (opcional)</label><input type="file" id="logo-cliente" accept="image/*"></div>
+        <div class="field wide campo-logo"><label>Logo do cliente (opcional)</label><input type="file" id="logo-cliente" accept="image/*"></div>
       </div>
     </section>
 
@@ -341,7 +344,7 @@ input.qtd-input:focus{outline:none;border-color:var(--laranja)}
     </section>
 
     <section>
-      <h2 class="section">Combos, apoio e serviços adicionais</h2>
+      <h2 class="section" id="titulo-combos">Combos, apoio e serviços adicionais</h2>
       <div id="cat-extra"></div>
 
       <h2 class="section">Checklist de contratação</h2>
@@ -807,6 +810,21 @@ function salvarProposta(){
 }
 
 montarCategorias();
+
+function limparPlaceholdersParaImpressao(){
+  document.querySelectorAll('input[placeholder]').forEach(el=>{
+    el.dataset.placeholderOriginal = el.getAttribute('placeholder');
+    el.removeAttribute('placeholder');
+  });
+}
+function restaurarPlaceholders(){
+  document.querySelectorAll('input[data-placeholder-original]').forEach(el=>{
+    el.setAttribute('placeholder', el.dataset.placeholderOriginal);
+    delete el.dataset.placeholderOriginal;
+  });
+}
+window.addEventListener('beforeprint', limparPlaceholdersParaImpressao);
+window.addEventListener('afterprint', restaurarPlaceholders);
 </script>
 </body>
 </html>
