@@ -1,0 +1,79 @@
+/* Print specific styles */
+
+@media print {
+  /* Reset background and remove shadows for print */
+  body {
+    background: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .sheet {
+    box-shadow: none;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+  }
+
+  /* Ensure page breaks happen reasonably */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  .solution-card, .financial-card, table, img, svg {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* Hide UI controls not needed in print */
+  .no-print,
+  .controls,
+  .add-buttons {
+    display: none !important;
+  }
+
+  /* Inputs look like text */
+  input, textarea, select, .editable-field {
+    border: none !important;
+    background: transparent !important;
+    resize: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Page margins are handled by the browser or pdf generator, but we can setup standard A4 */
+  @page {
+    size: A4;
+    margin: 1cm;
+  }
+
+  /* Ensure headers and footers repeat if designed to do so (often tricky in pure CSS, but we set structure) */
+  .print-header {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .print-footer {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  /* Provide padding to content so it doesn't overlap fixed header/footer if used */
+  .sheet-content {
+    padding-top: 2cm;
+    padding-bottom: 2cm;
+  }
+}
