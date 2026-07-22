@@ -1,0 +1,53 @@
+/* Typography styles */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap');
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--atlas-dark);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--atlas-black);
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+h1 {
+  font-size: var(--font-size-hero);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+h2 {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-black);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+}
+
+h4 {
+  font-size: var(--font-size-lg);
+}
+
+.text-primary { color: var(--atlas-primary); }
+.text-dark { color: var(--atlas-dark); }
+.text-light { color: var(--atlas-white); }
+.text-muted { color: var(--atlas-gray-dark); }
+
+.font-weight-regular { font-weight: var(--font-weight-regular); }
+.font-weight-medium { font-weight: var(--font-weight-medium); }
+.font-weight-semibold { font-weight: var(--font-weight-semibold); }
+.font-weight-bold { font-weight: var(--font-weight-bold); }
+.font-weight-black { font-weight: var(--font-weight-black); }
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+.text-justify { text-align: justify; }
+
+.uppercase { text-transform: uppercase; }
