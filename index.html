@@ -106,7 +106,7 @@
       border-radius: var(--border-radius-sm);
       overflow: hidden;
     }
-    .solution-header {
+    .solution-header { width: 100%; text-align: left; border: none;
       background: var(--atlas-dark);
       color: var(--atlas-white);
       padding: var(--spacing-md);
@@ -320,7 +320,7 @@
 
         <!-- Solution 1 -->
         <div class="solution-card">
-          <div class="solution-header" onclick="this.nextElementSibling.classList.toggle('active')">
+          <button class="solution-header" type="button" onclick="this.nextElementSibling.classList.toggle('active')">
             <div class="solution-icon">TR</div>
             <div>
               <h3>Treinamento Operacional</h3>
@@ -359,7 +359,7 @@
 
         <!-- Solution 2 -->
         <div class="solution-card">
-          <div class="solution-header" onclick="this.nextElementSibling.classList.toggle('active')">
+          <button class="solution-header" type="button" onclick="this.nextElementSibling.classList.toggle('active')">
             <div class="solution-icon">DG</div>
             <div>
               <h3>Diagnóstico de Riscos</h3>
