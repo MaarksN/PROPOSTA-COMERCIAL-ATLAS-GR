@@ -68,6 +68,30 @@ body{
 .print-btn:hover{background:#e04710;transform:translateY(-1px);}
 .print-btn:active{transform:translateY(0);}
 .print-btn svg{width:17px;height:17px;flex-shrink:0;}
+.download-btn{
+  position:fixed;
+  top:74px;
+  right:20px;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--atlas-dark);
+  color:#fff;
+  border:none;
+  border-radius:30px;
+  padding:12px 20px;
+  font-family:'Montserrat',Arial,sans-serif;
+  font-size:13.5px;
+  font-weight:700;
+  letter-spacing:.2px;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.28);
+  transition:background .15s,transform .15s;
+}
+.download-btn:hover{background:#1a1a1a;transform:translateY(-1px);}
+.download-btn:active{transform:translateY(0);}
+.download-btn svg{width:17px;height:17px;flex-shrink:0;}
 
 @media print{
   * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
@@ -75,6 +99,7 @@ body{
   .doc{padding:0;max-width:none;background:#fff;}
   .page{box-shadow:none;margin:0;page-break-after:always;min-height:0;}
   .print-btn{display:none !important;}
+  .download-btn{display:none !important;}
   .editable-field{border-bottom:none !important;background:transparent !important;padding:0 !important;}
   .valor-input,.qtde-input{border-bottom:none !important;background:transparent !important;}
   .line-total-cell{background:transparent !important;}
@@ -385,6 +410,10 @@ table.pricing td.detail{font-size:10.5px;line-height:1.4;}
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
   Imprimir / Gerar PDF
 </button>
+<button class="download-btn" onclick="baixarPropostaPreenchida()" title="Baixar HTML com os dados preenchidos">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+  Baixar HTML preenchido
+</button>
 <div class="doc">
 
 <div class="page cover">
@@ -630,6 +659,51 @@ document.querySelectorAll('.qtde-input').forEach(function(q){
   syncName();
   syncCnpj();
 })();
+</script>
+<script>
+function baixarPropostaPreenchida(){
+  document.querySelectorAll('input[type="text"]').forEach(function(el){
+    el.setAttribute('value', el.value);
+  });
+  document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(function(el){
+    if(el.checked) el.setAttribute('checked', ''); else el.removeAttribute('checked');
+  });
+  document.querySelectorAll('select').forEach(function(sel){
+    Array.prototype.forEach.call(sel.options, function(opt){ opt.removeAttribute('selected'); });
+    if(sel.selectedIndex >= 0) sel.options[sel.selectedIndex].setAttribute('selected', '');
+  });
+
+  var liveCanvas = document.getElementById('sigPad');
+  var sigDataUrl = null;
+  if(liveCanvas){
+    try{ sigDataUrl = liveCanvas.toDataURL('image/png'); }catch(e){}
+  }
+
+  var clone = document.documentElement.cloneNode(true);
+  if(sigDataUrl){
+    var img = clone.querySelector('#sigPadPrintImg');
+    var canvasClone = clone.querySelector('#sigPad');
+    if(img){ img.setAttribute('src', sigDataUrl); img.style.display = 'block'; }
+    if(canvasClone){ canvasClone.style.display = 'none'; }
+  }
+
+  var html = '<!DOCTYPE html>\n' + clone.outerHTML;
+  var blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+
+  var nomeEl = document.getElementById('cover-client-field');
+  var nome = nomeEl ? nomeEl.textContent.trim() : '';
+  nome = nome.replace(/[^a-zA-Z0-9\u00c0-\u00ff _-]/g, '').trim().replace(/\s+/g, '_');
+  if(!nome || /nome.?do.?cliente/i.test(nome)) nome = 'Cliente';
+
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'Proposta_' + nome + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
 </script>
 </body>
 </html>
