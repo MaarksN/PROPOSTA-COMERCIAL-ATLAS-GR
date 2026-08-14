@@ -92,6 +92,50 @@ body{
 .download-btn:hover{background:#1a1a1a;transform:translateY(-1px);}
 .download-btn:active{transform:translateY(0);}
 .download-btn svg{width:17px;height:17px;flex-shrink:0;}
+.bitrix-btn{
+  position:fixed;
+  top:128px;
+  right:20px;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:#2FC7F7;
+  color:#fff;
+  border:none;
+  border-radius:30px;
+  padding:12px 20px;
+  font-family:'Montserrat',Arial,sans-serif;
+  font-size:13.5px;
+  font-weight:700;
+  letter-spacing:.2px;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.28);
+  transition:background .15s,transform .15s;
+}
+.bitrix-btn:hover{background:#1CAEDE;transform:translateY(-1px);}
+.bitrix-btn:active{transform:translateY(0);}
+.bitrix-btn svg{width:17px;height:17px;flex-shrink:0;}
+.bitrix-modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.bitrix-modal{
+  background:#fff;border-radius:12px;max-width:520px;width:100%;max-height:85vh;overflow-y:auto;
+  padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.3);
+  font-family:'Montserrat',Arial,sans-serif;
+}
+.bitrix-modal-title{font-size:16px;font-weight:800;color:var(--atlas-dark);margin-bottom:16px;}
+.bitrix-field{font-size:12.5px;color:#333;margin-bottom:10px;line-height:1.5;}
+.bitrix-field ul{margin:6px 0 0;padding-left:18px;}
+.bitrix-field li{margin-bottom:4px;}
+.bitrix-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+.bitrix-modal-cancel{background:#eee;color:#333;border:none;border-radius:8px;padding:10px 18px;font-family:'Montserrat',Arial,sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;}
+.bitrix-modal-confirm{background:#2FC7F7;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-family:'Montserrat',Arial,sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;}
+.bitrix-modal-confirm:disabled{opacity:.6;cursor:not-allowed;}
+.bitrix-status{margin-top:12px;font-size:12px;font-weight:700;}
+.bitrix-status-ok{color:#1a8f4c;}
+.bitrix-status-error{color:#c0392b;}
 
 @media print{
   * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
@@ -101,6 +145,8 @@ body{
   .print-btn{display:none !important;}
   .item-picker{display:none !important;}
   .download-btn{display:none !important;}
+  .bitrix-btn{display:none !important;}
+  .bitrix-modal-overlay{display:none !important;}
   .plan-select-row{display:none !important;}
   .editable-field{border-bottom:none !important;background:transparent !important;padding:0 !important;}
   .valor-input,.qtde-input{border-bottom:none !important;background:transparent !important;}
@@ -421,6 +467,10 @@ table.pricing td.svc-repeat{font-weight:600;font-style:italic;color:#999;text-al
 <button class="download-btn" onclick="baixarPropostaPreenchida()" title="Baixar HTML com os dados preenchidos">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
   Baixar HTML preenchido
+</button>
+<button class="bitrix-btn" onclick="abrirVerificacaoBitrix()" title="Verificar dados e sincronizar com o Bitrix">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+  Sincronizar com Bitrix
 </button>
 <div class="doc">
 
@@ -817,6 +867,151 @@ document.querySelectorAll('.row-toggle').forEach(function(cb){
   cb.addEventListener('change', applyToggle);
   applyToggle();
 });
+</script>
+<div class="bitrix-modal-overlay" id="bitrixModal" style="display:none;">
+<div class="bitrix-modal">
+<div class="bitrix-modal-title">Verificar dados antes de enviar ao Bitrix</div>
+<div id="bitrixModalBody"></div>
+<div class="bitrix-modal-actions">
+<button type="button" class="bitrix-modal-cancel" onclick="fecharModalBitrix()">Cancelar</button>
+<button type="button" class="bitrix-modal-confirm" id="bitrixConfirmBtn">Confirmar e enviar</button>
+</div>
+<div class="bitrix-status" id="bitrixStatus"></div>
+</div>
+</div>
+<script>
+var BITRIX_WEBHOOK_URL = 'https://atlasgr.bitrix24.com.br/rest/450/xa4srbrft9jpe880/';
+
+function extrairCampoPorRotulo(rotulo){
+  var candidatos = document.querySelectorAll('.sig-field, .fone-line');
+  for(var i=0; i<candidatos.length; i++){
+    var el = candidatos[i];
+    if(el.textContent.trim().indexOf(rotulo) === 0){
+      var spans = el.querySelectorAll('.rule, .editable-field-dark, .fone-seg, .rule-ddd, .rule-phone, .rule-uf');
+      var vals = [];
+      spans.forEach(function(s){
+        var t = s.textContent.replace(/\u00a0/g, '').trim();
+        if(t) vals.push(t);
+      });
+      return vals.join(' ');
+    }
+  }
+  return '';
+}
+
+function coletarDadosProposta(){
+  var nomeEl = document.getElementById('cover-client-field');
+  var cnpjEl = document.getElementById('cover-cnpj-field');
+  var nome = nomeEl ? nomeEl.textContent.replace(/\u00a0/g, '').trim() : '';
+  var cnpj = cnpjEl ? cnpjEl.textContent.replace(/\u00a0/g, '').trim() : '';
+  var email = extrairCampoPorRotulo('E-mail:');
+  var telefone = extrairCampoPorRotulo('Fone:');
+
+  var table = document.querySelector('table.pricing');
+  var tableId = table ? table.id : null;
+
+  var itens = [];
+  document.querySelectorAll('.row-toggle').forEach(function(cb){
+    if(cb.checked){
+      var opt = cb.closest('.item-picker-opt');
+      var label = opt ? opt.textContent.trim() : cb.dataset.row;
+      var priceInput = document.querySelector('.valor-input[data-row="'+cb.dataset.row+'"]');
+      var qtyInput = document.querySelector('.qtde-input[data-row="'+cb.dataset.row+'"]');
+      var lineTotal = document.querySelector('.line-total[data-row="'+cb.dataset.row+'"]');
+      itens.push({
+        label: label,
+        valor: priceInput ? priceInput.value : '',
+        qtde: qtyInput ? qtyInput.value : '',
+        total: lineTotal ? lineTotal.textContent : ''
+      });
+    }
+  });
+
+  var totalGeral = '0,00';
+  if(tableId){
+    var totalEl = document.getElementById('total-' + tableId);
+    if(totalEl) totalGeral = totalEl.textContent;
+  }
+
+  return {nome: nome, cnpj: cnpj, email: email, telefone: telefone, itens: itens, totalGeral: totalGeral};
+}
+
+function abrirVerificacaoBitrix(){
+  var dados = coletarDadosProposta();
+  var body = document.getElementById('bitrixModalBody');
+  var itensHtml = dados.itens.length
+    ? '<ul>' + dados.itens.map(function(i){
+        return '<li>' + i.label + ' \u2014 R$' + i.valor + ' x ' + i.qtde + ' = R$' + i.total + '</li>';
+      }).join('') + '</ul>'
+    : '<p><i>Nenhum item selecionado na proposta.</i></p>';
+  body.innerHTML =
+    '<div class="bitrix-field"><b>Nome do Cliente:</b> ' + (dados.nome || '<i>(vazio)</i>') + '</div>' +
+    '<div class="bitrix-field"><b>CNPJ:</b> ' + (dados.cnpj || '<i>(vazio)</i>') + '</div>' +
+    '<div class="bitrix-field"><b>E-mail:</b> ' + (dados.email || '<i>(vazio)</i>') + '</div>' +
+    '<div class="bitrix-field"><b>Telefone:</b> ' + (dados.telefone || '<i>(vazio)</i>') + '</div>' +
+    '<div class="bitrix-field"><b>Itens selecionados:</b>' + itensHtml + '</div>' +
+    '<div class="bitrix-field"><b>Valor Total:</b> R$ ' + dados.totalGeral + '</div>';
+
+  var statusEl = document.getElementById('bitrixStatus');
+  statusEl.textContent = '';
+  statusEl.className = 'bitrix-status';
+  var btn = document.getElementById('bitrixConfirmBtn');
+  btn.disabled = false;
+  btn.textContent = 'Confirmar e enviar';
+  btn.onclick = function(){ enviarParaBitrix(dados); };
+
+  document.getElementById('bitrixModal').style.display = 'flex';
+}
+
+function fecharModalBitrix(){
+  document.getElementById('bitrixModal').style.display = 'none';
+}
+
+function enviarParaBitrix(dados){
+  var statusEl = document.getElementById('bitrixStatus');
+  var btn = document.getElementById('bitrixConfirmBtn');
+  btn.disabled = true;
+  statusEl.textContent = 'Enviando...';
+  statusEl.className = 'bitrix-status';
+
+  var titulo = 'Proposta - ' + (dados.nome || 'Cliente sem nome');
+  var valorNumerico = parseFloat((dados.totalGeral || '0').replace(/\./g, '').replace(',', '.')) || 0;
+  var comentario = dados.itens.map(function(i){
+    return i.label + ': R$' + i.valor + ' x ' + i.qtde + ' = R$' + i.total;
+  }).join('\n');
+
+  var payload = {
+    fields: {
+      TITLE: titulo,
+      OPPORTUNITY: valorNumerico,
+      CURRENCY_ID: 'BRL',
+      COMMENTS: 'CNPJ: ' + dados.cnpj + '\nE-mail: ' + dados.email + '\nTelefone: ' + dados.telefone + '\n\nItens:\n' + comentario
+    }
+  };
+
+  fetch(BITRIX_WEBHOOK_URL + 'crm.deal.add.json', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  })
+  .then(function(res){ return res.json(); })
+  .then(function(json){
+    if(json.result){
+      statusEl.textContent = 'Enviado com sucesso! Neg\u00f3cio criado no Bitrix (ID ' + json.result + ').';
+      statusEl.className = 'bitrix-status bitrix-status-ok';
+      btn.textContent = 'Enviado';
+    } else {
+      statusEl.textContent = 'Erro ao enviar: ' + (json.error_description || json.error || 'desconhecido');
+      statusEl.className = 'bitrix-status bitrix-status-error';
+      btn.disabled = false;
+    }
+  })
+  .catch(function(err){
+    statusEl.textContent = 'Erro de conex\u00e3o: ' + err.message;
+    statusEl.className = 'bitrix-status bitrix-status-error';
+    btn.disabled = false;
+  });
+}
 </script>
 </body>
 </html>
