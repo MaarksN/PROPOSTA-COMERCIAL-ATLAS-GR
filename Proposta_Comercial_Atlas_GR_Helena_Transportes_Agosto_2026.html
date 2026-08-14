@@ -116,6 +116,36 @@ body{
 .bitrix-btn:hover{background:#1CAEDE;transform:translateY(-1px);}
 .bitrix-btn:active{transform:translateY(0);}
 .bitrix-btn svg{width:17px;height:17px;flex-shrink:0;}
+.mic-btn{
+  position:fixed;
+  top:182px;
+  right:20px;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:#8e44ad;
+  color:#fff;
+  border:none;
+  border-radius:30px;
+  padding:12px 20px;
+  font-family:'Montserrat',Arial,sans-serif;
+  font-size:13.5px;
+  font-weight:700;
+  letter-spacing:.2px;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.28);
+  transition:background .15s,transform .15s;
+}
+.mic-btn:hover{background:#6f3585;transform:translateY(-1px);}
+.mic-btn:active{transform:translateY(0);}
+.mic-btn svg{width:17px;height:17px;flex-shrink:0;}
+.mic-btn.listening{background:#e74c3c;animation:micPulse 1.2s infinite;}
+@keyframes micPulse{
+  0%{box-shadow:0 4px 14px rgba(231,76,60,.55);}
+  50%{box-shadow:0 4px 26px rgba(231,76,60,.95);}
+  100%{box-shadow:0 4px 14px rgba(231,76,60,.55);}
+}
 .bitrix-modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;
   display:flex;align-items:center;justify-content:center;padding:20px;
@@ -151,6 +181,7 @@ body{
   .download-btn{display:none !important;}
   .bitrix-btn{display:none !important;}
   .bitrix-modal-overlay{display:none !important;}
+  .mic-btn{display:none !important;}
   .plan-select-row{display:none !important;}
   .editable-field{border-bottom:none !important;background:transparent !important;padding:0 !important;}
   .valor-input,.qtde-input{border-bottom:none !important;background:transparent !important;}
@@ -475,6 +506,10 @@ table.pricing td.svc-repeat{font-weight:600;font-style:italic;color:#999;text-al
 <button class="bitrix-btn" onclick="abrirVerificacaoBitrix()" title="Verificar dados e sincronizar com o Bitrix">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
   Sincronizar com Bitrix
+</button>
+<button class="mic-btn" id="micBtn" onclick="toggleDitado()" title="Clique no campo que deseja preencher, depois clique aqui e fale">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+  <span id="micBtnLabel">Ditar por voz</span>
 </button>
 <div class="doc">
 
@@ -1143,6 +1178,87 @@ function enviarParaBitrix(dados){
     statusEl.className = 'bitrix-status bitrix-status-error';
     btn.disabled = false;
   });
+}
+</script>
+<script>
+var reconhecimentoVoz = null;
+var campoAtivoVoz = null;
+
+document.addEventListener('focusin', function(e){
+  var el = e.target;
+  if(el.matches && (el.matches('input[type="text"]') || el.getAttribute('contenteditable') === 'true')){
+    campoAtivoVoz = el;
+  }
+});
+
+function limparNumeroFalado(texto){
+  var t = texto.toLowerCase().trim();
+  t = t.replace(/reais|real/g, '');
+  t = t.replace(/v[i\u00ed]rgula/g, ',');
+  t = t.replace(/\s+/g, ' ').trim();
+  return t;
+}
+
+function preencherCampoPorVoz(el, texto){
+  texto = texto.trim();
+  if(!texto) return;
+  if(el.classList.contains('valor-input') || el.classList.contains('qtde-input')){
+    var limpo = limparNumeroFalado(texto);
+    var match = limpo.match(/[\d.,]+/);
+    el.value = match ? match[0] : limpo;
+  } else if(el.getAttribute('contenteditable') === 'true'){
+    el.textContent = texto;
+  } else {
+    el.value = texto;
+  }
+  el.dispatchEvent(new Event('input', {bubbles:true}));
+  el.dispatchEvent(new Event('change', {bubbles:true}));
+}
+
+function toggleDitado(){
+  var SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var btn = document.getElementById('micBtn');
+  var label = document.getElementById('micBtnLabel');
+  if(!SpeechRecognitionCtor){
+    alert('Seu navegador n\u00e3o suporta dita\u00e7\u00e3o por voz. Use o Google Chrome ou Edge.');
+    return;
+  }
+  if(reconhecimentoVoz){
+    reconhecimentoVoz.stop();
+    return;
+  }
+  if(!campoAtivoVoz){
+    alert('Clique primeiro no campo que voc\u00ea quer preencher, depois clique no microfone.');
+    return;
+  }
+  reconhecimentoVoz = new SpeechRecognitionCtor();
+  reconhecimentoVoz.lang = 'pt-BR';
+  reconhecimentoVoz.continuous = true;
+  reconhecimentoVoz.interimResults = false;
+  reconhecimentoVoz.onstart = function(){
+    btn.classList.add('listening');
+    label.textContent = 'Ouvindo... (clique para parar)';
+  };
+  reconhecimentoVoz.onresult = function(event){
+    var texto = '';
+    for(var i = event.resultIndex; i < event.results.length; i++){
+      if(event.results[i].isFinal){ texto += event.results[i][0].transcript; }
+    }
+    if(texto && campoAtivoVoz){
+      preencherCampoPorVoz(campoAtivoVoz, texto);
+    }
+  };
+  reconhecimentoVoz.onerror = function(e){
+    if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+      alert('Permiss\u00e3o de microfone negada. Habilite o microfone para este site nas configura\u00e7\u00f5es do navegador.');
+    }
+  };
+  reconhecimentoVoz.onend = function(){
+    btn.classList.remove('listening');
+    label.textContent = 'Ditar por voz';
+    reconhecimentoVoz = null;
+  };
+  reconhecimentoVoz.start();
 }
 </script>
 </body>
