@@ -24,13 +24,10 @@ body{
   background:#d9d9d9;
   color:var(--text);
   -webkit-font-smoothing:antialiased;
-  padding-left:250px;
+  padding-left:60px;
   transition:padding-left .2s;
 }
-body.sidebar-collapsed{padding-left:60px;}
-@media (max-width:1100px){
-  body{padding-left:60px;}
-}
+body.sidebar-expanded{padding-left:250px;}
 
 .doc{
   max-width:900px;
@@ -622,7 +619,7 @@ table.pricing td.svc-repeat{font-weight:600;font-style:italic;color:#999;text-al
 <body>
 <div class="app-sidebar" id="appSidebar">
 <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Mostrar/ocultar ferramentas">&#9776;</button>
-<div class="sidebar-panel" id="sidebarPanel">
+<div class="sidebar-panel collapsed" id="sidebarPanel">
 <div class="sidebar-title">Ferramentas</div>
 <button class="print-btn" onclick="window.print()" title="Imprimir ou salvar como PDF">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
@@ -1586,7 +1583,7 @@ function toggleComandoVoz(){
 function toggleSidebar(){
   var panel = document.getElementById('sidebarPanel');
   panel.classList.toggle('collapsed');
-  document.body.classList.toggle('sidebar-collapsed');
+  document.body.classList.toggle('sidebar-expanded');
 }
 </script>
 </body>
