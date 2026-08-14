@@ -181,6 +181,71 @@ body{
   line-height:1.4;
   box-shadow:0 4px 14px rgba(0,0,0,.2);
 }
+.app-sidebar{
+  position:fixed;
+  top:50%;
+  right:20px;
+  transform:translateY(-50%);
+  z-index:1000;
+  display:flex;
+  align-items:flex-start;
+}
+.sidebar-toggle{
+  background:var(--atlas-dark);
+  color:#fff;
+  border:none;
+  border-radius:8px 0 0 8px;
+  width:30px;
+  height:44px;
+  cursor:pointer;
+  font-size:16px;
+  line-height:1;
+  box-shadow:-2px 2px 10px rgba(0,0,0,.2);
+  flex-shrink:0;
+}
+.sidebar-panel{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  background:#fff;
+  border-radius:0 12px 12px 12px;
+  padding:14px;
+  box-shadow:0 6px 24px rgba(0,0,0,.25);
+  width:190px;
+  max-height:80vh;
+  overflow-y:auto;
+}
+.sidebar-panel.collapsed{display:none;}
+.sidebar-title{
+  font-family:'Montserrat',Arial,sans-serif;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+  color:#999;
+  margin-bottom:2px;
+}
+.app-sidebar .print-btn,
+.app-sidebar .download-btn,
+.app-sidebar .bitrix-btn,
+.app-sidebar .mic-btn,
+.app-sidebar .voice-cmd-btn{
+  position:static;
+  top:auto;right:auto;
+  width:100%;
+  box-shadow:none;
+  justify-content:flex-start;
+  padding:10px 12px;
+  font-size:12.5px;
+}
+.app-sidebar .voice-cmd-status{
+  position:static;
+  top:auto;right:auto;
+  width:100%;
+  max-width:none;
+  margin-top:0;
+  box-sizing:border-box;
+}
 .mic-btn.listening{background:#e74c3c;animation:micPulse 1.2s infinite;}
 @keyframes micPulse{
   0%{box-shadow:0 4px 14px rgba(231,76,60,.55);}
@@ -225,6 +290,7 @@ body{
   .mic-btn{display:none !important;}
   .voice-cmd-btn{display:none !important;}
   .voice-cmd-status{display:none !important;}
+  .app-sidebar{display:none !important;}
   .plan-select-row{display:none !important;}
   .editable-field{border-bottom:none !important;background:transparent !important;padding:0 !important;}
   .valor-input,.qtde-input{border-bottom:none !important;background:transparent !important;}
@@ -538,27 +604,33 @@ table.pricing td.svc-repeat{font-weight:600;font-style:italic;color:#999;text-al
 </style>
 </head>
 <body>
+<div class="app-sidebar" id="appSidebar">
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Mostrar/ocultar ferramentas">&#9776;</button>
+<div class="sidebar-panel" id="sidebarPanel">
+<div class="sidebar-title">Ferramentas</div>
 <button class="print-btn" onclick="window.print()" title="Imprimir ou salvar como PDF">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-  Imprimir / Gerar PDF
+  Imprimir
 </button>
 <button class="download-btn" onclick="baixarPropostaPreenchida()" title="Baixar HTML com os dados preenchidos">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-  Baixar HTML preenchido
+  Baixar
 </button>
 <button class="bitrix-btn" onclick="abrirVerificacaoBitrix()" title="Verificar dados e sincronizar com o Bitrix">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-  Sincronizar com Bitrix
+  Sincronizar
 </button>
 <button class="mic-btn" id="micBtn" onclick="toggleDitado()" title="Clique no campo que deseja preencher, depois clique aqui e fale">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-  <span id="micBtnLabel">Ditar por voz</span>
+  <span id="micBtnLabel">Ditar</span>
 </button>
 <button class="voice-cmd-btn" id="voiceCmdBtn" onclick="toggleComandoVoz()" title="Ative e diga 'Atlas' seguido do comando, ex: Atlas, nome \u00e9 Fulano">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h.01M12 12h.01M16 12h.01"></path></svg>
-  <span id="voiceCmdLabel">Comando de voz (Atlas)</span>
+  <span id="voiceCmdLabel">Comando de Voz</span>
 </button>
 <div class="voice-cmd-status" id="voiceCmdStatus" style="display:none;"></div>
+</div>
+</div>
 <div class="doc">
 
 <div class="page cover">
@@ -1303,7 +1375,7 @@ function toggleDitado(){
   };
   reconhecimentoVoz.onend = function(){
     btn.classList.remove('listening');
-    label.textContent = 'Ditar por voz';
+    label.textContent = 'Ditar';
     reconhecimentoVoz = null;
   };
   reconhecimentoVoz.start();
@@ -1486,12 +1558,18 @@ function toggleComandoVoz(){
   };
   reconhecimentoComando.onend = function(){
     btn.classList.remove('listening');
-    label.textContent = 'Comando de voz (Atlas)';
+    label.textContent = 'Comando de Voz';
     status.style.display = 'none';
     reconhecimentoComando = null;
     aguardandoComando = false;
   };
   reconhecimentoComando.start();
+}
+</script>
+<script>
+function toggleSidebar(){
+  var panel = document.getElementById('sidebarPanel');
+  panel.classList.toggle('collapsed');
 }
 </script>
 </body>
