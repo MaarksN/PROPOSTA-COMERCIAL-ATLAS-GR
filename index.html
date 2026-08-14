@@ -137,11 +137,15 @@ function abrirProposta(){
   var nome = document.getElementById('hubNome').value.trim();
   var cnpj = document.getElementById('hubCnpj').value.trim();
   var arquivo = document.getElementById('hubSelect').value;
+  if(logoDataUrl){
+    sessionStorage.setItem('atlasLogoDataUrl', logoDataUrl);
+  } else {
+    sessionStorage.removeItem('atlasLogoDataUrl');
+  }
   var url = arquivo + '?';
   var qs = [];
   if(nome) qs.push('nome=' + encodeURIComponent(nome));
   if(cnpj) qs.push('cnpj=' + encodeURIComponent(cnpj));
-  if(logoDataUrl) qs.push('logo=' + encodeURIComponent(logoDataUrl));
   url += qs.join('&');
   window.open(url, '_blank');
 }

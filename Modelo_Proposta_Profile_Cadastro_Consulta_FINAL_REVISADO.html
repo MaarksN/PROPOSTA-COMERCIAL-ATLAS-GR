@@ -474,7 +474,7 @@ function aplicarParametrosDaURL(){
   var params = new URLSearchParams(window.location.search);
   var nome = params.get('nome');
   var cnpj = params.get('cnpj');
-  var logo = params.get('logo');
+  var logo = params.get('logo') || sessionStorage.getItem('atlasLogoDataUrl');
   if(nome){
     var elNome = document.getElementById('cover-client-field');
     if(elNome) elNome.textContent = nome;
@@ -486,6 +486,7 @@ function aplicarParametrosDaURL(){
   if(logo){
     var img = document.getElementById('client-logo-img');
     if(img){ img.src = logo; img.style.display = 'inline-block'; }
+    sessionStorage.removeItem('atlasLogoDataUrl');
   }
 }
 document.addEventListener('DOMContentLoaded', function(){
