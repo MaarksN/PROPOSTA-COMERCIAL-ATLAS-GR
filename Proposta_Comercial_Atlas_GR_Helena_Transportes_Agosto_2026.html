@@ -389,7 +389,7 @@ table.pricing td.detail{font-size:10.5px;line-height:1.4;}
   <div class="cover-top">
     <div class="cover-top-row">
       <div>
-        <div class="cover-client editable-field" contenteditable="true" spellcheck="false">Helena Transportes</div>
+        <div id="cover-client-field" class="cover-client editable-field" contenteditable="true" spellcheck="false">Helena Transportes</div>
       </div>
       <div class="cover-divider"></div>
       <div style="text-align:right;">
@@ -397,7 +397,7 @@ table.pricing td.detail{font-size:10.5px;line-height:1.4;}
       </div>
     </div>
     <div class="cover-top-row" style="margin-top:6px;">
-      <div style="font-size:14px;">CNPJ:&nbsp;&nbsp;<span class="editable-field" contenteditable="true" spellcheck="false">&nbsp;</span></div>
+      <div style="font-size:14px;">CNPJ:&nbsp;&nbsp;<span id="cover-cnpj-field" class="editable-field" contenteditable="true" spellcheck="false">&nbsp;</span></div>
       <div class="cover-divider" style="opacity:0;"></div>
       <div class="cover-date-value editable-field auto-today-date" contenteditable="true" spellcheck="false" style="text-align:right;">XX de Novembro de 2026</div>
     </div>
@@ -441,8 +441,8 @@ table.pricing td.detail{font-size:10.5px;line-height:1.4;}
 <div class="sig-pad-wrap"><canvas id="sigPad" class="sig-pad" width="420" height="120"></canvas><img id="sigPadPrintImg" class="sig-pad-print-img" alt=""></div>
 <div class="sig-line"></div>
 <button type="button" class="sig-clear-btn" id="sigClearBtn">Limpar assinatura</button>
-<div class="sig-name">Helena Transportes</div>
-<div class="sig-cnpj editable-field-dark" contenteditable="true" spellcheck="false">&nbsp;</div>
+<div class="sig-name" id="sig-name-field">Helena Transportes</div>
+<div class="sig-cnpj" id="sig-cnpj-field">&nbsp;</div>
 <div class="client-logo-block"><input type="file" id="clientLogoInput" accept="image/*" style="display:none;"><label for="clientLogoInput" class="logo-upload-btn" id="logoUploadBtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>Adicionar logo do cliente</label><img id="clientLogoPreview" class="client-logo-preview" alt="Logo do cliente" style="display:none;"></div>
 </div></div></div>
 </div>
@@ -635,6 +635,20 @@ document.querySelectorAll('.plan-picker').forEach(function(sel){
   sel.addEventListener('change', applyPlan);
   if(sel.value) applyPlan();
 });
+</script>
+<script>
+(function(){
+  var nameSource = document.getElementById('cover-client-field');
+  var cnpjSource = document.getElementById('cover-cnpj-field');
+  var nameTarget = document.getElementById('sig-name-field');
+  var cnpjTarget = document.getElementById('sig-cnpj-field');
+  function syncName(){ if(nameTarget && nameSource) nameTarget.textContent = nameSource.textContent; }
+  function syncCnpj(){ if(cnpjTarget && cnpjSource) cnpjTarget.textContent = cnpjSource.textContent; }
+  if(nameSource){ nameSource.addEventListener('input', syncName); }
+  if(cnpjSource){ cnpjSource.addEventListener('input', syncCnpj); }
+  syncName();
+  syncCnpj();
+})();
 </script>
 </body>
 </html>

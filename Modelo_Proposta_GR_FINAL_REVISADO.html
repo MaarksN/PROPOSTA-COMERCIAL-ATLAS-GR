@@ -444,8 +444,8 @@ table.pricing td.detail{font-size:10.5px;line-height:1.4;}
 <div class="fone-line">Fone: ( <span class="fone-seg fone-ddd" contenteditable="true" spellcheck="false">&nbsp;</span> ) <span class="fone-seg" contenteditable="true" spellcheck="false">&nbsp;</span> - <span class="fone-seg" contenteditable="true" spellcheck="false">&nbsp;</span></div>
 <div class="sig-date"><span class="u" contenteditable="true" spellcheck="false">&nbsp;</span> de <span class="u month" contenteditable="true" spellcheck="false">&nbsp;</span> de <span class="u" contenteditable="true" spellcheck="false">2026</span>.</div>
 <div class="sig-pad-label">Assinatura do cliente</div><div class="sig-pad-wrap"><canvas id="sigPad" class="sig-pad" width="420" height="120"></canvas><img id="sigPadPrintImg" class="sig-pad-print-img" alt=""></div><div class="sig-line"></div><button type="button" class="sig-clear-btn" id="sigClearBtn">Limpar assinatura</button>
-<div class="sig-name">[NOME DO CLIENTE]</div>
-<div class="sig-cnpj">XX.XXX.XXX/XXXX-XX</div>
+<div class="sig-name" id="sig-name-field">[NOME DO CLIENTE]</div>
+<div class="sig-cnpj" id="sig-cnpj-field">XX.XXX.XXX/XXXX-XX</div>
 </div></div></div>
 </div>
 
@@ -585,6 +585,20 @@ document.querySelectorAll('.plan-picker').forEach(function(sel){
   sel.addEventListener('change', applyPlan);
   if(sel.value) applyPlan();
 });
+</script>
+<script>
+(function(){
+  var nameSource = document.getElementById('cover-client-field');
+  var cnpjSource = document.getElementById('cover-cnpj-field');
+  var nameTarget = document.getElementById('sig-name-field');
+  var cnpjTarget = document.getElementById('sig-cnpj-field');
+  function syncName(){ if(nameTarget && nameSource) nameTarget.textContent = nameSource.textContent; }
+  function syncCnpj(){ if(cnpjTarget && cnpjSource) cnpjTarget.textContent = cnpjSource.textContent; }
+  if(nameSource){ nameSource.addEventListener('input', syncName); }
+  if(cnpjSource){ cnpjSource.addEventListener('input', syncCnpj); }
+  syncName();
+  syncCnpj();
+})();
 </script>
 </body>
 </html>
