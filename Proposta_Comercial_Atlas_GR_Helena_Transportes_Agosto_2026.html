@@ -136,6 +136,10 @@ body{
 .bitrix-status{margin-top:12px;font-size:12px;font-weight:700;}
 .bitrix-status-ok{color:#1a8f4c;}
 .bitrix-status-error{color:#c0392b;}
+.bitrix-search-btn{background:#eef8fd;color:#1CAEDE;border:1px solid #2FC7F7;border-radius:6px;padding:3px 8px;font-size:10.5px;font-weight:700;cursor:pointer;margin-left:6px;font-family:'Montserrat',Arial,sans-serif;}
+.bitrix-search-btn:hover{background:#2FC7F7;color:#fff;}
+.bitrix-id-input{border:1.2px solid #ccc;border-radius:6px;padding:4px 6px;font-size:12px;font-family:'Montserrat',Arial,sans-serif;width:110px;}
+.bitrix-search-status{font-size:11px;font-weight:700;margin-left:8px;}
 
 @media print{
   * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
@@ -1025,8 +1029,12 @@ function abrirVerificacaoBitrix(){
       }).join('') + '</ul>'
     : '<p><i>Nenhum item selecionado na proposta.</i></p>';
   body.innerHTML =
-    '<div class="bitrix-field"><b>Nome do Cliente:</b> ' + (dados.nome || '<i>(vazio)</i>') + '</div>' +
-    '<div class="bitrix-field"><b>CNPJ:</b> ' + (dados.cnpj || '<i>(vazio)</i>') + '</div>' +
+    '<div class="bitrix-field"><b>Nome do Cliente:</b> <span id="bitrixNomeDisplay">' + (dados.nome || '<i>(vazio)</i>') + '</span>' +
+      '<button type="button" class="bitrix-search-btn" onclick="buscarClienteBitrix(\'nome\')">Buscar por nome</button></div>' +
+    '<div class="bitrix-field"><b>CNPJ:</b> <span id="bitrixCnpjDisplay">' + (dados.cnpj || '<i>(vazio)</i>') + '</span>' +
+      '<button type="button" class="bitrix-search-btn" onclick="buscarClienteBitrix(\'cnpj\')">Buscar por CNPJ</button></div>' +
+    '<div class="bitrix-field"><b>ID da Empresa no Bitrix:</b> <input type="text" id="bitrixCompanyId" class="bitrix-id-input" placeholder="buscar ou digitar">' +
+      '<span id="bitrixSearchStatus" class="bitrix-search-status"></span></div>' +
     '<div class="bitrix-field"><b>E-mail:</b> ' + (dados.email || '<i>(vazio)</i>') + '</div>' +
     '<div class="bitrix-field"><b>Telefone:</b> ' + (dados.telefone || '<i>(vazio)</i>') + '</div>' +
     '<div class="bitrix-field"><b>Itens selecionados:</b>' + itensHtml + '</div>' +
@@ -1041,6 +1049,46 @@ function abrirVerificacaoBitrix(){
   btn.onclick = function(){ enviarParaBitrix(dados); };
 
   document.getElementById('bitrixModal').style.display = 'flex';
+}
+
+function buscarClienteBitrix(tipo){
+  var statusEl = document.getElementById('bitrixSearchStatus');
+  var idInput = document.getElementById('bitrixCompanyId');
+  var nome = document.getElementById('bitrixNomeDisplay').textContent.trim();
+  var cnpj = document.getElementById('bitrixCnpjDisplay').textContent.trim();
+  var filter = {};
+  if(tipo === 'nome'){
+    if(!nome){ statusEl.textContent = 'Preencha o nome na proposta primeiro.'; statusEl.className = 'bitrix-search-status bitrix-status-error'; return; }
+    filter['%TITLE'] = nome;
+  } else {
+    if(!cnpj){ statusEl.textContent = 'Preencha o CNPJ na proposta primeiro.'; statusEl.className = 'bitrix-search-status bitrix-status-error'; return; }
+    filter['UF_CRM_1785182242607'] = cnpj;
+  }
+  statusEl.textContent = 'Buscando...';
+  statusEl.className = 'bitrix-search-status';
+
+  fetch(BITRIX_WEBHOOK_URL + 'crm.company.list.json', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({filter: filter, select: ['ID', 'TITLE', 'UF_CRM_1785182242607']})
+  })
+  .then(function(res){ return res.json(); })
+  .then(function(json){
+    if(json.result && json.result.length){
+      var empresa = json.result[0];
+      idInput.value = empresa.ID;
+      var extra = json.result.length > 1 ? ' (' + json.result.length + ' resultados, usando o primeiro)' : '';
+      statusEl.textContent = 'Encontrado: ' + empresa.TITLE + ' \u2014 ID ' + empresa.ID + extra;
+      statusEl.className = 'bitrix-search-status bitrix-status-ok';
+    } else {
+      statusEl.textContent = 'Nenhuma empresa encontrada com esse ' + (tipo === 'nome' ? 'nome' : 'CNPJ') + '.';
+      statusEl.className = 'bitrix-search-status bitrix-status-error';
+    }
+  })
+  .catch(function(err){
+    statusEl.textContent = 'Erro na busca: ' + err.message;
+    statusEl.className = 'bitrix-search-status bitrix-status-error';
+  });
 }
 
 function fecharModalBitrix(){
@@ -1060,6 +1108,9 @@ function enviarParaBitrix(dados){
     return i.label + ': R$' + i.valor + ' x ' + i.qtde + ' = R$' + i.total;
   }).join('\n');
 
+  var idInput = document.getElementById('bitrixCompanyId');
+  var companyId = idInput && idInput.value.trim() ? parseInt(idInput.value.trim(), 10) : null;
+
   var payload = {
     fields: {
       TITLE: titulo,
@@ -1068,6 +1119,7 @@ function enviarParaBitrix(dados){
       COMMENTS: 'CNPJ: ' + dados.cnpj + '\nE-mail: ' + dados.email + '\nTelefone: ' + dados.telefone + '\n\nItens:\n' + comentario
     }
   };
+  if(companyId){ payload.fields.COMPANY_ID = companyId; }
 
   fetch(BITRIX_WEBHOOK_URL + 'crm.deal.add.json', {
     method: 'POST',
