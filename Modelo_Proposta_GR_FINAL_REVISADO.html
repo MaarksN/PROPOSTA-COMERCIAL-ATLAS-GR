@@ -140,6 +140,47 @@ body{
 .mic-btn:hover{background:#6f3585;transform:translateY(-1px);}
 .mic-btn:active{transform:translateY(0);}
 .mic-btn svg{width:17px;height:17px;flex-shrink:0;}
+.voice-cmd-btn{
+  position:fixed;
+  top:236px;
+  right:20px;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:#16a085;
+  color:#fff;
+  border:none;
+  border-radius:30px;
+  padding:12px 20px;
+  font-family:'Montserrat',Arial,sans-serif;
+  font-size:13.5px;
+  font-weight:700;
+  letter-spacing:.2px;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.28);
+  transition:background .15s,transform .15s;
+}
+.voice-cmd-btn:hover{background:#118a70;transform:translateY(-1px);}
+.voice-cmd-btn:active{transform:translateY(0);}
+.voice-cmd-btn svg{width:17px;height:17px;flex-shrink:0;}
+.voice-cmd-btn.listening{background:#e67e22;animation:micPulse 1.2s infinite;}
+.voice-cmd-status{
+  position:fixed;
+  top:290px;
+  right:20px;
+  z-index:1000;
+  max-width:260px;
+  background:#fff;
+  border:1.4px solid #16a085;
+  border-radius:10px;
+  padding:10px 14px;
+  font-family:'Montserrat',Arial,sans-serif;
+  font-size:11.5px;
+  color:#333;
+  line-height:1.4;
+  box-shadow:0 4px 14px rgba(0,0,0,.2);
+}
 .mic-btn.listening{background:#e74c3c;animation:micPulse 1.2s infinite;}
 @keyframes micPulse{
   0%{box-shadow:0 4px 14px rgba(231,76,60,.55);}
@@ -182,6 +223,8 @@ body{
   .bitrix-btn{display:none !important;}
   .bitrix-modal-overlay{display:none !important;}
   .mic-btn{display:none !important;}
+  .voice-cmd-btn{display:none !important;}
+  .voice-cmd-status{display:none !important;}
   .plan-select-row{display:none !important;}
   .editable-field{border-bottom:none !important;background:transparent !important;padding:0 !important;}
   .valor-input,.qtde-input{border-bottom:none !important;background:transparent !important;}
@@ -511,6 +554,11 @@ table.pricing td.detail{font-size:10.5px;line-height:1.4;}
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
   <span id="micBtnLabel">Ditar por voz</span>
 </button>
+<button class="voice-cmd-btn" id="voiceCmdBtn" onclick="toggleComandoVoz()" title="Ative e diga 'Atlas' seguido do comando, ex: Atlas, nome \u00e9 Fulano">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h.01M12 12h.01M16 12h.01"></path></svg>
+  <span id="voiceCmdLabel">Comando de voz (Atlas)</span>
+</button>
+<div class="voice-cmd-status" id="voiceCmdStatus" style="display:none;"></div>
 <div class="doc">
 
 <div class="page cover">
@@ -1140,6 +1188,191 @@ function toggleDitado(){
     reconhecimentoVoz = null;
   };
   reconhecimentoVoz.start();
+}
+</script>
+<script>
+function normalizarTexto(t){
+  return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function encontrarCampoPorRotuloVoz(rotulo){
+  var candidatos = document.querySelectorAll('.sig-field, .fone-line');
+  for(var i=0; i<candidatos.length; i++){
+    if(candidatos[i].textContent.trim().indexOf(rotulo) === 0){
+      return candidatos[i].querySelector('.rule, .editable-field-dark');
+    }
+  }
+  return null;
+}
+
+function preencherTelefonePorVoz(texto){
+  var digitos = texto.replace(/\D/g, '');
+  var candidatos = document.querySelectorAll('.sig-field, .fone-line');
+  var campo = null;
+  for(var i=0; i<candidatos.length; i++){
+    if(candidatos[i].textContent.trim().indexOf('Fone:') === 0){ campo = candidatos[i]; break; }
+  }
+  if(!campo) return 'Campo de telefone n\u00e3o encontrado nesta proposta.';
+  var ddd = campo.querySelector('.fone-ddd, .rule-ddd');
+  var partes = campo.querySelectorAll('.fone-seg:not(.fone-ddd), .rule-phone');
+  if(ddd && digitos.length >= 2){
+    ddd.textContent = digitos.slice(0, 2);
+    digitos = digitos.slice(2);
+  }
+  if(partes.length >= 2 && digitos.length >= 5){
+    partes[0].textContent = digitos.slice(0, digitos.length - 4);
+    partes[1].textContent = digitos.slice(-4);
+  } else if(partes.length >= 1){
+    partes[0].textContent = digitos;
+  }
+  return 'Telefone preenchido.';
+}
+
+function encontrarItemChecklistPorVoz(servicoFalado){
+  var alvo = normalizarTexto(servicoFalado);
+  var palavras = alvo.split(' ').filter(function(p){ return p.length > 2; });
+  var opts = document.querySelectorAll('.item-picker-opt');
+  var melhor = null, melhorScore = 0;
+  opts.forEach(function(opt){
+    var label = normalizarTexto(opt.textContent);
+    var score = 0;
+    palavras.forEach(function(p){ if(label.indexOf(p) !== -1) score++; });
+    if(score > melhorScore){ melhorScore = score; melhor = opt; }
+  });
+  return melhorScore > 0 ? melhor : null;
+}
+
+function preencherValorServicoPorVoz(servicoFalado, valorFalado){
+  var opt = encontrarItemChecklistPorVoz(servicoFalado);
+  if(!opt) return 'N\u00e3o encontrei um item de "' + servicoFalado + '" na tabela.';
+  var cb = opt.querySelector('input.row-toggle');
+  if(cb && !cb.checked){
+    cb.checked = true;
+    cb.dispatchEvent(new Event('change', {bubbles:true}));
+  }
+  var rowId = cb ? cb.dataset.row : null;
+  var input = rowId ? document.querySelector('.valor-input[data-row="' + rowId + '"]') : null;
+  if(!input) return 'Item encontrado, mas sem campo de valor.';
+  var limpo = limparNumeroFalado(valorFalado);
+  var match = limpo.match(/[\d.,]+/);
+  input.value = match ? match[0] : limpo;
+  input.dispatchEvent(new Event('input', {bubbles:true}));
+  input.dispatchEvent(new Event('change', {bubbles:true}));
+  return 'Valor de "' + opt.textContent.trim() + '" definido para R$' + input.value;
+}
+
+function marcarItemChecklistPorVoz(servicoFalado){
+  var opt = encontrarItemChecklistPorVoz(servicoFalado);
+  if(!opt) return 'N\u00e3o encontrei um item de "' + servicoFalado + '" na tabela.';
+  var cb = opt.querySelector('input.row-toggle');
+  if(cb){ cb.checked = true; cb.dispatchEvent(new Event('change', {bubbles:true})); }
+  return 'Selecionado: ' + opt.textContent.trim();
+}
+
+var COMANDOS_VOZ = [
+  { regex: /^nome\s*(?:é|eh|:)?\s*(.+)$/i, acao: function(m){
+      var el = document.getElementById('cover-client-field');
+      if(el) preencherCampoPorVoz(el, m[1].trim());
+      return 'Nome definido: ' + m[1].trim();
+  }},
+  { regex: /^cnpj\s*(?:é|eh|:)?\s*(.+)$/i, acao: function(m){
+      var el = document.getElementById('cover-cnpj-field');
+      if(el) preencherCampoPorVoz(el, m[1].trim());
+      return 'CNPJ definido: ' + m[1].trim();
+  }},
+  { regex: /^e-?mail\s*(?:é|eh|:)?\s*(.+)$/i, acao: function(m){
+      var el = encontrarCampoPorRotuloVoz('E-mail:');
+      if(el) preencherCampoPorVoz(el, m[1].trim().replace(/\s*arroba\s*/gi, '@').replace(/\s+/g, ''));
+      return el ? 'E-mail definido.' : 'Campo de e-mail n\u00e3o encontrado.';
+  }},
+  { regex: /^telefone\s*(?:é|eh|:)?\s*(.+)$/i, acao: function(m){
+      return preencherTelefonePorVoz(m[1].trim());
+  }},
+  { regex: /^valor\s+(?:d[eoa]s?\s+)?(.+?)\s*(?:é|eh|:)?\s*([\d.,]+)\s*(?:reais)?$/i, acao: function(m){
+      return preencherValorServicoPorVoz(m[1].trim(), m[2].trim());
+  }},
+  { regex: /^(?:selecionar|marcar|incluir)\s+(.+)$/i, acao: function(m){
+      return marcarItemChecklistPorVoz(m[1].trim());
+  }}
+];
+
+function processarComandoVoz(texto){
+  var t = texto.trim();
+  for(var i=0; i<COMANDOS_VOZ.length; i++){
+    var m = t.match(COMANDOS_VOZ[i].regex);
+    if(m){
+      try{ return COMANDOS_VOZ[i].acao(m); }
+      catch(e){ return 'Erro ao processar comando.'; }
+    }
+  }
+  return 'N\u00e3o entendi o comando: "' + texto + '"';
+}
+
+var reconhecimentoComando = null;
+var aguardandoComando = false;
+
+function toggleComandoVoz(){
+  var SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var btn = document.getElementById('voiceCmdBtn');
+  var label = document.getElementById('voiceCmdLabel');
+  var status = document.getElementById('voiceCmdStatus');
+  if(!SpeechRecognitionCtor){
+    alert('Seu navegador n\u00e3o suporta comando de voz. Use o Google Chrome ou Edge.');
+    return;
+  }
+  if(reconhecimentoComando){
+    reconhecimentoComando.stop();
+    return;
+  }
+  aguardandoComando = false;
+  reconhecimentoComando = new SpeechRecognitionCtor();
+  reconhecimentoComando.lang = 'pt-BR';
+  reconhecimentoComando.continuous = true;
+  reconhecimentoComando.interimResults = false;
+  reconhecimentoComando.onstart = function(){
+    btn.classList.add('listening');
+    label.textContent = 'Aguardando "Atlas"...';
+    status.style.display = 'block';
+    status.textContent = 'Diga "Atlas" seguido do comando. Ex: "Atlas, nome \u00e9 Fulano".';
+  };
+  reconhecimentoComando.onresult = function(event){
+    var texto = '';
+    for(var i = event.resultIndex; i < event.results.length; i++){
+      if(event.results[i].isFinal){ texto += event.results[i][0].transcript; }
+    }
+    texto = texto.trim();
+    if(!texto) return;
+    var normalizado = normalizarTexto(texto);
+    if(!aguardandoComando){
+      var idx = normalizado.indexOf('atlas');
+      if(idx === -1) return;
+      var resto = texto.slice(idx + 5).replace(/^[,\s:]+/, '').trim();
+      if(resto){
+        status.textContent = processarComandoVoz(resto);
+      } else {
+        aguardandoComando = true;
+        label.textContent = 'Diga o comando...';
+        status.textContent = 'Pode falar o comando agora.';
+      }
+    } else {
+      status.textContent = processarComandoVoz(texto);
+      aguardandoComando = false;
+      label.textContent = 'Aguardando "Atlas"...';
+    }
+  };
+  reconhecimentoComando.onerror = function(e){
+    if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+      alert('Permiss\u00e3o de microfone negada. Habilite o microfone para este site nas configura\u00e7\u00f5es do navegador.');
+    }
+  };
+  reconhecimentoComando.onend = function(){
+    btn.classList.remove('listening');
+    label.textContent = 'Comando de voz (Atlas)';
+    status.style.display = 'none';
+    reconhecimentoComando = null;
+    aguardandoComando = false;
+  };
+  reconhecimentoComando.start();
 }
 </script>
 </body>
