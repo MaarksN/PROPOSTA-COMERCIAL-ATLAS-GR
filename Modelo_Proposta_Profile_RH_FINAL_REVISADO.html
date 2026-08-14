@@ -791,6 +791,15 @@ document.querySelectorAll('.add-range-btn').forEach(wireAddRangeBtn);
 })();
 </script>
 <script>
+function isBlankLockField(el){
+  var t = el.textContent.replace(/\u00a0/g, '').trim();
+  if(t === '') return true;
+  if(/^\[.*\]$/.test(t)) return true;
+  if(t === 'XX.XXX.XXX/XXXX-XX') return true;
+  if(t === 'XX de Novembro de 2026') return true;
+  return false;
+}
+
 function baixarPropostaPreenchida(){
   document.querySelectorAll('input[type="text"]').forEach(function(el){
     el.setAttribute('value', el.value);
@@ -801,6 +810,11 @@ function baixarPropostaPreenchida(){
   document.querySelectorAll('select').forEach(function(sel){
     Array.prototype.forEach.call(sel.options, function(opt){ opt.removeAttribute('selected'); });
     if(sel.selectedIndex >= 0) sel.options[sel.selectedIndex].setAttribute('selected', '');
+  });
+
+  var checkedRows = {};
+  document.querySelectorAll('.row-toggle').forEach(function(cb){
+    if(cb.checked) checkedRows[cb.dataset.row] = true;
   });
 
   var liveCanvas = document.getElementById('sigPad');
@@ -816,6 +830,72 @@ function baixarPropostaPreenchida(){
     if(img){ img.setAttribute('src', sigDataUrl); img.style.display = 'block'; }
     if(canvasClone){ canvasClone.style.display = 'none'; }
   }
+
+  clone.querySelectorAll('.item-picker').forEach(function(el){ el.remove(); });
+  clone.querySelectorAll('tr.pricing-row').forEach(function(tr){
+    if(!checkedRows[tr.dataset.row]) tr.remove();
+  });
+  clone.querySelectorAll('.add-range-btn, .remove-range-btn').forEach(function(el){ el.remove(); });
+  var bitrixBtnClone = clone.querySelector('.bitrix-btn');
+  if(bitrixBtnClone) bitrixBtnClone.remove();
+  var bitrixModalClone = clone.querySelector('.bitrix-modal-overlay');
+  if(bitrixModalClone) bitrixModalClone.remove();
+
+  clone.querySelectorAll('.valor-input, .qtde-input').forEach(function(el){
+    el.setAttribute('readonly', '');
+    el.classList.add('pw-locked');
+  });
+  clone.querySelectorAll('.row-range-select').forEach(function(el){
+    el.classList.add('pw-locked');
+  });
+  var planPickerClone = clone.querySelector('#plan-picker');
+  if(planPickerClone && planPickerClone.value){
+    planPickerClone.classList.add('pw-locked');
+  }
+  clone.querySelectorAll('[contenteditable="true"]').forEach(function(el){
+    if(!isBlankLockField(el)){
+      el.setAttribute('contenteditable', 'false');
+      el.classList.add('pw-locked');
+    }
+  });
+
+  var lockStyle = document.createElement('style');
+  lockStyle.textContent = '.pw-locked{cursor:not-allowed !important;}input.pw-locked,select.pw-locked{background:#f4f4f4 !important;color:#888 !important;}';
+  clone.querySelector('head').appendChild(lockStyle);
+
+  var lockScript = document.createElement('script');
+  lockScript.textContent = [
+    '(function(){',
+    '  var PASSWORD = "Atl@s";',
+    '  var unlocked = false;',
+    '  function unlockAll(){',
+    '    unlocked = true;',
+    '    document.querySelectorAll(".pw-locked").forEach(function(el){',
+    '      if(el.tagName === "INPUT"){ el.removeAttribute("readonly"); }',
+    '      else if(el.tagName !== "SELECT"){ el.setAttribute("contenteditable", "true"); }',
+    '      el.classList.remove("pw-locked");',
+    '    });',
+    '  }',
+    '  function tryUnlock(){',
+    '    if(unlocked) return;',
+    '    var pw = prompt("Este campo j\\u00e1 foi preenchido pela Atlas. Digite a senha para alterar:");',
+    '    if(pw === null) return;',
+    '    if(pw === "Atl@s"){ unlockAll(); }',
+    '    else { alert("Senha incorreta."); }',
+    '  }',
+    '  document.querySelectorAll(".pw-locked").forEach(function(el){',
+    '    el.addEventListener("mousedown", function(e){',
+    '      if(unlocked) return;',
+    '      if(el.tagName === "SELECT"){ e.preventDefault(); }',
+    '      tryUnlock();',
+    '    });',
+    '    el.addEventListener("keydown", function(e){',
+    '      if(!unlocked && el.tagName === "SELECT"){ e.preventDefault(); }',
+    '    });',
+    '  });',
+    '})();'
+  ].join('\n');
+  clone.querySelector('body').appendChild(lockScript);
 
   var html = '<!DOCTYPE html>\n' + clone.outerHTML;
   var blob = new Blob([html], {type: 'text/html;charset=utf-8'});
