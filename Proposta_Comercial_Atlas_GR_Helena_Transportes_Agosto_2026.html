@@ -24,6 +24,12 @@ body{
   background:#d9d9d9;
   color:var(--text);
   -webkit-font-smoothing:antialiased;
+  padding-left:250px;
+  transition:padding-left .2s;
+}
+body.sidebar-collapsed{padding-left:60px;}
+@media (max-width:1100px){
+  body{padding-left:60px;}
 }
 
 .doc{
@@ -280,7 +286,7 @@ body{
 
 @media print{
   * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
-  body{background:#fff;}
+  body{background:#fff;padding-left:0 !important;}
   .doc{padding:0;max-width:none;background:#fff;}
   .page{box-shadow:none;margin:0;page-break-after:always;min-height:0;}
   .print-btn{display:none !important;}
@@ -1571,6 +1577,7 @@ function toggleComandoVoz(){
 function toggleSidebar(){
   var panel = document.getElementById('sidebarPanel');
   panel.classList.toggle('collapsed');
+  document.body.classList.toggle('sidebar-collapsed');
 }
 </script>
 </body>
