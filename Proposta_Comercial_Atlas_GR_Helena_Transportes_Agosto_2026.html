@@ -199,14 +199,20 @@ body.sidebar-expanded{padding-left:250px;}
   color:#fff;
   border:none;
   border-radius:0 8px 8px 0;
-  width:30px;
   height:44px;
+  padding:0 14px 0 8px;
+  display:flex;
+  align-items:center;
+  gap:6px;
   cursor:pointer;
-  font-size:16px;
-  line-height:1;
+  font-family:'Montserrat',Arial,sans-serif;
+  font-size:12px;
+  font-weight:700;
+  white-space:nowrap;
   box-shadow:2px 2px 10px rgba(0,0,0,.2);
   flex-shrink:0;
 }
+.sidebar-toggle-icon{font-size:16px;line-height:1;}
 .sidebar-panel{
   display:flex;
   flex-direction:column;
@@ -609,7 +615,7 @@ table.pricing td.svc-repeat{font-weight:600;font-style:italic;color:#999;text-al
 </head>
 <body>
 <div class="app-sidebar" id="appSidebar">
-<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Mostrar/ocultar ferramentas">&#9776;</button>
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Mostrar/ocultar ferramentas"><span class="sidebar-toggle-icon">&#9776;</span><span class="sidebar-toggle-label">Imprimir / Salvar</span></button>
 <div class="sidebar-panel collapsed" id="sidebarPanel">
 <div class="sidebar-title">Ferramentas</div>
 <button class="print-btn" onclick="window.print()" title="Imprimir ou salvar como PDF">
@@ -695,8 +701,8 @@ table.pricing td.svc-repeat{font-weight:600;font-style:italic;color:#999;text-al
 <div class="sig-pad-wrap"><canvas id="sigPad" class="sig-pad" width="420" height="120"></canvas><img id="sigPadPrintImg" class="sig-pad-print-img" alt=""></div>
 <div class="sig-line"></div>
 <button type="button" class="sig-clear-btn" id="sigClearBtn">Limpar assinatura</button>
-<div class="sig-name" id="sig-name-field">Helena Transportes</div>
-<div class="sig-cnpj" id="sig-cnpj-field">&nbsp;</div>
+<div class="sig-name editable-field-dark" id="sig-name-field" contenteditable="true" spellcheck="false">Helena Transportes</div>
+<div class="sig-cnpj editable-field-dark" id="sig-cnpj-field" contenteditable="true" spellcheck="false">&nbsp;</div>
 <div class="client-logo-block"><input type="file" id="clientLogoInput" accept="image/*" style="display:none;"><label for="clientLogoInput" class="logo-upload-btn" id="logoUploadBtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>Adicionar logo do cliente</label><img id="clientLogoPreview" class="client-logo-preview" alt="Logo do cliente" style="display:none;"></div>
 </div></div></div>
 </div>
@@ -964,10 +970,13 @@ document.querySelectorAll('.plan-picker').forEach(function(sel){
   var cnpjSource = document.getElementById('cover-cnpj-field');
   var nameTarget = document.getElementById('sig-name-field');
   var cnpjTarget = document.getElementById('sig-cnpj-field');
-  function syncName(){ if(nameTarget && nameSource) nameTarget.textContent = nameSource.textContent; }
-  function syncCnpj(){ if(cnpjTarget && cnpjSource) cnpjTarget.textContent = cnpjSource.textContent; }
+  var nameTouched = false, cnpjTouched = false;
+  function syncName(){ if(nameTarget && nameSource && !nameTouched) nameTarget.textContent = nameSource.textContent; }
+  function syncCnpj(){ if(cnpjTarget && cnpjSource && !cnpjTouched) cnpjTarget.textContent = cnpjSource.textContent; }
   if(nameSource){ nameSource.addEventListener('input', syncName); }
   if(cnpjSource){ cnpjSource.addEventListener('input', syncCnpj); }
+  if(nameTarget){ nameTarget.addEventListener('input', function(){ nameTouched = true; }); }
+  if(cnpjTarget){ cnpjTarget.addEventListener('input', function(){ cnpjTouched = true; }); }
   syncName();
   syncCnpj();
 })();
