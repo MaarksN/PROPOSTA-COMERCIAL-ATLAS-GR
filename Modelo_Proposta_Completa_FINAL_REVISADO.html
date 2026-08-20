@@ -626,7 +626,14 @@ table.pricing td.svc-repeat{font-weight:600;font-style:italic;color:#999;text-al
 <div class="app-sidebar" id="appSidebar">
 <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Mostrar/ocultar ferramentas"><span class="sidebar-toggle-icon">&#9776;</span><span class="sidebar-toggle-label">Imprimir / Salvar</span></button>
 <div class="sidebar-panel collapsed" id="sidebarPanel">
-<div class="sidebar-title">Ferramentas</div>
+<div class="sidebar-title">Ferramentas
+<div style="background:#fff7f2; border:1px solid #ffd8c2; padding:10px; border-radius:8px; margin-top:6px; font-size:11px;">
+  <b style="color:var(--atlas-orange); display:block; margin-bottom:4px;">ðŸ” Buscar no Bitrix24:</b>
+  <input type="text" id="bxSideSearch" placeholder="Nome do cliente..." style="width:100%; border:1px solid #ccc; padding:4px 6px; border-radius:4px; font-size:11px; font-family:'Montserrat',Arial,sans-serif; margin-bottom:4px;">
+  <button type="button" onclick="buscarBitrixSidebar()" style="width:100%; background:var(--atlas-orange); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-weight:700; cursor:pointer; font-size:11px; font-family:'Montserrat',Arial,sans-serif;">Buscar Cliente</button>
+  <select id="bxSideResults" style="display:none; width:100%; border:1px solid #ccc; padding:4px; border-radius:4px; font-size:11px; margin-top:4px; font-family:'Montserrat',Arial,sans-serif;" onchange="selecionarBitrixSidebar()"></select>
+</div>
+</div>
 <button class="print-btn" onclick="window.print()" title="Imprimir ou salvar como PDF">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
   Imprimir
@@ -1593,6 +1600,158 @@ function toggleSidebar(){
   var panel = document.getElementById('sidebarPanel');
   panel.classList.toggle('collapsed');
   document.body.classList.toggle('sidebar-expanded');
+}
+</script>
+<script>
+var atlasBxWebhook = "https://atlasgr.bitrix24.com.br/rest/450/gr94fas79p1nizci/";
+
+function buscarBitrixSidebar() {
+  var input = document.getElementById('bxSideSearch');
+  var term = input ? input.value.trim() : '';
+  if(!term) return;
+  
+  var btn = event ? event.target : null;
+  if(btn) btn.textContent = '...';
+
+  var pCompany = fetch(atlasBxWebhook + "crm.company.list.json", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filter: { "%TITLE": term }, select: ["ID", "TITLE"] })
+  }).then(function(r){ return r.json(); }).catch(function(){ return {result:[]}; });
+
+  var pLead = fetch(atlasBxWebhook + "crm.lead.list.json", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filter: { "%TITLE": term }, select: ["ID", "TITLE", "COMPANY_TITLE"] })
+  }).then(function(r){ return r.json(); }).catch(function(){ return {result:[]}; });
+
+  var pDeal = fetch(atlasBxWebhook + "crm.deal.list.json", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filter: { "%TITLE": term }, select: ["ID", "TITLE", "COMPANY_ID"] })
+  }).then(function(r){ return r.json(); }).catch(function(){ return {result:[]}; });
+
+  var pContact = fetch(atlasBxWebhook + "crm.contact.list.json", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filter: { "%NAME": term }, select: ["ID", "NAME", "LAST_NAME"] })
+  }).then(function(r){ return r.json(); }).catch(function(){ return {result:[]}; });
+
+  Promise.all([pCompany, pLead, pDeal, pContact]).then(function(results){
+    if(btn) btn.textContent = 'Buscar Cliente';
+    var sel = document.getElementById('bxSideResults');
+    sel.innerHTML = '<option value="">Selecione o cliente...</option>';
+    var count = 0;
+
+    // 1. Companies
+    if(results[0] && results[0].result && results[0].result.length > 0){
+      results[0].result.forEach(function(c){
+        count++;
+        var opt = document.createElement('option');
+        opt.value = c.ID;
+        opt.textContent = '[Empresa] ' + c.TITLE;
+        opt.dataset.type = 'company';
+        opt.dataset.title = c.TITLE;
+        sel.appendChild(opt);
+      });
+    }
+
+    // 2. Leads
+    if(results[1] && results[1].result && results[1].result.length > 0){
+      results[1].result.forEach(function(l){
+        count++;
+        var opt = document.createElement('option');
+        opt.value = l.ID;
+        var t = l.TITLE || l.COMPANY_TITLE || 'Lead #' + l.ID;
+        opt.textContent = '[Lead] ' + t;
+        opt.dataset.type = 'lead';
+        opt.dataset.title = t;
+        sel.appendChild(opt);
+      });
+    }
+
+    // 3. Deals
+    if(results[2] && results[2].result && results[2].result.length > 0){
+      results[2].result.forEach(function(d){
+        count++;
+        var opt = document.createElement('option');
+        opt.value = d.ID;
+        opt.textContent = '[NegÃ³cio] ' + d.TITLE;
+        opt.dataset.type = 'deal';
+        opt.dataset.title = d.TITLE;
+        opt.dataset.companyId = d.COMPANY_ID || '';
+        sel.appendChild(opt);
+      });
+    }
+
+    // 4. Contacts
+    if(results[3] && results[3].result && results[3].result.length > 0){
+      results[3].result.forEach(function(ct){
+        count++;
+        var opt = document.createElement('option');
+        opt.value = ct.ID;
+        var n = ((ct.NAME || '') + ' ' + (ct.LAST_NAME || '')).trim() || 'Contato #' + ct.ID;
+        opt.textContent = '[Contato] ' + n;
+        opt.dataset.type = 'contact';
+        opt.dataset.title = n;
+        sel.appendChild(opt);
+      });
+    }
+
+    if(count > 0){
+      sel.style.display = 'block';
+    } else {
+      sel.style.display = 'none';
+      alert("Nenhum cliente encontrado no Bitrix24 da Atlas GR.");
+    }
+  }).catch(function(err){
+    if(btn) btn.textContent = 'Buscar Cliente';
+    alert("Erro ao buscar no Bitrix24.");
+    console.error(err);
+  });
+}
+
+function selecionarBitrixSidebar() {
+  var sel = document.getElementById('bxSideResults');
+  var id = sel.value;
+  if(!id) return;
+  var opt = sel.options[sel.selectedIndex];
+  var title = opt.dataset.title || opt.text;
+  
+  var elNome = document.getElementById('cover-client-field');
+  if(elNome) {
+    elNome.textContent = title;
+    elNome.dispatchEvent(new Event('input', {bubbles:true}));
+  }
+
+  var entityTypeMap = { 'lead': 1, 'deal': 2, 'contact': 3, 'company': 4 };
+  var typeId = entityTypeMap[opt.dataset.type] || 4;
+
+  var reqUrl = atlasBxWebhook + "crm.requisite.list.json";
+  fetch(reqUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filter: { "ENTITY_ID": id, "ENTITY_TYPE_ID": typeId }, select: ["RQ_CNPJ"] })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(reqData){
+    var finalCnpj = null;
+    if(reqData.result && reqData.result.length > 0){
+      for(var i=0; i<reqData.result.length; i++){
+        if(reqData.result[i].RQ_CNPJ) {
+          finalCnpj = reqData.result[i].RQ_CNPJ;
+          break;
+        }
+      }
+    }
+    if(finalCnpj) {
+      var elCnpj = document.getElementById('cover-cnpj-field');
+      if(elCnpj) {
+        elCnpj.textContent = finalCnpj;
+        elCnpj.dispatchEvent(new Event('input', {bubbles:true}));
+      }
+    }
+  }).catch(function(){});
 }
 </script>
 </body>
