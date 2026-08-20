@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta Comercial — Total Trac Rastreadores</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --tt-primary:#374898;
+  --tt-primary-2:#2D3B78;
+  --tt-secondary:#008FCE;
+  --tt-light:#93DBF2;
+  --tt-dark:#1E2F37;
+  --band-light:#E4F4FB;
+  --band:#CDEAF7;
+  --text:#20242b;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Poppins',Arial,sans-serif;
+  background:#d9d9d9;
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+
+.doc{max-width:900px;margin:0 auto;background:#d9d9d9;padding:24px 0 60px;}
+.page{position:relative;width:100%;min-height:560px;background:#fff;overflow:hidden;margin:0 auto 28px;box-shadow:0 4px 18px rgba(0,0,0,.18);}
+
+.tt-logo-mark{height:1em;width:auto;color:#fff;display:inline-block;vertical-align:middle;}
+
+/* ---------- FLOATING BUTTONS ---------- */
+.print-btn,.download-btn{
+  position:fixed;right:20px;z-index:1000;display:flex;align-items:center;gap:8px;
+  border:none;border-radius:30px;padding:12px 20px;color:#fff;
+  font-family:'Poppins',Arial,sans-serif;font-size:13.5px;font-weight:700;letter-spacing:.2px;
+  cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.28);transition:background .15s,transform .15s;
+}
+.print-btn{top:20px;background:var(--tt-primary);}
+.print-btn:hover{background:var(--tt-primary-2);transform:translateY(-1px);}
+.download-btn{top:74px;background:var(--tt-dark);}
+.download-btn:hover{background:#141c22;transform:translateY(-1px);}
+.print-btn svg,.download-btn svg{width:17px;height:17px;flex-shrink:0;}
+
+@media print{
+  * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+  body{background:#fff;}
+  .doc{padding:0;max-width:none;background:#fff;}
+  .page{box-shadow:none;margin:0;page-break-after:always;min-height:0;}
+  .print-btn,.download-btn,.item-picker{display:none !important;}
+  .editable-field{border-bottom:none !important;background:transparent !important;padding:0 !important;}
+  .valor-input,.qtde-input{border-bottom:none !important;background:transparent !important;}
+  .line-total-cell{background:transparent !important;}
+  .sig-field .rule,.fone-seg,.sig-date .u{border-bottom:1.6px solid #161616 !important;background:transparent !important;}
+  .sig-pad{display:none !important;}
+  .sig-pad-print-img{display:block !important;width:420px;height:120px;margin:0 auto;}
+  .sig-clear-btn{display:none !important;}
+}
+
+/* ---------- COVER ---------- */
+.cover{background:var(--tt-primary);color:#fff;min-height:900px;display:flex;flex-direction:column;}
+.cover-diagonal{position:absolute;inset:0;background:var(--tt-primary-2);clip-path:polygon(62% 0,100% 0,100% 100%,34% 100%);z-index:0;}
+.cover-diagonal-2{position:absolute;inset:0;background:var(--tt-secondary);opacity:.85;clip-path:polygon(78% 45%,100% 45%,100% 62%,60% 100%,44% 100%);z-index:0;}
+.cover-top{position:relative;z-index:1;padding:38px 48px 26px;border-bottom:2px solid rgba(255,255,255,.85);}
+.cover-top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;}
+.cover-client{font-size:15px;opacity:.95;display:flex;align-items:center;gap:10px;}
+.client-logo-img{height:34px;max-width:90px;object-fit:contain;border-radius:3px;background:#fff;padding:2px;}
+.cover-date-label{font-weight:700;font-size:14px;margin-bottom:6px;}
+.cover-date-value{font-size:13px;opacity:.95;}
+.cover-cnpj-row{margin-top:14px;font-size:14px;}
+.cover-cnpj-row b{font-weight:600;margin-right:6px;}
+.cover-top .editable-field{outline:none;border-bottom:1.4px dashed rgba(255,255,255,.65);padding:0 3px 1px;cursor:text;border-radius:2px;}
+.cover-top .editable-field:hover{background:rgba(255,255,255,.14);}
+.cover-top .editable-field:focus{border-bottom:1.4px solid #fff;background:rgba(255,255,255,.2);}
+
+.editable-field{outline:none;border-bottom:1.4px dashed #7fa4d6;padding:0 3px 1px;cursor:text;border-radius:2px;}
+.editable-field:hover{background:#eef4ff;}
+.editable-field:focus{border-bottom:1.4px solid var(--tt-primary);background:#eef4ff;}
+
+.cover-mid{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 20px 18px;}
+.cover-brand-row{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.cover-brand-row .tt-logo-mark{height:58px;}
+.cover-wordmark{font-size:30px;font-weight:800;letter-spacing:3px;}
+.cover-wordmark small{display:block;font-size:11px;font-weight:600;letter-spacing:5px;opacity:.85;margin-top:2px;}
+.cover-title{font-size:44px;font-weight:800;line-height:1.08;letter-spacing:1px;margin:6px 0 8px;}
+.cover-subtitle{font-size:14.5px;font-weight:500;opacity:.92;max-width:520px;margin:0 auto;line-height:1.55;}
+
+.cover-white{position:relative;z-index:1;background:#fff;color:var(--text);padding:32px 48px 42px;}
+.cover-white h3{color:var(--tt-primary);font-size:19px;font-weight:800;letter-spacing:.3px;margin:0 0 10px;text-align:center;}
+.cover-white p{font-size:13.5px;line-height:1.65;margin:0;color:#333;}
+.cover-rule{border:none;border-top:2px solid var(--tt-dark);margin:20px 0;}
+.cover-stats{display:flex;justify-content:space-between;gap:10px;margin-top:22px;}
+.cover-stat{flex:1;text-align:center;background:var(--band-light);border-radius:10px;padding:14px 6px;}
+.cover-stat b{display:block;font-size:19px;color:var(--tt-primary);font-weight:800;}
+.cover-stat span{font-size:10px;color:#555;font-weight:600;letter-spacing:.2px;}
+
+/* ---------- INNER PAGES ---------- */
+.inner{min-height:560px;background:var(--band-light);padding:52px 50px 60px;}
+.inner-diagonal{position:absolute;inset:0;background:var(--band);clip-path:polygon(56% 0,80% 0,26% 100%,2% 100%);z-index:0;}
+.inner-diagonal-2{position:absolute;inset:0;background:var(--band);opacity:.6;clip-path:polygon(20% 100%,40% 100%,30% 115%);z-index:0;}
+.inner-content{position:relative;z-index:1;}
+.inner.white-bg{background:#fff;}
+.inner.white-bg .inner-diagonal,.inner.white-bg .inner-diagonal-2{display:none;}
+
+h2.sect{font-size:20px;font-weight:800;color:var(--tt-primary);margin:0 0 22px;text-align:center;}
+h3.sub{font-size:18px;font-weight:700;color:var(--tt-secondary);margin:26px 0 8px;text-align:center;}
+h3.sub:first-of-type{margin-top:0;}
+p.body-text{font-size:13.5px;line-height:1.7;margin:0 0 14px;color:#333;}
+p.body-text.center{text-align:center;}
+.check-list{list-style:none;margin:6px 0 18px;padding:0;}
+.check-list li{position:relative;padding-left:26px;font-size:13.5px;line-height:1.6;margin-bottom:8px;color:#333;}
+.check-list li::before{content:"\2714";position:absolute;left:0;top:0;color:var(--tt-secondary);font-size:12px;}
+.dot-list{list-style:none;margin:6px 0 18px;padding:0;}
+.dot-list li{position:relative;padding-left:22px;font-size:13.5px;line-height:1.6;margin-bottom:10px;color:#333;text-align:justify;}
+.dot-list li::before{content:"\25CF";position:absolute;left:2px;top:5px;color:var(--tt-secondary);font-size:8px;}
+.label-line{font-size:13px;font-weight:600;color:#222;margin:20px 0 6px;}
+
+/* attributes */
+.attr-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:18px 0 6px;}
+.attr-pill{background:var(--tt-primary);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.3px;padding:9px 16px;border-radius:30px;}
+
+/* portfolio cards */
+.portfolio-grid{display:flex;flex-direction:column;gap:14px;margin-top:6px;}
+.portfolio-card{border:1px solid var(--band);border-left:5px solid var(--tt-secondary);background:#fff;border-radius:8px;padding:14px 18px;}
+.portfolio-card h4{margin:0 0 4px;font-size:14.5px;font-weight:800;color:var(--tt-primary);}
+.portfolio-card p{margin:0;font-size:12.5px;line-height:1.55;color:#3a3a3a;}
+
+/* ---------- PRICING TABLE ---------- */
+.item-picker{border:1px solid var(--tt-light);background:#f2fafd;border-radius:8px;padding:12px 16px;margin:0 0 16px;}
+.item-picker-title{font-size:12px;font-weight:800;color:var(--tt-dark);margin-bottom:8px;}
+.item-picker-opt{display:flex;align-items:flex-start;gap:6px;font-size:11.5px;color:#333;margin-bottom:6px;cursor:pointer;line-height:1.35;}
+.item-picker-opt input{margin-top:2px;flex-shrink:0;cursor:pointer;}
+.item-picker-opt:last-child{margin-bottom:0;}
+.pricing-scroll{overflow-x:auto;margin-bottom:6px;-webkit-overflow-scrolling:touch;}
+table.pricing{width:100%;min-width:760px;border-collapse:collapse;font-size:11px;}
+table.pricing.ref-table{min-width:0;}
+table.pricing th{background:var(--tt-primary);color:#fff;font-weight:700;padding:9px 7px;text-align:center;border:1px solid var(--tt-primary);font-size:10.5px;}
+table.pricing td{border:1px solid #dce7ee;padding:8px 7px;vertical-align:middle;color:#2c2c2c;background:#fff;}
+table.pricing td.svc{font-weight:600;text-align:left;}
+table.pricing td.center{text-align:center;}
+table.pricing td.ref-cell{color:#5b6b76;font-size:10.5px;}
+table.pricing td.detail{font-size:10px;line-height:1.4;text-align:left;color:#555;}
+.valor-input{width:60px;border:none;border-bottom:1.4px dashed var(--tt-light);background:transparent;font-family:'Poppins',Arial,sans-serif;font-size:11px;font-weight:600;color:#2c2c2c;text-align:right;padding:1px 2px;}
+.valor-input:hover{background:#eef8fd;}
+.valor-input:focus{outline:none;border-bottom:1.4px solid var(--tt-primary);background:#eef8fd;}
+.qtde-input{width:28px;border:none;border-bottom:1.4px dashed var(--tt-light);background:transparent;font-family:'Poppins',Arial,sans-serif;font-size:11px;font-weight:600;color:#2c2c2c;text-align:center;padding:1px 2px;}
+.qtde-input:hover{background:#eef8fd;}
+.qtde-input:focus{outline:none;border-bottom:1.4px solid var(--tt-primary);background:#eef8fd;}
+.line-total-cell{background:#eef8fd;}
+.line-total{font-weight:800;color:var(--tt-primary);}
+.currency-prefix{color:#888;font-size:10px;margin-right:1px;}
+.total-bar{display:flex;justify-content:space-between;align-items:center;background:var(--tt-primary);color:#fff;border:1px solid var(--tt-primary);padding:11px 14px;font-size:13px;font-weight:800;letter-spacing:.3px;margin-bottom:10px;}
+.total-bar .tval{font-size:15px;}
+.pricing-note{font-size:10.5px;color:#5b6b76;margin:0 0 26px;line-height:1.5;}
+.pricing-note b{color:var(--tt-dark);}
+
+/* ---------- SIGNATURE ---------- */
+.sig-field{font-size:13.5px;font-weight:700;color:#161616;margin:16px 0;display:flex;align-items:baseline;white-space:nowrap;}
+.sig-field .rule{flex:1;border-bottom:1.6px dashed #161616;margin-left:6px;outline:none;cursor:text;min-height:1.3em;font-weight:500;}
+.sig-field .rule:hover{background:#eef4ff;}
+.sig-field .rule:focus{border-bottom:1.6px solid var(--tt-primary);background:#eef4ff;}
+.fone-line{font-size:13.5px;font-weight:700;color:#161616;margin:16px 0;}
+.fone-seg{display:inline-block;min-width:64px;border-bottom:1.6px dashed #161616;outline:none;cursor:text;text-align:center;padding:0 2px;font-weight:500;}
+.fone-seg:hover{background:#eef4ff;}
+.fone-seg:focus{border-bottom:1.6px solid var(--tt-primary);background:#eef4ff;}
+.fone-ddd{min-width:32px;}
+.sig-date{margin:34px 0 60px;font-size:13.5px;color:#333;}
+.sig-date .u{border-bottom:1.6px dashed #333;padding:0 4px;outline:none;cursor:text;display:inline-block;min-width:26px;text-align:center;font-weight:500;}
+.sig-date .u.month{min-width:100px;}
+.sig-date .u:hover{background:#eef4ff;}
+.sig-date .u:focus{border-bottom:1.6px solid var(--tt-primary);background:#eef4ff;}
+.sig-line{border-top:1.6px solid #161616;width:420px;margin:70px auto 10px;}
+.sig-name{text-align:center;font-size:12.5px;letter-spacing:.3px;}
+.sig-cnpj{text-align:center;font-size:12px;margin-top:4px;}
+.sig-pad-label{text-align:center;font-size:10px;font-weight:700;letter-spacing:.6px;color:#aaa;text-transform:uppercase;margin:36px 0 4px;}
+.sig-pad-wrap{width:420px;margin:0 auto;}
+.sig-pad{border:1.6px dashed #ccc;border-radius:6px;width:100%;height:120px;touch-action:none;cursor:crosshair;background:#fcfcfc;}
+.sig-pad-print-img{display:none;}
+.sig-clear-btn{display:block;margin:8px auto 0;background:none;border:1px solid #ccc;border-radius:20px;padding:5px 14px;font-size:10.5px;font-family:'Poppins',Arial,sans-serif;color:#666;cursor:pointer;}
+.sig-clear-btn:hover{background:#f4f4f4;}
+
+.footer-band{background:var(--tt-dark);color:#fff;text-align:center;padding:16px;font-size:11px;letter-spacing:.4px;border-radius:8px;}
+.footer-band b{color:var(--tt-light);}
+.footer-band .tt-logo-mark{height:16px;}
+@media print{.footer-band{display:none !important;}}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+Imprimir / PDF
+</button>
+<button class="download-btn" onclick="baixarPropostaPreenchida()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+Baixar proposta
+</button>
+
+<div class="doc">
+<div class="page">
+<div class="cover">
+<div class="cover-diagonal"></div>
+<div class="cover-diagonal-2"></div>
+<div class="cover-top">
+<div class="cover-top-row">
+<div class="cover-client">
+<img id="client-logo-img" class="client-logo-img" style="display:none;" alt="Logo do cliente">
+<div id="cover-client-field" class="cover-client editable-field" contenteditable="true" spellcheck="false">[Nome do Cliente]</div>
+</div>
+<div>
+<div class="cover-date-label">Data</div>
+<div class="cover-date-value auto-today-date">XX de Novembro de 2026</div>
+</div>
+</div>
+<div class="cover-cnpj-row"><b>CNPJ:</b><span id="cover-cnpj-field" class="editable-field" contenteditable="true" spellcheck="false">XX.XXX.XXX/XXXX-XX</span></div>
+</div>
+<div class="cover-mid">
+<div class="cover-brand-row">
+<svg viewBox="0 0 100 132" class="tt-logo-mark " xmlns="http://www.w3.org/2000/svg">
+<path d="M50 2 C24.6 2 4 22.4 4 47.6 C4 82 50 130 50 130 C50 130 96 82 96 47.6 C96 22.4 75.4 2 50 2 Z" fill="currentColor"/>
+<circle cx="50" cy="45" r="9" fill="#fff"/>
+<path d="M34 39 A22.6 22.6 0 0 1 66 39" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M26 30 A35.3 35.3 0 0 1 74 30" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".65"/>
+</svg>
+<div class="cover-wordmark">TOTAL TRAC<small>RASTREADORES</small></div>
+</div>
+<div class="cover-title">PROPOSTA<br>COMERCIAL</div>
+<div class="cover-subtitle">Rastreamento veicular, telemetria, vídeo monitoramento de fadiga/ADAS e gestão de frotas — tecnologia própria a serviço da sua operação.</div>
+</div>
+<div class="cover-white">
+<h3>CONECTAR PARA CUIDAR</h3>
+<p>Fundada em 2008, a Total Trac Rastreadores revolucionou o mercado de transporte de cargas com soluções logísticas de ponta. Ao longo de mais de 15 anos, contribuímos para a modernização do setor com atendimento altamente personalizado, unindo as tecnologias de rastreamento mais avançadas às particularidades de cada cliente — otimizando rotas, elevando a eficiência operacional e trazendo tranquilidade para a gestão logística.</p>
+<hr class="cover-rule">
+<div class="cover-stats">
+<div class="cover-stat"><b>2008</b><span>NO MERCADO DESDE</span></div>
+<div class="cover-stat"><b>15+</b><span>ANOS DE EXPERIÊNCIA</span></div>
+<div class="cover-stat"><b>4G</b><span>TECNOLOGIA DE PONTA</span></div>
+<div class="cover-stat"><b>24/7</b><span>MONITORAMENTO</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="page"><div class="inner"><div class="inner-diagonal"></div><div class="inner-diagonal-2"></div><div class="inner-content">
+<h2 class="sect">QUEM SOMOS</h2>
+<p class="body-text">Fundada em 2008, a Total Trac Rastreadores revoluciona o mercado de transporte de cargas com soluções logísticas de ponta. Ao longo de mais de 15 anos, a Total Trac contribui para a modernização e o aprimoramento do mercado de transportes com um atendimento altamente personalizado no setor.</p>
+<p class="body-text">Com o compromisso de impulsionar a operação de transporte com inovação e praticidade, a Total Trac busca as mais avançadas tecnologias disponíveis. As soluções de rastreamento são desenvolvidas para se alinhar às particularidades de cada cliente, utilizando as melhores práticas de rastreamento e permitindo otimização de rotas, eficiência operacional e, acima de tudo, tranquilidade na gestão logística.</p>
+<div class="attr-grid">
+<span class="attr-pill">AGILIDADE</span><span class="attr-pill">SEGURANÇA</span><span class="attr-pill">EFICIÊNCIA</span><span class="attr-pill">EXCELÊNCIA</span><span class="attr-pill">INOVAÇÃO</span>
+</div>
+<h3 class="sub">Missão</h3>
+<p class="body-text center">Atender às necessidades dos nossos clientes na gestão de frotas, proporcionando os melhores recursos tecnológicos para maior segurança e eficácia no controle logístico.</p>
+<h3 class="sub">Visão</h3>
+<p class="body-text center">Ser uma empresa com representatividade e abrangência nacional na área de rastreamento e gestão de frotas, através de produtos diferenciados para segurança e logística.</p>
+<h3 class="sub">Valores</h3>
+<p class="body-text center">Trazer inovação, praticidade e segurança com as mais avançadas tecnologias disponíveis e o melhor custo-benefício, além de excelência e padrão exemplar de atendimento ao cliente.</p>
+</div></div></div>
+
+<div class="page"><div class="inner white-bg"><div class="inner-content">
+<h2 class="sect">NOSSAS SOLUÇÕES</h2>
+<p class="body-text center">Um ecossistema completo de rastreamento, telemetria e vídeo monitoramento, com tecnologia 4G própria e suporte especializado de ponta a ponta.</p>
+<div class="portfolio-grid">
+<div class="portfolio-card"><h4>Rastreamento & Logística</h4><p>Linha completa de rastreadores 4G para veículos leves, pesados, motos, máquinas e frotas — com opções de bloqueio remoto, identificação de motorista, sensores de painel e telemetria via CAN.</p></div>
+<div class="portfolio-card"><h4>Segurança de Carga</h4><p>Rastreadores de backup, carretas e semirreboques com autonomia estendida de bateria (solar ou RF), além de imobilizador sem fio 4G para resposta rápida em caso de sinistro.</p></div>
+<div class="portfolio-card"><h4>Iscas RF</h4><p>Iscas de rastreamento discretas — retornáveis ou descartáveis — para cargas de alto valor agregado, complementando a proteção do veículo principal.</p></div>
+<div class="portfolio-card"><h4>Fadiga, ADAS & Vídeo Telemetria</h4><p>Sistemas Total SAFE e Total Safe Plus (MDVR) com identificação de fadiga do motorista, alertas ADAS e gravação em múltiplas câmeras internas/externas.</p></div>
+<div class="portfolio-card"><h4>Controle de Jornada</h4><p>Gestão de jornada de motoristas integrada ao rastreamento, com controle por CPF e conformidade operacional.</p></div>
+<div class="portfolio-card"><h4>Serviços & Pronta Resposta</h4><p>Equipe de antenistas, atendimento de pronta resposta em todo o Estado de São Paulo e demais regiões, manutenções e suporte técnico especializado.</p></div>
+</div>
+</div></div></div>
+
+<div class="page"><div class="inner white-bg"><div class="inner-content">
+<h2 class="sect">RASTREAMENTO & LOGÍSTICA</h2>
+<p class="body-text center">Linha completa de rastreadores 4G para veículos leves, pesados, motos, máquinas e frotas.</p>
+<div class="item-picker"><div class="item-picker-title">O que esta proposta vai incluir? Selecione os itens:</div><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r0"> Total Easy 4G</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r1"> Total Auto - TTA 4G</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r2"> Total Auto - TTA 4G (com Bloqueio)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r3"> Total Auto - TID 4G (Auto + Identificação do motorista)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r4"> Total Auto - TID 4G (Desbloqueio pelo RFID)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r5"> Total Frota - TTF 4G (com sensor de painel)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r6"> Total Jornada 4G - TJ</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r7"> Total Máquinas 4G - TMA</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r8"> Total Moto 4G - TTM</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r9"> Total Moto 4G - TTM (com Bloqueio)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r10"> Total Temperatura - Sensor com fio (1 sensor, suporta até -45°C)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="log-r11"> Total Telemetria CAN</label></div>
+<div class="pricing-scroll"><table class="pricing" id="log"><thead><tr><th>SERVIÇO</th><th>QTDE</th><th>VENDA</th><th>COMUNIC. VENDA/MÊS</th><th>ATIVAÇÃO LOCAÇÃO</th><th>COMUNIC. LOCAÇÃO/MÊS</th><th>REINSTALAÇÃO</th><th>DESINSTALAÇÃO</th><th>VALOR TOTAL</th><th>DETALHAMENTO</th></tr></thead><tbody><tr class="pricing-row" data-row="log-r0" style="display:none;"><td class="svc">Total Easy 4G</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r0" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r0" inputmode="decimal" value="399,00" size="6"></td><td class="center ref-cell">R$ 35,90</td><td class="center ref-cell">R$ 119,00</td><td class="center ref-cell">R$ 45,90</td><td class="center ref-cell">R$ 170,00</td><td class="center ref-cell">R$ 125,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r0">0,00</span></td><td class="detail">Rastreador de entrada, ideal para veículos leves.</td></tr><tr class="pricing-row" data-row="log-r1" style="display:none;"><td class="svc">Total Auto - TTA 4G</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r1" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r1" inputmode="decimal" value="499,00" size="6"></td><td class="center ref-cell">R$ 45,90</td><td class="center ref-cell">R$ 199,00</td><td class="center ref-cell">R$ 55,90</td><td class="center ref-cell">R$ 170,00</td><td class="center ref-cell">R$ 125,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r1">0,00</span></td><td class="detail">Rastreamento completo para veículos de passeio e utilitários.</td></tr><tr class="pricing-row" data-row="log-r2" style="display:none;"><td class="svc">Total Auto - TTA 4G (com Bloqueio)</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r2" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r2" inputmode="decimal" value="599,00" size="6"></td><td class="center ref-cell">R$ 49,90</td><td class="center ref-cell">R$ 249,00</td><td class="center ref-cell">R$ 59,90</td><td class="center ref-cell">R$ 200,00</td><td class="center ref-cell">R$ 160,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r2">0,00</span></td><td class="detail">Rastreamento com função de bloqueio remoto do veículo.</td></tr><tr class="pricing-row" data-row="log-r3" style="display:none;"><td class="svc">Total Auto - TID 4G (Auto + Identificação do motorista)</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r3" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r3" inputmode="decimal" value="749,00" size="6"></td><td class="center ref-cell">R$ 55,90</td><td class="center ref-cell">R$ 299,00</td><td class="center ref-cell">R$ 69,90</td><td class="center ref-cell">R$ 250,00</td><td class="center ref-cell">R$ 160,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r3">0,00</span></td><td class="detail">Rastreamento com identificação do motorista habilitado a conduzir.</td></tr><tr class="pricing-row" data-row="log-r4" style="display:none;"><td class="svc">Total Auto - TID 4G (Desbloqueio pelo RFID)</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r4" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r4" inputmode="decimal" value="799,00" size="6"></td><td class="center ref-cell">R$ 55,90</td><td class="center ref-cell">R$ 349,00</td><td class="center ref-cell">R$ 69,90</td><td class="center ref-cell">R$ 250,00</td><td class="center ref-cell">R$ 160,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r4">0,00</span></td><td class="detail">Identificação do motorista com desbloqueio via cartão RFID.</td></tr><tr class="pricing-row" data-row="log-r5" style="display:none;"><td class="svc">Total Frota - TTF 4G (com sensor de painel)</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r5" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r5" inputmode="decimal" value="649,00" size="6"></td><td class="center ref-cell">R$ 55,90</td><td class="center ref-cell">R$ 249,00</td><td class="center ref-cell">R$ 69,90</td><td class="center ref-cell">R$ 200,00</td><td class="center ref-cell">R$ 160,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r5">0,00</span></td><td class="detail">Rastreamento para frotas com leitura de sensores de painel.</td></tr><tr class="pricing-row" data-row="log-r6" style="display:none;"><td class="svc">Total Jornada 4G - TJ</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r6" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r6" inputmode="decimal" value="1.699,00" size="6"></td><td class="center ref-cell">R$ 69,90</td><td class="center ref-cell">R$ 399,00</td><td class="center ref-cell">R$ 99,90</td><td class="center ref-cell">R$ 250,00</td><td class="center ref-cell">R$ 160,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r6">0,00</span></td><td class="detail">Controle de jornada de motoristas integrado ao rastreamento.</td></tr><tr class="pricing-row" data-row="log-r7" style="display:none;"><td class="svc">Total Máquinas 4G - TMA</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r7" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r7" inputmode="decimal" value="649,00" size="6"></td><td class="center ref-cell">R$ 49,90</td><td class="center ref-cell">R$ 199,00</td><td class="center ref-cell">R$ 69,90</td><td class="center ref-cell">R$ 170,00</td><td class="center ref-cell">R$ 125,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r7">0,00</span></td><td class="detail">Telemetria e rastreamento para máquinas e equipamentos pesados.</td></tr><tr class="pricing-row" data-row="log-r8" style="display:none;"><td class="svc">Total Moto 4G - TTM</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r8" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r8" inputmode="decimal" value="499,00" size="6"></td><td class="center ref-cell">R$ 45,90</td><td class="center ref-cell">R$ 199,00</td><td class="center ref-cell">R$ 55,90</td><td class="center ref-cell">R$ 170,00</td><td class="center ref-cell">R$ 170,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r8">0,00</span></td><td class="detail">Rastreamento dedicado para motocicletas.</td></tr><tr class="pricing-row" data-row="log-r9" style="display:none;"><td class="svc">Total Moto 4G - TTM (com Bloqueio)</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r9" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r9" inputmode="decimal" value="599,00" size="6"></td><td class="center ref-cell">R$ 49,90</td><td class="center ref-cell">R$ 249,00</td><td class="center ref-cell">R$ 59,90</td><td class="center ref-cell">R$ 200,00</td><td class="center ref-cell">R$ 125,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r9">0,00</span></td><td class="detail">Rastreamento para motocicletas com bloqueio remoto.</td></tr><tr class="pricing-row" data-row="log-r10" style="display:none;"><td class="svc">Total Temperatura - Sensor com fio (1 sensor, suporta até -45°C)</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r10" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r10" inputmode="decimal" value="799,00" size="6"></td><td class="center ref-cell">R$ 55,90</td><td class="center ref-cell">R$ 299,00</td><td class="center ref-cell">R$ 75,90</td><td class="center ref-cell">R$ 200,00</td><td class="center ref-cell">R$ 160,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r10">0,00</span></td><td class="detail">Monitoramento de temperatura de carga refrigerada.</td></tr><tr class="pricing-row" data-row="log-r11" style="display:none;"><td class="svc">Total Telemetria CAN</td><td class="center"><input type="text" class="qtde-input" data-table="log" data-row="log-r11" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="log" data-row="log-r11" inputmode="decimal" value="999,00" size="6"></td><td class="center ref-cell">R$ 69,90</td><td class="center ref-cell">R$ 299,00</td><td class="center ref-cell">R$ 99,90</td><td class="center ref-cell">R$ 250,00</td><td class="center ref-cell">R$ 200,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="log" data-row="log-r11">0,00</span></td><td class="detail">Leitura de dados de telemetria via barramento CAN do veículo.</td></tr></tbody></table><div class="total-bar"><span>VALOR TOTAL — VENDA (itens selecionados)</span><span class="tval"><span class="currency-prefix" style="color:#fff;">R$</span><span id="total-log">0,00</span></span></div></div>
+<p class="pricing-note"><b>Venda</b>: equipamento instalado, pagamento único. <b>Locação</b>: taxa de ativação + mensalidade de comunicação, sem custo do equipamento. Valores de reinstalação/desinstalação são cobrados por evento, quando aplicável.</p>
+</div></div></div>
+
+<div class="page"><div class="inner white-bg"><div class="inner-content">
+<h2 class="sect">SEGURANÇA DE CARGA</h2>
+<p class="body-text center">Rastreadores de backup, carretas/semirreboques e imobilizador sem fio, para reforço de segurança da operação.</p>
+<div class="item-picker"><div class="item-picker-title">O que esta proposta vai incluir? Selecione os itens:</div><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="seg-r0"> Total Backup 4G - TTB</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="seg-r1"> Total Carreta 4G - TTC — Semirreboque (3 dias de bateria)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="seg-r2"> Total Carreta Kit Autonomia RF - TCA (20 dias de bateria)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="seg-r3"> Total Carreta Solar 4G</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="seg-r4"> Total Imobilizador SEM FIO 4G</label></div>
+<div class="pricing-scroll"><table class="pricing" id="seg"><thead><tr><th>SERVIÇO</th><th>QTDE</th><th>VENDA</th><th>COMUNIC. VENDA/MÊS</th><th>ATIVAÇÃO LOCAÇÃO</th><th>COMUNIC. LOCAÇÃO/MÊS</th><th>REINSTALAÇÃO</th><th>DESINSTALAÇÃO</th><th>VALOR TOTAL</th><th>DETALHAMENTO</th></tr></thead><tbody><tr class="pricing-row" data-row="seg-r0" style="display:none;"><td class="svc">Total Backup 4G - TTB</td><td class="center"><input type="text" class="qtde-input" data-table="seg" data-row="seg-r0" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="seg" data-row="seg-r0" inputmode="decimal" value="499,00" size="6"></td><td class="center ref-cell">R$ 45,90</td><td class="center ref-cell">R$ 199,00</td><td class="center ref-cell">R$ 55,90</td><td class="center ref-cell">R$ 150,00</td><td class="center ref-cell">R$ 125,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="seg" data-row="seg-r0">0,00</span></td><td class="detail">Rastreador reserva/backup com comunicação independente.</td></tr><tr class="pricing-row" data-row="seg-r1" style="display:none;"><td class="svc">Total Carreta 4G - TTC — Semirreboque (3 dias de bateria)</td><td class="center"><input type="text" class="qtde-input" data-table="seg" data-row="seg-r1" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="seg" data-row="seg-r1" inputmode="decimal" value="549,00" size="6"></td><td class="center ref-cell">R$ 49,90</td><td class="center ref-cell">R$ 199,00</td><td class="center ref-cell">R$ 59,90</td><td class="center ref-cell">R$ 170,00</td><td class="center ref-cell">R$ 160,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="seg" data-row="seg-r1">0,00</span></td><td class="detail">Rastreamento de carretas e semirreboques com bateria própria.</td></tr><tr class="pricing-row" data-row="seg-r2" style="display:none;"><td class="svc">Total Carreta Kit Autonomia RF - TCA (20 dias de bateria)</td><td class="center"><input type="text" class="qtde-input" data-table="seg" data-row="seg-r2" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="seg" data-row="seg-r2" inputmode="decimal" value="649,00" size="6"></td><td class="center ref-cell">R$ 59,90</td><td class="center ref-cell">R$ 249,00</td><td class="center ref-cell">R$ 69,90</td><td class="center ref-cell">R$ 170,00</td><td class="center ref-cell">R$ 160,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="seg" data-row="seg-r2">0,00</span></td><td class="detail">Alta autonomia de bateria para carretas paradas por longos períodos.</td></tr><tr class="pricing-row" data-row="seg-r3" style="display:none;"><td class="svc">Total Carreta Solar 4G</td><td class="center"><input type="text" class="qtde-input" data-table="seg" data-row="seg-r3" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="seg" data-row="seg-r3" inputmode="decimal" value="649,00" size="6"></td><td class="center ref-cell">R$ 59,90</td><td class="center ref-cell">R$ 249,00</td><td class="center ref-cell">R$ 69,90</td><td class="center ref-cell">R$ 150,00</td><td class="center ref-cell">R$ 250,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="seg" data-row="seg-r3">0,00</span></td><td class="detail">Rastreamento de carretas com recarga solar contínua.</td></tr><tr class="pricing-row" data-row="seg-r4" style="display:none;"><td class="svc">Total Imobilizador SEM FIO 4G</td><td class="center"><input type="text" class="qtde-input" data-table="seg" data-row="seg-r4" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="seg" data-row="seg-r4" inputmode="decimal" value="1.599,00" size="6"></td><td class="center ref-cell">R$ 59,90</td><td class="center ref-cell">R$ 499,00</td><td class="center ref-cell">R$ 89,90</td><td class="center ref-cell">R$ 350,00</td><td class="center ref-cell">R$ 250,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="seg" data-row="seg-r4">0,00</span></td><td class="detail">Imobilização remota sem fio do veículo em caso de sinistro.</td></tr></tbody></table><div class="total-bar"><span>VALOR TOTAL — VENDA (itens selecionados)</span><span class="tval"><span class="currency-prefix" style="color:#fff;">R$</span><span id="total-seg">0,00</span></span></div></div>
+<p class="pricing-note"><b>Venda</b>: equipamento instalado, pagamento único. <b>Locação</b>: taxa de ativação + mensalidade de comunicação, sem custo do equipamento.</p>
+</div></div></div>
+
+<div class="page"><div class="inner white-bg"><div class="inner-content">
+<h2 class="sect">ISCAS RF</h2>
+<p class="body-text center">Iscas de rastreamento discretas para cargas de alto valor agregado.</p>
+<div class="item-picker"><div class="item-picker-title">O que esta proposta vai incluir? Selecione os itens:</div><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="isc-r0"> Total Isca RF - TIRF (retornável, com termo retrátil)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="isc-r1"> Total Isca RF - TIRF (descartável)</label></div>
+<div class="pricing-scroll"><table class="pricing" id="isc"><thead><tr><th>SERVIÇO</th><th>QTDE</th><th>VENDA</th><th>INSTALAÇÃO/MÊS</th><th>VALOR TOTAL</th><th>DETALHAMENTO</th></tr></thead><tbody><tr class="pricing-row" data-row="isc-r0" style="display:none;"><td class="svc">Total Isca RF - TIRF (retornável, com termo retrátil)</td><td class="center"><input type="text" class="qtde-input" data-table="isc" data-row="isc-r0" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="isc" data-row="isc-r0" inputmode="decimal" value="450,00" size="6"></td><td class="center ref-cell">R$ 49,90</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="isc" data-row="isc-r0">0,00</span></td><td class="detail">Isca de rastreamento retornável para cargas de alto valor.</td></tr><tr class="pricing-row" data-row="isc-r1" style="display:none;"><td class="svc">Total Isca RF - TIRF (descartável)</td><td class="center"><input type="text" class="qtde-input" data-table="isc" data-row="isc-r1" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="isc" data-row="isc-r1" inputmode="decimal" value="500,00" size="6"></td><td class="center ref-cell">—</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="isc" data-row="isc-r1">0,00</span></td><td class="detail">Isca de rastreamento descartável — autonomia aproximada de 30 dias.</td></tr></tbody></table><div class="total-bar"><span>VALOR TOTAL — VENDA (itens selecionados)</span><span class="tval"><span class="currency-prefix" style="color:#fff;">R$</span><span id="total-isc">0,00</span></span></div></div>
+<p class="pricing-note">A Isca RF descartável possui autonomia aproximada de 30 dias e não é reutilizável.</p>
+</div></div></div>
+
+<div class="page"><div class="inner white-bg"><div class="inner-content">
+<h2 class="sect">FADIGA, ADAS & VÍDEO TELEMETRIA</h2>
+<p class="body-text center">Sistemas Total SAFE e Total Safe Plus (MDVR) para identificação de fadiga, alertas ADAS e vídeo monitoramento.</p>
+<div class="item-picker"><div class="item-picker-title">O que esta proposta vai incluir? Selecione os itens:</div><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="fad-r0"> Total SAFE - Fadiga + ADAS (128 GB) — 1 câmera extra opcional</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="fad-r1"> Total Safe Plus Padrão - Fadiga + ADAS (256 GB) — até 3 câmeras extras</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="fad-r2"> Total Safe Plus MDVR (512 GB) — até 5 câmeras</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="fad-r3"> Câmera auxiliar externa</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="fad-r4"> Câmera auxiliar interna</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="fad-r5"> Fadiga MDVR (cabo 2m)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="fad-r6"> ADAS MDVR (cabo 2m)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="fad-r7"> Câmera auxiliar externa MDVR (cabo 2m)</label><label class="item-picker-opt"><input type="checkbox" class="row-toggle" data-row="fad-r8"> Câmera auxiliar interna MDVR (cabo 2m)</label></div>
+<div class="pricing-scroll"><table class="pricing" id="fad"><thead><tr><th>SERVIÇO</th><th>QTDE</th><th>VENDA</th><th>INSTALAÇÃO</th><th>COMUNIC./MÊS</th><th>PARC. 36 MESES</th><th>PARC. 48 MESES</th><th>REINSTALAÇÃO</th><th>DESINSTALAÇÃO</th><th>VALOR TOTAL</th><th>DETALHAMENTO</th></tr></thead><tbody><tr class="pricing-row" data-row="fad-r0" style="display:none;"><td class="svc">Total SAFE - Fadiga + ADAS (128 GB) — 1 câmera extra opcional</td><td class="center"><input type="text" class="qtde-input" data-table="fad" data-row="fad-r0" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="fad" data-row="fad-r0" inputmode="decimal" value="2.990,00" size="6"></td><td class="center ref-cell">R$ 159,90</td><td class="center ref-cell">R$ 399,00</td><td class="center ref-cell">R$ 249,90</td><td class="center ref-cell">R$ 229,90</td><td class="center ref-cell">R$ 280,00</td><td class="center ref-cell">R$ 180,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="fad" data-row="fad-r0">0,00</span></td><td class="detail">Monitoramento de fadiga e sistema ADAS com gravação embarcada.</td></tr><tr class="pricing-row" data-row="fad-r1" style="display:none;"><td class="svc">Total Safe Plus Padrão - Fadiga + ADAS (256 GB) — até 3 câmeras extras</td><td class="center"><input type="text" class="qtde-input" data-table="fad" data-row="fad-r1" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="fad" data-row="fad-r1" inputmode="decimal" value="3.490,00" size="6"></td><td class="center ref-cell">R$ 159,90</td><td class="center ref-cell">R$ 399,00</td><td class="center ref-cell">R$ 269,90</td><td class="center ref-cell">R$ 249,90</td><td class="center ref-cell">R$ 280,00</td><td class="center ref-cell">R$ 180,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="fad" data-row="fad-r1">0,00</span></td><td class="detail">Versão Plus com maior capacidade de armazenamento e câmeras adicionais.</td></tr><tr class="pricing-row" data-row="fad-r2" style="display:none;"><td class="svc">Total Safe Plus MDVR (512 GB) — até 5 câmeras</td><td class="center"><input type="text" class="qtde-input" data-table="fad" data-row="fad-r2" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="fad" data-row="fad-r2" inputmode="decimal" value="3.990,00" size="6"></td><td class="center ref-cell">R$ 179,90</td><td class="center ref-cell">R$ 699,00</td><td class="center ref-cell">R$ 289,90</td><td class="center ref-cell">R$ 279,00</td><td class="center ref-cell">R$ 350,00</td><td class="center ref-cell">R$ 280,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="fad" data-row="fad-r2">0,00</span></td><td class="detail">Sistema MDVR robusto para múltiplas câmeras de vídeo telemetria.</td></tr><tr class="pricing-row" data-row="fad-r3" style="display:none;"><td class="svc">Câmera auxiliar externa</td><td class="center"><input type="text" class="qtde-input" data-table="fad" data-row="fad-r3" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="fad" data-row="fad-r3" inputmode="decimal" value="499,00" size="6"></td><td class="center ref-cell">R$ 9,90</td><td class="center ref-cell">R$ 99,00</td><td class="center ref-cell">R$ 29,90</td><td class="center ref-cell">R$ 25,90</td><td class="center ref-cell">R$ 100,00</td><td class="center ref-cell">R$ 100,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="fad" data-row="fad-r3">0,00</span></td><td class="detail">Câmera adicional externa para o sistema Fadiga + ADAS.</td></tr><tr class="pricing-row" data-row="fad-r4" style="display:none;"><td class="svc">Câmera auxiliar interna</td><td class="center"><input type="text" class="qtde-input" data-table="fad" data-row="fad-r4" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="fad" data-row="fad-r4" inputmode="decimal" value="399,00" size="6"></td><td class="center ref-cell">R$ 9,90</td><td class="center ref-cell">R$ 99,00</td><td class="center ref-cell">R$ 24,90</td><td class="center ref-cell">R$ 20,90</td><td class="center ref-cell">R$ 100,00</td><td class="center ref-cell">R$ 100,00</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="fad" data-row="fad-r4">0,00</span></td><td class="detail">Câmera adicional interna para monitoramento da cabine.</td></tr><tr class="pricing-row" data-row="fad-r5" style="display:none;"><td class="svc">Fadiga MDVR (cabo 2m)</td><td class="center"><input type="text" class="qtde-input" data-table="fad" data-row="fad-r5" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="fad" data-row="fad-r5" inputmode="decimal" value="499,00" size="6"></td><td class="center ref-cell">R$ 9,90</td><td class="center ref-cell">R$ 99,00</td><td class="center ref-cell">R$ 29,90</td><td class="center ref-cell">R$ 25,90</td><td class="center ref-cell">R$ 100,00</td><td class="center ref-cell">—</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="fad" data-row="fad-r5">0,00</span></td><td class="detail">Módulo de fadiga para sistema MDVR.</td></tr><tr class="pricing-row" data-row="fad-r6" style="display:none;"><td class="svc">ADAS MDVR (cabo 2m)</td><td class="center"><input type="text" class="qtde-input" data-table="fad" data-row="fad-r6" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="fad" data-row="fad-r6" inputmode="decimal" value="399,00" size="6"></td><td class="center ref-cell">R$ 9,90</td><td class="center ref-cell">R$ 99,00</td><td class="center ref-cell">R$ 24,90</td><td class="center ref-cell">R$ 20,90</td><td class="center ref-cell">R$ 100,00</td><td class="center ref-cell">—</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="fad" data-row="fad-r6">0,00</span></td><td class="detail">Módulo ADAS para sistema MDVR.</td></tr><tr class="pricing-row" data-row="fad-r7" style="display:none;"><td class="svc">Câmera auxiliar externa MDVR (cabo 2m)</td><td class="center"><input type="text" class="qtde-input" data-table="fad" data-row="fad-r7" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="fad" data-row="fad-r7" inputmode="decimal" value="499,00" size="6"></td><td class="center ref-cell">R$ 9,90</td><td class="center ref-cell">R$ 99,00</td><td class="center ref-cell">R$ 29,90</td><td class="center ref-cell">R$ 25,90</td><td class="center ref-cell">R$ 100,00</td><td class="center ref-cell">—</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="fad" data-row="fad-r7">0,00</span></td><td class="detail">Câmera externa adicional para sistema MDVR.</td></tr><tr class="pricing-row" data-row="fad-r8" style="display:none;"><td class="svc">Câmera auxiliar interna MDVR (cabo 2m)</td><td class="center"><input type="text" class="qtde-input" data-table="fad" data-row="fad-r8" inputmode="numeric" value="01" size="2"></td><td class="center"><span class="currency-prefix">R$</span><input type="text" class="valor-input" data-table="fad" data-row="fad-r8" inputmode="decimal" value="399,00" size="6"></td><td class="center ref-cell">R$ 9,90</td><td class="center ref-cell">R$ 99,00</td><td class="center ref-cell">R$ 24,90</td><td class="center ref-cell">R$ 20,90</td><td class="center ref-cell">R$ 100,00</td><td class="center ref-cell">—</td><td class="center line-total-cell"><span class="currency-prefix">R$</span><span class="line-total" data-table="fad" data-row="fad-r8">0,00</span></td><td class="detail">Câmera interna adicional para sistema MDVR.</td></tr></tbody></table><div class="total-bar"><span>VALOR TOTAL — VENDA (itens selecionados)</span><span class="tval"><span class="currency-prefix" style="color:#fff;">R$</span><span id="total-fad">0,00</span></span></div></div>
+<p class="pricing-note">Parcelamento disponível em 36 ou 48 meses (valor mensal já com comunicação e monitoramento inclusos, conforme condição comercial escolhida).</p>
+</div></div></div>
+
+<div class="page"><div class="inner"><div class="inner-diagonal"></div><div class="inner-diagonal-2"></div><div class="inner-content">
+<h2 class="sect">SERVIÇOS ADICIONAIS &amp; SUPORTE</h2>
+<p class="body-text center">Tabela de referência para serviços avulsos, manutenção e atendimento de campo. Valores sujeitos à disponibilidade e distância do atendimento.</p>
+
+<h3 class="sub">Antenista &amp; Pronta Resposta</h3>
+<div class="pricing-scroll"><table class="pricing ref-table"><thead><tr><th>SERVIÇO</th><th>VALOR</th></tr></thead><tbody><tr><td class="svc">Acionamento Antenista — RF (até 3 horas)</td><td class="center">R$ 1.600,00</td></tr><tr><td class="svc">Hora Adicional Antenista</td><td class="center">R$ 150,00</td></tr></tbody></table></div>
+<div class="pricing-scroll"><table class="pricing ref-table"><thead><tr><th>REGIÃO DE ATENDIMENTO (até 3h)</th><th>ACIONAMENTO</th><th>HORA ADICIONAL</th><th>KM ADICIONAL</th></tr></thead><tbody><tr><td class="svc">São Paulo Capital e Grande São Paulo (até 3 horas)</td><td class="center">R$ 850,00</td><td class="center">R$ 120,00</td><td class="center">—</td></tr><tr><td class="svc">Interior de São Paulo até 50 km (até 3 horas)</td><td class="center">R$ 850,00</td><td class="center">R$ 180,00</td><td class="center">R$ 2,20</td></tr><tr><td class="svc">Outros Estados até 50 km (até 3 horas)</td><td class="center">R$ 850,00</td><td class="center">R$ 250,00</td><td class="center">R$ 2,20</td></tr></tbody></table></div>
+
+<h3 class="sub">Sistemas &amp; Acessórios</h3>
+<div class="pricing-scroll"><table class="pricing ref-table"><thead><tr><th>ITEM</th><th>VALOR</th></tr></thead><tbody><tr><td class="svc">Mensalidade por CPF — Controle de Jornada (A52)</td><td class="center">R$ 35,00</td></tr><tr><td class="svc">Cartão RFID</td><td class="center">R$ 10,00</td></tr><tr><td class="svc">Carregador de Isca</td><td class="center">R$ 60,00</td></tr></tbody></table></div>
+<div class="pricing-scroll"><table class="pricing ref-table"><thead><tr><th>ACESSÓRIO (VÍDEO TELEMETRIA)</th><th>VENDA</th><th>INSTALAÇÃO</th><th>REINSTALAÇÃO</th><th>DESINSTALAÇÃO</th></tr></thead><tbody><tr><td class="svc">Cabo extra 10 metros</td><td class="center">R$ 120,00</td><td class="center">—</td><td class="center">R$ 120,00</td><td class="center">R$ 0,00</td></tr><tr><td class="svc">Suporte para câmera externa — unidade instalada</td><td class="center">R$ 80,00</td><td class="center">—</td><td class="center">R$ 80,00</td><td class="center">R$ 0,00</td></tr></tbody></table></div>
+
+<h3 class="sub">Manutenções &amp; Desbloqueio</h3>
+<div class="pricing-scroll"><table class="pricing ref-table"><thead><tr><th>SERVIÇO</th><th>VALOR CLIENTE</th></tr></thead><tbody><tr><td class="svc">Religar bloqueio de imobilizador (manutenção)</td><td class="center">R$ 350,00</td></tr><tr><td class="svc">Desbloqueio emergencial — horário comercial (seg. a sex., 8h às 18h)</td><td class="center">R$ 250,00</td></tr><tr><td class="svc">Desbloqueio emergencial — final de semana e feriados</td><td class="center">R$ 399,00</td></tr></tbody></table></div>
+
+<h3 class="sub">Serviço por KM Rodado</h3>
+<div class="pricing-scroll"><table class="pricing ref-table"><thead><tr><th>MODALIDADE</th><th>VALOR CLIENTE / KM</th></tr></thead><tbody><tr><td class="svc">KM com abrangência de 50 km</td><td class="center">R$ 2,59</td></tr><tr><td class="svc">KM atendimento emergencial — horário comercial</td><td class="center">R$ 2,59</td></tr><tr><td class="svc">KM atendimento emergencial — final de semana e feriados</td><td class="center">R$ 3,10</td></tr></tbody></table></div>
+
+<h3 class="sub">Outros Serviços — Somente Instalação</h3>
+<div class="pricing-scroll"><table class="pricing ref-table"><thead><tr><th>SERVIÇO</th><th>VALOR</th></tr></thead><tbody><tr><td class="svc">Visita improdutiva</td><td class="center">R$ 150,00</td></tr><tr><td class="svc">Tela de janela (somente instalação)</td><td class="center">R$ 849,00</td></tr></tbody></table></div>
+</div></div></div>
+
+<div class="page"><div class="inner white-bg"><div class="inner-content">
+<h2 class="sect">CONDIÇÕES GERAIS</h2>
+<ul class="dot-list">
+<li>Os valores desta proposta são apresentados em Reais (R$) e não incluem impostos que porventura venham a incidir sobre a operação, salvo disposição em contrário.</li>
+<li>A modalidade de <b>Locação</b> não contempla o custo do equipamento, sendo cobrada a taxa de ativação e a mensalidade de comunicação enquanto o contrato estiver vigente.</li>
+<li>Os valores de reinstalação e desinstalação são cobrados por evento, quando solicitados pelo cliente ou necessários por troca de veículo.</li>
+<li>Serviços de campo (antenista, pronta resposta, manutenções e KM rodado) são cobrados conforme tabela de referência vigente na data do atendimento, podendo variar de acordo com a região.</li>
+<li>Custos de implantação, treinamentos e deslocamentos especiais, quando solicitados, serão orçados e cobrados à parte.</li>
+<li>O reajuste anual dos valores contratados seguirá a variação acumulada do IGP-M (ou índice que vier a substituí-lo), salvo condição específica pactuada em contrato.</li>
+<li>Esta proposta é válida por 15 (quinze) dias corridos a partir da data de emissão.</li>
+<li>Os equipamentos possuem garantia de fábrica contra defeitos de fabricação, conforme prazo estabelecido no manual do produto.</li>
+<li>A prestação dos serviços é meramente supletiva e complementar, não consistindo em obrigação de guarda de veículos, nem dispensando ou eximindo o cliente de adotar outras medidas de segurança.</li>
+<li>Os dados de localização são transmitidos por meio de redes de telefonia móvel (4G), sujeitas a interrupções, zonas de sombra e interferências que possam afetar a prestação do serviço, sem que isso configure falha da Total Trac.</li>
+</ul>
+<h2 class="sect" style="margin-top:8px;">CONFIDENCIALIDADE</h2>
+<p class="body-text">As informações contidas neste documento sobre produtos, serviços e valores são de propriedade da Total Trac Rastreadores, sendo sua duplicação permitida apenas para uso interno do cliente. Estas informações não poderão ser utilizadas como fonte a terceiros nem divulgadas, salvo mediante autorização por escrito de ambas as partes.</p>
+</div></div></div>
+
+<div class="page"><div class="inner white-bg"><div class="inner-content">
+<h2 class="sect">ACEITE &amp; ASSINATURA</h2>
+<p class="body-text center">Ao assinar este documento, o cliente declara estar de acordo com os produtos, serviços e condições comerciais descritos nesta proposta.</p>
+<div class="sig-pad-label">Assinatura do cliente</div>
+<div class="sig-pad-wrap"><canvas id="sigPad" class="sig-pad" width="420" height="120"></canvas><img id="sigPadPrintImg" class="sig-pad-print-img" alt=""></div>
+<div class="sig-line"></div>
+<button type="button" class="sig-clear-btn" id="sigClearBtn">Limpar assinatura</button>
+<div class="sig-name" id="sig-name-field">[NOME DO CLIENTE]</div>
+<div class="sig-cnpj" id="sig-cnpj-field">XX.XXX.XXX/XXXX-XX</div>
+<div class="sig-date" style="text-align:center;margin-top:40px;">Ribeirão Preto/SP, <span class="u" contenteditable="true">XX</span> de <span class="u month" contenteditable="true">[mês]</span> de <span class="u" contenteditable="true">2026</span>.</div>
+<hr class="cover-rule" style="margin:36px 0 20px;">
+<div class="sig-field">Representante comercial:<span class="rule editable-field" contenteditable="true" spellcheck="false">&nbsp;</span></div>
+<div class="fone-line">Telefone: <span class="fone-seg fone-ddd editable-field" contenteditable="true">(&nbsp;&nbsp;)</span> <span class="fone-seg editable-field" contenteditable="true">00000-0000</span></div>
+<div class="sig-field">E-mail:<span class="rule editable-field" contenteditable="true" spellcheck="false">&nbsp;</span></div>
+</div></div></div>
+<div class="footer-band"><svg viewBox="0 0 100 132" class="tt-logo-mark " xmlns="http://www.w3.org/2000/svg">
+<path d="M50 2 C24.6 2 4 22.4 4 47.6 C4 82 50 130 50 130 C50 130 96 82 96 47.6 C96 22.4 75.4 2 50 2 Z" fill="currentColor"/>
+<circle cx="50" cy="45" r="9" fill="#fff"/>
+<path d="M34 39 A22.6 22.6 0 0 1 66 39" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M26 30 A35.3 35.3 0 0 1 74 30" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".65"/>
+</svg> &nbsp; <b>TOTAL TRAC RASTREADORES</b> — Conectar para cuidar.</div>
+</div>
+
+<script>
+function parseBR(v){
+  if(!v) return 0;
+  v = v.replace(/[^0-9,.-]/g,'').replace(/\./g,'').replace(',', '.');
+  var n = parseFloat(v);
+  return isNaN(n) ? 0 : n;
+}
+function parseInt_(v){
+  if(!v) return 0;
+  var n = parseInt(v.replace(/[^0-9]/g,''), 10);
+  return isNaN(n) ? 0 : n;
+}
+function formatBR(n){
+  return n.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function recalcTable(tableId){
+  var valores = document.querySelectorAll('.valor-input[data-table="'+tableId+'"]');
+  var grand = 0;
+  valores.forEach(function(vEl){
+    var rowId = vEl.dataset.row;
+    var ltEl = document.querySelector('.line-total[data-row="'+rowId+'"]');
+    var toggle = document.querySelector('.row-toggle[data-row="'+rowId+'"]');
+    if(toggle && !toggle.checked){
+      if(ltEl) ltEl.textContent = '0,00';
+      return;
+    }
+    var qEl = document.querySelector('.qtde-input[data-row="'+rowId+'"]');
+    var v = parseBR(vEl.value);
+    var q = qEl ? parseInt_(qEl.value) : 1;
+    var lt = v*q;
+    if(ltEl) ltEl.textContent = formatBR(lt);
+    grand += lt;
+  });
+  var out = document.getElementById('total-'+tableId);
+  if(out) out.textContent = formatBR(grand);
+}
+function dataPorExtenso(d){
+  var meses = ['Janeiro','Fevereiro','Mar\u00e7o','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  return d.getDate() + ' de ' + meses[d.getMonth()] + ' de ' + d.getFullYear();
+}
+function aplicarParametrosDaURL(){
+  var params = new URLSearchParams(window.location.search);
+  var nome = params.get('nome');
+  var cnpj = params.get('cnpj');
+  var logo = params.get('logo') || sessionStorage.getItem('atlasLogoDataUrl');
+  if(nome){
+    var elNome = document.getElementById('cover-client-field');
+    if(elNome) elNome.textContent = nome;
+  }
+  if(cnpj){
+    var elCnpj = document.getElementById('cover-cnpj-field');
+    if(elCnpj) elCnpj.textContent = cnpj;
+  }
+  if(logo){
+    var img = document.getElementById('client-logo-img');
+    if(img){ img.src = logo; img.style.display = 'inline-block'; }
+    sessionStorage.removeItem('atlasLogoDataUrl');
+  }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var tables = new Set();
+  document.querySelectorAll('.valor-input, .qtde-input').forEach(function(el){
+    tables.add(el.dataset.table);
+    el.addEventListener('input', function(){ recalcTable(el.dataset.table); });
+  });
+  tables.forEach(recalcTable);
+
+  document.querySelectorAll('.auto-today-date').forEach(function(el){
+    el.textContent = dataPorExtenso(new Date());
+  });
+
+  aplicarParametrosDaURL();
+});
+</script>
+<script>
+(function(){
+  var canvas = document.getElementById('sigPad');
+  if(canvas){
+    var ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 2.2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    var drawing = false;
+    var last = null;
+
+    function getPos(e){
+      var rect = canvas.getBoundingClientRect();
+      var scaleX = canvas.width / rect.width;
+      var scaleY = canvas.height / rect.height;
+      var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+    }
+    function start(e){ drawing = true; last = getPos(e); e.preventDefault(); }
+    function move(e){
+      if(!drawing) return;
+      var pos = getPos(e);
+      ctx.beginPath();
+      ctx.moveTo(last.x, last.y);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      last = pos;
+      e.preventDefault();
+    }
+    function end(){ drawing = false; last = null; }
+
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    canvas.addEventListener('touchstart', start, {passive:false});
+    canvas.addEventListener('touchmove', move, {passive:false});
+    canvas.addEventListener('touchend', end);
+
+    var clearBtn = document.getElementById('sigClearBtn');
+    if(clearBtn){
+      clearBtn.addEventListener('click', function(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+      });
+    }
+
+    window.addEventListener('beforeprint', function(){
+      var img = document.getElementById('sigPadPrintImg');
+      if(img){ img.src = canvas.toDataURL('image/png'); }
+    });
+  }
+})();
+</script>
+<script>
+(function(){
+  var nameSource = document.getElementById('cover-client-field');
+  var cnpjSource = document.getElementById('cover-cnpj-field');
+  var nameTarget = document.getElementById('sig-name-field');
+  var cnpjTarget = document.getElementById('sig-cnpj-field');
+  function syncName(){ if(nameTarget && nameSource) nameTarget.textContent = nameSource.textContent; }
+  function syncCnpj(){ if(cnpjTarget && cnpjSource) cnpjTarget.textContent = cnpjSource.textContent; }
+  if(nameSource){ nameSource.addEventListener('input', syncName); }
+  if(cnpjSource){ cnpjSource.addEventListener('input', syncCnpj); }
+  syncName();
+  syncCnpj();
+})();
+</script>
+<script>
+function isBlankLockField(el){
+  var t = el.textContent.replace(/\u00a0/g, '').trim();
+  if(t === '') return true;
+  if(/^\[.*\]$/.test(t)) return true;
+  if(t === 'XX.XXX.XXX/XXXX-XX') return true;
+  if(t === 'XX de Novembro de 2026') return true;
+  return false;
+}
+
+function baixarPropostaPreenchida(){
+  document.querySelectorAll('input[type="text"]').forEach(function(el){
+    el.setAttribute('value', el.value);
+  });
+  document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(function(el){
+    if(el.checked) el.setAttribute('checked', ''); else el.removeAttribute('checked');
+  });
+
+  var checkedRows = {};
+  document.querySelectorAll('.row-toggle').forEach(function(cb){
+    if(cb.checked) checkedRows[cb.dataset.row] = true;
+  });
+
+  var liveCanvas = document.getElementById('sigPad');
+  var sigDataUrl = null;
+  if(liveCanvas){
+    try{ sigDataUrl = liveCanvas.toDataURL('image/png'); }catch(e){}
+  }
+
+  var clone = document.documentElement.cloneNode(true);
+  if(sigDataUrl){
+    var img = clone.querySelector('#sigPadPrintImg');
+    var canvasClone = clone.querySelector('#sigPad');
+    if(img){ img.setAttribute('src', sigDataUrl); img.style.display = 'block'; }
+    if(canvasClone){ canvasClone.style.display = 'none'; }
+  }
+
+  clone.querySelectorAll('.item-picker').forEach(function(el){ el.remove(); });
+  clone.querySelectorAll('tr.pricing-row').forEach(function(tr){
+    if(!checkedRows[tr.dataset.row]) tr.remove();
+  });
+
+  clone.querySelectorAll('.valor-input, .qtde-input').forEach(function(el){
+    el.setAttribute('readonly', '');
+    el.classList.add('pw-locked');
+  });
+  clone.querySelectorAll('[contenteditable="true"]').forEach(function(el){
+    if(!isBlankLockField(el)){
+      el.setAttribute('contenteditable', 'false');
+      el.classList.add('pw-locked');
+    }
+  });
+
+  var lockStyle = document.createElement('style');
+  lockStyle.textContent = '.pw-locked{cursor:not-allowed !important;}input.pw-locked{background:#f4f4f4 !important;color:#888 !important;}';
+  clone.querySelector('head').appendChild(lockStyle);
+
+  var lockScript = document.createElement('script');
+  lockScript.textContent = [
+    '(function(){',
+    '  var PASSWORD = "T0t@lTrac";',
+    '  var unlocked = false;',
+    '  function unlockAll(){',
+    '    unlocked = true;',
+    '    document.querySelectorAll(".pw-locked").forEach(function(el){',
+    '      if(el.tagName === "INPUT"){ el.removeAttribute("readonly"); }',
+    '      else { el.setAttribute("contenteditable", "true"); }',
+    '      el.classList.remove("pw-locked");',
+    '    });',
+    '  }',
+    '  function tryUnlock(){',
+    '    if(unlocked) return;',
+    '    var pw = prompt("Este campo j\\u00e1 foi preenchido pela Total Trac. Digite a senha para alterar:");',
+    '    if(pw === null) return;',
+    '    if(pw === "T0t@lTrac"){ unlockAll(); }',
+    '    else { alert("Senha incorreta."); }',
+    '  }',
+    '  document.querySelectorAll(".pw-locked").forEach(function(el){',
+    '    el.addEventListener("mousedown", function(e){',
+    '      if(unlocked) return;',
+    '      tryUnlock();',
+    '    });',
+    '  });',
+    '})();'
+  ].join('\n');
+  clone.querySelector('body').appendChild(lockScript);
+
+  var html = '<!DOCTYPE html>\n' + clone.outerHTML;
+  var blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+
+  var nomeEl = document.getElementById('cover-client-field');
+  var nome = nomeEl ? nomeEl.textContent.trim() : '';
+  nome = nome.replace(/[^a-zA-Z0-9\u00c0-\u00ff _-]/g, '').trim().replace(/\s+/g, '_');
+  if(!nome || /nome.?do.?cliente/i.test(nome)) nome = 'Cliente';
+
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'Proposta_TotalTrac_' + nome + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+</script>
+<script>
+document.querySelectorAll('.row-toggle').forEach(function(cb){
+  function applyToggle(){
+    var tr = document.querySelector('tr.pricing-row[data-row="'+cb.dataset.row+'"]');
+    if(tr){
+      tr.style.display = cb.checked ? '' : 'none';
+      var table = tr.closest('table');
+      if(table) recalcTable(table.id);
+    }
+  }
+  cb.addEventListener('change', applyToggle);
+  applyToggle();
+});
+</script>
+
+</body>
+</html>
